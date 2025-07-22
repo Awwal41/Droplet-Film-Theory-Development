@@ -6,6 +6,8 @@ from sklearn.model_selection import train_test_split, StratifiedKFold
 from sklearn.preprocessing import StandardScaler
 from typing import Optional, List, Callable, Dict, Any, List
 import itertools
+from sklearn.pipeline import Pipeline
+from pysindy import SINDy
 
 class ChiefBldr:
     """
@@ -131,7 +133,7 @@ class ChiefBldr:
             hparams = dict(zip(keys, combo))
 
             # evaluate model on these params
-            model = build_model(hparams=hparams) # build model with hparams
+            model = build_model(hparams=hparams) # model defined and passed by user
             self.score = self._cross_val(model=model) # perform k-fold CV for each set of hparams 
 
             # collect the best set of hyperparameters 
@@ -146,7 +148,13 @@ class ChiefBldr:
         # retrain the model with the full training set and evalute test set performance 
         print("Retraining optimized model on full training set")
         self.model = build_model(hparams=self.best_params)
-        self.model.fit(self.X_train_scaled, self.y_train_scaled)
+
+        if isinstance(model, SINDy): # PySINDy models require unconventional format
+            
+            self.model.fit(self.X_train_scaled, x_dot=self.y_train_scaled)
+        else:
+            self.model.fit(self.X_train_scaled, self.y_train_scaled)
+        
         self.y_train_scaled_pred = self.model.predict(self.X_train_scaled)
         self.y_train_pred = self.scaler_y.inverse_transform(self.y_train_scaled_pred.reshape(-1, 1)).flatten()
         print(f"Training set score: {self.classification_scores(self.y_train_pred, self.gsflow_train, self.loading_train)}")
@@ -188,7 +196,11 @@ class ChiefBldr:
             scaler_y = StandardScaler()
             y_train_cv_scaled = scaler_y.fit_transform(y_train_cv.reshape(-1, 1))
 
-            model.fit(X_train_cv_scaled, y_train_cv_scaled)
+            if isinstance(model, SINDy): # PySINDy models require unconventional format
+                
+                model.fit(X_train_cv_scaled, x_dot=y_train_cv_scaled)
+            else:
+                model.fit(X_train_cv_scaled, y_train_cv_scaled)
 
             # evalaute the performance on the validation set 
             y_val_pred_scaled = model.predict(X_val_cv_scaled)
@@ -206,7 +218,7 @@ class ChiefBldr:
         y_pred: np.ndarray,
         gsflow: np.ndarray, 
         loading: np.ndarray, 
-        interval: float=0,
+        interval: float=0.01,
     ):
         """
         This functiion converts model regression values to well status classificaitons and computes accuracy 
@@ -220,7 +232,7 @@ class ChiefBldr:
         loading: np.ndarray 
             Well status: Loaded, Unloaded, Near Loader
         Interval: float 
-            Interval for Near Loaded wells => Default: 0
+            Interval for Near Loaded wells => Default: 0.01
 
         """
         loading_pred = np.where(y_pred > gsflow + interval, 1, 
