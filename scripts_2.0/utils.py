@@ -8,6 +8,72 @@ from typing import Optional, List, Callable, Dict, Any, List
 import itertools
 from sklearn.pipeline import Pipeline
 from pysindy import SINDy
+import feyn
+import pandas as pd
+        
+class QLatticeWrapper():
+    def __init__(
+            self, 
+            feature_tags: List,
+            output_tag: int="Qcr",
+            seed: int=42, 
+            max_complexity: int=10, 
+            n_epochs: int=10,
+            criterion: str="bic"
+    ): 
+        super().__init__()
+
+        self.seed = seed
+        self.feature_tags = feature_tags
+        self.output_tag = output_tag
+        self.max_complexity = max_complexity
+        self.n_epochs = n_epochs
+        self.criterion = criterion
+
+        # connect QLattice
+        self.ql = feyn.connect_qlattice()
+        self.opt_model = None
+        self.y_pred = None
+
+    def fit(
+            self, 
+            X: np.ndarray, 
+            y: np.ndarray,
+    ) -> None:
+        
+        # QLattice requires python dataframes 
+        data = pd.DataFrame(X, columns=self.feature_tags)
+        data[self.output_tag] = y
+
+        models = self.ql.auto_run(
+            data=data, 
+            output_name=self.output_tag,
+            criterion=self.criterion, 
+            max_complexity=self.max_complexity,
+            n_epochs=self.n_epochs,
+        )
+
+        self.opt_model = models[0]
+
+        return self
+    
+    def predict(
+            self, 
+            X: np.ndarray, 
+    ) -> np.ndarray:
+        # QLattice requires python dataframes 
+        data = pd.DataFrame(X, columns=self.feature_tags)
+
+        self.y_pred = self.opt_model.predict(data[self.feature_tags])
+
+        return self.y_pred
+    
+    def express(
+            self,
+    ):
+        return self.opt_model.sympify()
+    
+
 
 class ChiefBldr:
     """
@@ -158,6 +224,7 @@ class ChiefBldr:
         self.y_train_scaled_pred = self.model.predict(self.X_train_scaled)
         self.y_train_pred = self.scaler_y.inverse_transform(self.y_train_scaled_pred.reshape(-1, 1)).flatten()
         print(f"Training set score: {self.classification_scores(self.y_train_pred, self.gsflow_train, self.loading_train)}")
+        
         self.y_test_scaled_pred = self.model.predict(self.X_test_scaled)
         self.y_test_pred = self.scaler_y.inverse_transform(self.y_test_scaled_pred.reshape(-1, 1)).flatten()
         print(f"Test set score: {self.classification_scores(self.y_test_pred, self.gsflow_test, self.loading_test)}")
