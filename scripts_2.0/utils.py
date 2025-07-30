@@ -8,6 +8,7 @@ from typing import Optional, List, Callable, Dict, Any, List
 import itertools
 from sklearn.pipeline import Pipeline
 from pysindy import SINDy
+from dft_model import DFT
 import feyn
 import pandas as pd
         
@@ -99,10 +100,12 @@ class ChiefBldr:
             drop_cols: Optional[List[str]]=None,
             includ_cols: Optional[List[str]]=None,
             test_size: float=0.20,
+            scale: bool = True
     ):
         super().__init__()
         self.path = path
         self.seed = seed
+        self.scale = scale
 
         # build pandas data object from the file path 
         df = pd.read_csv(self.path)
@@ -143,14 +146,22 @@ class ChiefBldr:
         )
 
         # scale features and continuous target (Qcr)
-        self.scaler_X = StandardScaler()
-        self.scaler_y = StandardScaler()
+        if self.scale:
+            self.scaler_X = StandardScaler()
+            self.scaler_y = StandardScaler()
 
-        self.X_train_scaled = self.scaler_X.fit_transform(self.X_train)
-        self.X_test_scaled = self.scaler_X.transform(self.X_test)
+            self.X_train_rdy = self.scaler_X.fit_transform(self.X_train)
+            self.X_test_rdy = self.scaler_X.transform(self.X_test)
 
-        self.y_train_scaled = self.scaler_y.fit_transform(self.y_train.values.reshape(-1, 1))
-        self.y_test_scaled = self.scaler_y.transform(self.y_test.values.reshape(-1, 1))
+            self.y_train_rdy = self.scaler_y.fit_transform(self.y_train.values.reshape(-1, 1))
+            self.y_test_rdy = self.scaler_y.transform(self.y_test.values.reshape(-1, 1))
+
+        else:
+            self.X_train_rdy = np.array(self.X_train)
+            self.X_test_rdy = np.array(self.X_test)
+
+            self.y_train_rdy = self.y_train.values.reshape(-1, 1)
+            self.y_test_rdy = self.y_test.values.reshape(-1, 1)
 
         # convert to a numpy array and store test data 
         self.X_train = np.array(self.X_train)
@@ -185,48 +196,52 @@ class ChiefBldr:
         
         """
 
-        self.best_score  = -float("inf") # store the best score for hyperparameter opt 
-        self.best_params = None
-        self.k_folds = k_folds
-        print("Training model and optimizing hyperparameters via k-fold CV...")
+        if k_folds > 0: # perform k-fold cross validation and hyperparametr grid search 
+            self.best_score  = -float("inf") # store the best score for hyperparameter opt 
+            self.best_params = None
+            self.k_folds = k_folds
+            print("Training model and optimizing hyperparameters via k-fold CV...")
 
-        # grab the keys and corresponding lists
-        keys   = list(hparam_grid.keys()) 
-        values = [hparam_grid[k] for k in keys]
+            # grab the keys and corresponding lists
+            keys   = list(hparam_grid.keys()) 
+            values = [hparam_grid[k] for k in keys]
 
-        # iterate over every combination in hyperparameter set 
-        for combo in itertools.product(*values): 
-            hparams = dict(zip(keys, combo))
+            # iterate over every combination in hyperparameter set 
+            for combo in itertools.product(*values): 
+                hparams = dict(zip(keys, combo))
 
-            # evaluate model on these params
-            model = build_model(hparams=hparams) # model defined and passed by user
-            self.score = self._cross_val(model=model) # perform k-fold CV for each set of hparams 
+                # evaluate model on these params
+                model = build_model(hparams=hparams) # model defined and passed by user
+                self.score = self._cross_val(model=model) # perform k-fold CV for each set of hparams 
 
-            # collect the best set of hyperparameters 
-            if self.score > self.best_score:
-                self.best_score  = self.score
-                self.best_params = hparams
+                # collect the best set of hyperparameters 
+                if self.score > self.best_score:
+                    self.best_score  = self.score
+                    self.best_params = hparams
 
-        # print best score hparams from hyperparameter tuning 
-        print("Done. Best score =", self.best_score)
-        print("Best hyperparameters:", self.best_params)
+            # print best score hparams from hyperparameter tuning 
+            print("Done. Best score =", self.best_score)
+            print("Best hyperparameters:", self.best_params)
 
-        # retrain the model with the full training set and evalute test set performance 
-        print("Retraining optimized model on full training set")
-        self.model = build_model(hparams=self.best_params)
-
-        if isinstance(model, SINDy): # PySINDy models require unconventional format
-            
-            self.model.fit(self.X_train_scaled, x_dot=self.y_train_scaled)
+            # retrain the model with the full training set and evalute test set performance 
+            print("Retraining optimized model on full training set")
+            self.model = build_model(hparams=self.best_params)
+        
         else:
-            self.model.fit(self.X_train_scaled, self.y_train_scaled)
+            self.model = build_model(hparams=hparam_grid)
+
+        if isinstance(self.model, SINDy): # PySINDy models require unconventional format
+            self.model.fit(self.X_train_rdy, x_dot=self.y_train_rdy)
+        else:
+            self.model.fit(self.X_train_rdy, self.y_train_rdy)
         
-        self.y_train_scaled_pred = self.model.predict(self.X_train_scaled)
-        self.y_train_pred = self.scaler_y.inverse_transform(self.y_train_scaled_pred.reshape(-1, 1)).flatten()
+        self.y_train_pred = self.model.predict(self.X_train_rdy)
+        self.y_test_pred = self.model.predict(self.X_test_rdy)
+        if self.scale:
+            self.y_train_pred = self.scaler_y.inverse_transform(self.y_train_pred.reshape(-1, 1)).flatten()
+            self.y_test_pred = self.scaler_y.inverse_transform(self.y_test_pred.reshape(-1, 1)).flatten()
+        
         print(f"Training set score: {self.classification_scores(self.y_train_pred, self.gsflow_train, self.loading_train)}")
-        
-        self.y_test_scaled_pred = self.model.predict(self.X_test_scaled)
-        self.y_test_pred = self.scaler_y.inverse_transform(self.y_test_scaled_pred.reshape(-1, 1)).flatten()
         print(f"Test set score: {self.classification_scores(self.y_test_pred, self.gsflow_test, self.loading_test)}")
 
         return self.model 
@@ -256,22 +271,28 @@ class ChiefBldr:
             gsflow_val_cv = self.gsflow_train[val_idx]
             loading_val_cv = self.loading_train[val_idx]
             
-            scaler_X = StandardScaler()
-            X_train_cv_scaled = scaler_X.fit_transform(X_train_cv)
-            X_val_cv_scaled = scaler_X.transform(X_val_cv)
-            
-            scaler_y = StandardScaler()
-            y_train_cv_scaled = scaler_y.fit_transform(y_train_cv.reshape(-1, 1))
+            if self.scale:
+                scaler_X = StandardScaler()
+                X_train_cv_rdy = scaler_X.fit_transform(X_train_cv)
+                X_val_rdy = scaler_X.transform(X_val_cv)
+                
+                scaler_y = StandardScaler()
+                y_train_cv_rdy = scaler_y.fit_transform(y_train_cv.reshape(-1, 1))
+            else:
+                X_train_cv_rdy = X_train_cv
+                X_val_rdy = X_val_cv
+                y_train_cv_rdy = y_train_cv.reshape(-1, 1)
 
             if isinstance(model, SINDy): # PySINDy models require unconventional format
-                
-                model.fit(X_train_cv_scaled, x_dot=y_train_cv_scaled)
+                model.fit(X_train_cv_rdy, x_dot=y_train_cv_rdy)
             else:
-                model.fit(X_train_cv_scaled, y_train_cv_scaled)
+                model.fit(X_train_cv_rdy, y_train_cv_rdy)
 
             # evalaute the performance on the validation set 
-            y_val_pred_scaled = model.predict(X_val_cv_scaled)
-            y_val_pred_cv = scaler_y.inverse_transform(y_val_pred_scaled.reshape(-1, 1)).flatten()
+            y_val_pred_cv = model.predict(X_val_rdy)
+            if self.scale:
+                y_val_pred_cv = scaler_y.inverse_transform(y_val_pred_cv.reshape(-1, 1)).flatten()
+
             acc = self.classification_scores(y_pred=y_val_pred_cv, gsflow=gsflow_val_cv, loading=loading_val_cv)
             acc_scores.append(acc) # compute classification score based on well status 
             

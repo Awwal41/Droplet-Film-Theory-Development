@@ -4,11 +4,23 @@ from scipy.optimize import minimize
 from typing import Optional, List, Callable, Dict, Any, List
 
 class DFT():
+    """
+    This class defines the Droplet-Film Theory model for predicitng well flow rates 
+
+    Args 
+    ____
+    """
     def __init__(
             self,
             seed: int=42,
+            feature_tol: float=1.0, 
+            dev_tol: float=1e-3,
+            multiple_dev_policy: str="max", 
     ):
         self.seed = seed
+        self.feature_tol = feature_tol
+        self.dev_tol = dev_tol
+        self.multiple_dev_policy = multiple_dev_policy
     
     def _eq(
             self,
@@ -67,31 +79,35 @@ class DFT():
             params,
     ) -> float:
         y_pred = self._eq(params=params, X=self.X_train)
-        return np.mean((self.y - y_pred) ** 2)
+        self.loss = np.mean((self.y_train - y_pred) ** 2)
+        return self.loss
 
     def fit(
             self,
             X: np.ndarray,
             y: np.ndarray,
-            x0: np.ndarray, #initial guess 
     ):
         self.X_train = X
         self.y_train = y
 
-        bounds = [(None, None)] * 5 + [(0.0, 1.0)] * X.shape[0]
-        self.opt_params = minimize(self._loss, x0=x0, bounds=bounds) #(f, x0)
-        self.opt_params = self.opt_params.x
+        n_train = len(self.y_train)
+        x0 = np.concatenate(([1.0, 1.0, 0.5, 1.0, 1.0], np.full(n_train, 0.5)))
+        bounds = [(None, None)] * 5 + [(0.0, 1.0)] * n_train
+        result = minimize(self._loss, x0=x0, bounds=bounds, method="Powell",
+                      options={'maxiter': 5000, 'maxfun': 10000, 'disp': True}) #(f, x0)
+        
+        if result.success:
+            self.opt_params = result.x
+        else:
+            raise RuntimeError("Optimization failed: " + result.message)
         
         return self 
 
     def predict(
             self, 
             X, 
-            dev_train, 
-            alpha_strategy: str='enhances_dev_based',
-            multiple_dev_policy: str='max',
-            dev_tol: float=1e-3,
-            feature_tol: float=1.0,
+            dev_train: Optional[np.ndarray] = None,
+            alpha_strategy: str='enhanced_dev_based',
     ):
         """
         Predicts Y for new input samples using learned parameters and an enhanced dev-based α assignment.
@@ -121,6 +137,7 @@ class DFT():
         Returns:
         - Y_pred: Predicted Y values (array)
         """
+        dev_train: np.ndarray=self.X_train[:, 1]
         p_opt = self.opt_params[:5]
         alpha_train = self.opt_params[5:]
         alpha_used = []
@@ -130,26 +147,26 @@ class DFT():
 
             if d_new < 10:
                 # For dev < 20: use matching based on Dev(deg) with specified policy
-                match_idx = np.where(np.abs(dev_train - d_new) <= dev_tol)[0]
+                match_idx = np.where(np.abs(dev_train - d_new) <= self.dev_tol)[0]
                 if len(match_idx) == 0:
                     alpha_used.append(np.mean(alpha_train))
                 elif len(match_idx) == 1:
                     alpha_used.append(alpha_train[match_idx[0]])
                 else:
                     alphas = alpha_train[match_idx]
-                    if multiple_dev_policy == 'max':
+                    if self.multiple_dev_policy == 'max':
                         alpha_used.append(np.max(alphas))
-                    elif multiple_dev_policy == 'min':
+                    elif self.multiple_dev_policy == 'min':
                         alpha_used.append(np.min(alphas))
-                    elif multiple_dev_policy == 'mean':
+                    elif self.multiple_dev_policy == 'mean':
                         alpha_used.append(np.mean(alphas))
-                    elif multiple_dev_policy == 'median':
+                    elif self.multiple_dev_policy == 'median':
                         alpha_used.append(np.median(alphas))
                     else:
                         raise ValueError("Invalid multiple_dev_policy.")
             elif 10 <= d_new < 20:
                 # For 20 <= dev < 30: use the minimum α among matching samples
-                match_idx = np.where(np.abs(dev_train - d_new) <= dev_tol)[0]
+                match_idx = np.where(np.abs(dev_train - d_new) <= self.dev_tol)[0]
                 if len(match_idx) == 0:
                     alpha_used.append(np.mean(alpha_train))
                 else:
@@ -159,7 +176,7 @@ class DFT():
                 # For dev >= 30: use full-feature matching
                 distances = np.linalg.norm(self.X_train - X[i, :], axis=1)
                 min_dist = np.min(distances)
-                if min_dist < feature_tol:
+                if min_dist < self.feature_tol:
                     closest_idx = np.argmin(distances)
                     alpha_used.append(alpha_train[closest_idx])
                 else:
