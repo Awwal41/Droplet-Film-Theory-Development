@@ -52,9 +52,6 @@ class DFT():
             friction_factor, 
             critical_film_thickness,
         ) = X.T
-
-        p1, p2, p3, p4, p5 = params[:5]
-        alpha = params[5:]
       
         # Guard against division errors
         z = np.maximum(z, 1e-8)
@@ -62,6 +59,8 @@ class DFT():
         friction_factor = np.maximum(friction_factor, 1e-8)
         critical_film_thickness = np.maximum(critical_film_thickness, 1e-8)
 
+        p1, p2, p3, p4, p5 = params[:5]
+        alpha = params[5:]
 
         term1 = (2 * g_m_s2 * Dia * (1 - 3 * (Dia / critical_film_thickness) +
                 3 * ((Dia / critical_film_thickness) ** 2)) *
@@ -78,6 +77,7 @@ class DFT():
             self,
             params,
     ) -> float:
+        
         y_pred = self._eq(params=params, X=self.X_train)
         self.loss = np.mean((self.y_train - y_pred) ** 2)
         return self.loss
@@ -94,13 +94,12 @@ class DFT():
         x0 = np.concatenate(([1.0, 1.0, 0.5, 1.0, 1.0], np.full(n_train, 0.5)))
         bounds = [(None, None)] * 5 + [(0.0, 1.0)] * n_train
         result = minimize(self._loss, x0=x0, bounds=bounds, method="Powell",
-                      options={'maxiter': 5000, 'maxfun': 10000, 'disp': True}) #(f, x0)
+                      options={'maxiter': 5000, 'maxfun': 10000, 'disp': False}) #(f, x0)
         
         if result.success:
             self.opt_params = result.x
         else:
             raise RuntimeError("Optimization failed: " + result.message)
-        
         return self 
 
     def predict(
@@ -182,7 +181,7 @@ class DFT():
                 else:
                     alpha_used.append(np.mean(alpha_train))
         alpha_used = np.array(alpha_used)
-        self.opt_params = np.concatenate((p_opt, alpha_used))
+        full_params = np.concatenate((p_opt, alpha_used))
 
-        return self._eq(self.opt_params, X)
+        return self._eq(full_params, X)
         

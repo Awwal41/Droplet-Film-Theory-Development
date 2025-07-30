@@ -1,14 +1,13 @@
 import pandas as pd
 import numpy as np
-import pandas as pd
+import sys
+
 from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.model_selection import train_test_split, StratifiedKFold 
 from sklearn.preprocessing import StandardScaler
 from typing import Optional, List, Callable, Dict, Any, List
 import itertools
-from sklearn.pipeline import Pipeline
 from pysindy import SINDy
-from dft_model import DFT
 import feyn
 import pandas as pd
         
@@ -52,6 +51,7 @@ class QLatticeWrapper():
             criterion=self.criterion, 
             max_complexity=self.max_complexity,
             n_epochs=self.n_epochs,
+            verbose=False,
         )
 
         self.opt_model = models[0]
@@ -116,7 +116,7 @@ class ChiefBldr:
         else: 
             includ_cols=[]
             self.X = df.drop(columns=drop_cols) # exclude these colums
-
+        
         self.feature_names = self.X.columns.tolist() # store feature namaes
         self.y = df['Qcr']
         self.gsflow = df['Gasflowrate']  # additional target for classification metrics
@@ -160,8 +160,8 @@ class ChiefBldr:
             self.X_train_rdy = np.array(self.X_train)
             self.X_test_rdy = np.array(self.X_test)
 
-            self.y_train_rdy = self.y_train.values.reshape(-1, 1)
-            self.y_test_rdy = self.y_test.values.reshape(-1, 1)
+            self.y_train_rdy = self.y_train.values
+            self.y_test_rdy = self.y_test.values
 
         # convert to a numpy array and store test data 
         self.X_train = np.array(self.X_train)
@@ -195,12 +195,12 @@ class ChiefBldr:
             Number of folds in cross validation => Default: 5-fold CV
         
         """
-
+       
         if k_folds > 0: # perform k-fold cross validation and hyperparametr grid search 
             self.best_score  = -float("inf") # store the best score for hyperparameter opt 
             self.best_params = None
             self.k_folds = k_folds
-            print("Training model and optimizing hyperparameters via k-fold CV...")
+            print("Training model and optimizing hyperparameters via k-fold CV...", file=sys.stderr)
 
             # grab the keys and corresponding lists
             keys   = list(hparam_grid.keys()) 
@@ -220,13 +220,12 @@ class ChiefBldr:
                     self.best_params = hparams
 
             # print best score hparams from hyperparameter tuning 
-            print("Done. Best score =", self.best_score)
-            print("Best hyperparameters:", self.best_params)
+            print("Done. Best score =", self.best_score, file=sys.stderr)
+            print("Best hyperparameters:", self.best_params, file=sys.stderr)
 
             # retrain the model with the full training set and evalute test set performance 
-            print("Retraining optimized model on full training set")
+            print("Retraining optimized model on full training set", file=sys.stderr)
             self.model = build_model(hparams=self.best_params)
-        
         else:
             self.model = build_model(hparams=hparam_grid)
 
@@ -241,8 +240,8 @@ class ChiefBldr:
             self.y_train_pred = self.scaler_y.inverse_transform(self.y_train_pred.reshape(-1, 1)).flatten()
             self.y_test_pred = self.scaler_y.inverse_transform(self.y_test_pred.reshape(-1, 1)).flatten()
         
-        print(f"Training set score: {self.classification_scores(self.y_train_pred, self.gsflow_train, self.loading_train)}")
-        print(f"Test set score: {self.classification_scores(self.y_test_pred, self.gsflow_test, self.loading_test)}")
+        print(f"Training set score: {self.classification_scores(self.y_train_pred, self.gsflow_train, self.loading_train)}", file=sys.stderr)
+        print(f"Test set score: {self.classification_scores(self.y_test_pred, self.gsflow_test, self.loading_test)}", file=sys.stderr)
 
         return self.model 
 
@@ -281,7 +280,7 @@ class ChiefBldr:
             else:
                 X_train_cv_rdy = X_train_cv
                 X_val_rdy = X_val_cv
-                y_train_cv_rdy = y_train_cv.reshape(-1, 1)
+                y_train_cv_rdy = y_train_cv
 
             if isinstance(model, SINDy): # PySINDy models require unconventional format
                 model.fit(X_train_cv_rdy, x_dot=y_train_cv_rdy)
