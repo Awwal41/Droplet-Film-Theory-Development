@@ -1,0 +1,373 @@
+Troubleshooting Guide
+Droplet-Film Theory Development
+Scripts 2.0
+
+Common Issues and Solutions
+This file addresses frequently encountered problems
+and provides step-by-step solutions.
+Use this guide when you encounter errors or unexpected behavior.
+
+Issue 1: Import Errors
+Problem: ModuleNotFoundError when importing DFT or utils
+
+Common causes:
+- Missing dependencies
+- Incorrect Python path
+- Virtual environment not activated
+
+Issue 1: Import Error Solutions
+Solution 1: Install missing packages
+pip install numpy pandas scipy scikit-learn matplotlib seaborn
+
+Solution 2: Activate virtual environment
+# Windows
+dft_env\Scripts\activate
+
+# macOS/Linux
+source dft_env/bin/activate
+
+Issue 1: Import Error Solutions (continued)
+Solution 3: Check Python path
+python -c "import sys; print(sys.path)"
+
+Solution 4: Install in development mode
+cd /path/to/project
+pip install -e .
+
+Issue 2: Data Loading Errors
+Problem: FileNotFoundError or pandas errors when loading data
+
+Common causes:
+- Incorrect file path
+- Wrong file format
+- Missing required columns
+- File permissions
+
+Issue 2: Data Loading Solutions
+Solution 1: Verify file path
+import os
+print(os.path.exists("your_data.csv"))
+print(os.path.abspath("your_data.csv"))
+
+Solution 2: Check file format
+# Ensure CSV format
+import pandas as pd
+data = pd.read_csv("your_data.csv")
+print(data.columns.tolist())
+
+Issue 2: Data Loading Solutions (continued)
+Solution 3: Verify required columns
+required_cols = ['Dia', 'Dev(deg)', 'Area (m2)', 'z', 
+                 'GasDens', 'LiquidDens', 'g (m/s2)', 
+                 'P/T', 'friction_factor', 'critical_film_thickness']
+
+missing_cols = [col for col in required_cols if col not in data.columns]
+if missing_cols:
+    print(f"Missing columns: {missing_cols}")
+
+Issue 3: Memory Errors
+Problem: MemoryError during training or data processing
+
+Common causes:
+- Dataset too large
+- Insufficient RAM
+- Memory leaks
+- Large hyperparameter grid
+
+Issue 3: Memory Error Solutions
+Solution 1: Reduce dataset size
+# Use data sampling during development
+data_sample = data.sample(n=1000, random_state=42)
+
+Solution 2: Reduce hyperparameter grid
+hparam_grid = {
+    "dev_tol": [1e-3],  # Single value instead of list
+    "feature_tol": [1.0],
+    "multiple_dev_policy": ["max"]
+}
+
+Issue 3: Memory Error Solutions (continued)
+Solution 3: Process data in chunks
+# For large datasets
+chunk_size = 1000
+for i in range(0, len(data), chunk_size):
+    chunk = data[i:i+chunk_size]
+    # Process chunk
+
+Solution 4: Close other applications
+# Free up system memory
+
+Issue 4: Optimization Convergence Errors
+Problem: RuntimeError: "Optimization failed" during training
+
+Common causes:
+- Poor initial parameters
+- Inappropriate bounds
+- Insufficient iterations
+- Numerical instability
+
+Issue 4: Optimization Error Solutions
+Solution 1: Increase optimization iterations
+# Modify dft_model.py
+result = minimize(self._loss, x0=x0, bounds=bounds, method="Powell",
+                  options={'maxiter': 10000, 'maxfun': 20000})
+
+Solution 2: Adjust initial parameters
+x0 = np.concatenate(([0.1, 0.1, 0.1, 0.1, 0.1], np.full(n_train, 0.5)))
+
+Issue 4: Optimization Error Solutions (continued)
+Solution 3: Check data scaling
+# Ensure data is properly scaled
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+Solution 4: Verify data quality
+# Check for NaN or infinite values
+print(f"NaN values: {np.isnan(X).sum()}")
+print(f"Inf values: {np.isinf(X).sum()}")
+
+Issue 5: Performance Issues
+Problem: Slow training or poor model performance
+
+Common causes:
+- Large hyperparameter grid
+- Too many cross-validation folds
+- Inefficient data structures
+- Suboptimal parameters
+
+Issue 5: Performance Solutions
+Solution 1: Optimize hyperparameter grid
+# Use smaller, focused grid
+hparam_grid = {
+    "dev_tol": [1e-3, 1e-2],  # Fewer values
+    "feature_tol": [0.5, 1.0, 2.0],
+    "multiple_dev_policy": ["max", "mean"]
+}
+
+Solution 2: Reduce cross-validation folds
+k_folds = 3  # Instead of 5 or 10
+
+Issue 5: Performance Solutions (continued)
+Solution 3: Use data sampling for development
+# Sample data for faster development
+data_dev = data.sample(n=500, random_state=42)
+
+Solution 4: Profile your code
+import cProfile
+profiler = cProfile.Profile()
+profiler.enable()
+# Your code here
+profiler.disable()
+profiler.print_stats(sort='cumulative')
+
+Issue 6: Visualization Errors
+Problem: Matplotlib or plotting errors
+
+Common causes:
+- Backend issues
+- Missing display
+- Data type mismatches
+- Memory issues
+
+Issue 6: Visualization Solutions
+Solution 1: Set matplotlib backend
+import matplotlib
+matplotlib.use('Agg')  # For non-interactive environments
+
+Solution 2: Check data types
+# Ensure data is numeric
+print(f"Data types: {X.dtype}")
+print(f"Target types: {y.dtype}")
+
+Issue 6: Visualization Solutions (continued)
+Solution 3: Handle missing values
+# Remove or fill missing values
+data_clean = data.dropna()
+# OR
+data_filled = data.fillna(method='ffill')
+
+Solution 4: Use alternative plotting
+# Try seaborn for better error handling
+import seaborn as sns
+sns.scatterplot(x=y_actual, y=y_predicted)
+
+Issue 7: QLattice Connection Errors
+Problem: Connection errors with Feyn QLattice
+
+Common causes:
+- Network connectivity issues
+- Invalid API credentials
+- Service unavailability
+- Version compatibility
+
+Issue 7: QLattice Solutions
+Solution 1: Check network connection
+import requests
+try:
+    response = requests.get("https://api.feynlab.com")
+    print(f"Connection status: {response.status_code}")
+except:
+    print("Network connection failed")
+
+Solution 2: Verify API credentials
+# Check if feyn is properly configured
+import feyn
+print(f"Feyn version: {feyn.__version__}")
+
+Issue 7: QLattice Solutions (continued)
+Solution 3: Use alternative symbolic regression
+# Fall back to PySINDy if QLattice fails
+from pysindy import SINDy
+sindy_model = SINDy()
+sindy_model.fit(X_train, y_train)
+
+Solution 4: Check service status
+# Visit Feyn status page or contact support
+
+Issue 8: Model Persistence Errors
+Problem: Errors when saving or loading models
+
+Common causes:
+- Insufficient disk space
+- Permission issues
+- Version compatibility
+- Corrupted files
+
+Issue 8: Model Persistence Solutions
+Solution 1: Check disk space
+import shutil
+total, used, free = shutil.disk_usage(".")
+print(f"Free space: {free // (1024**3)} GB")
+
+Solution 2: Use alternative serialization
+# Try joblib for large models
+import joblib
+joblib.dump(model, 'model.joblib')
+loaded_model = joblib.load('model.joblib')
+
+Issue 8: Model Persistence Solutions (continued)
+Solution 3: Save only essential data
+# Save only model parameters
+model_params = {
+    'opt_params': model.opt_params,
+    'feature_tol': model.feature_tol,
+    'dev_tol': model.dev_tol
+}
+
+import json
+with open('model_params.json', 'w') as f:
+    json.dump(model_params, f)
+
+Solution 4: Check file permissions
+# Ensure write permissions
+import os
+print(f"Writable: {os.access('.', os.W_OK)}")
+
+Issue 9: Cross-Validation Errors
+Problem: Errors during k-fold cross-validation
+
+Common causes:
+- Insufficient data
+- Invalid fold splitting
+- Memory issues
+- Data leakage
+
+Issue 9: Cross-Validation Solutions
+Solution 1: Check data size
+if len(X) < k_folds:
+    print(f"Data size ({len(X)}) too small for {k_folds} folds")
+    k_folds = min(k_folds, len(X) // 2)
+
+Solution 2: Use stratified splitting
+from sklearn.model_selection import StratifiedKFold
+skf = StratifiedKFold(n_splits=k_folds, shuffle=True, random_state=42)
+
+Issue 9: Cross-Validation Solutions (continued)
+Solution 3: Handle small datasets
+# Use leave-one-out for very small datasets
+if len(X) < 10:
+    from sklearn.model_selection import LeaveOneOut
+    cv = LeaveOneOut()
+else:
+    cv = KFold(n_splits=min(k_folds, len(X)//2))
+
+Solution 4: Check for data leakage
+# Ensure no overlap between train/validation sets
+
+Issue 10: Numerical Stability Issues
+Problem: NaN or infinite values in predictions
+
+Common causes:
+- Division by zero
+- Overflow in calculations
+- Poor data scaling
+- Extreme parameter values
+
+Issue 10: Numerical Stability Solutions
+Solution 1: Add numerical guards
+# In physics equation, add small epsilon
+epsilon = 1e-8
+z = np.maximum(z, epsilon)
+GasDens = np.maximum(GasDens, epsilon)
+
+Solution 2: Check parameter bounds
+# Ensure parameters stay within reasonable bounds
+bounds = [(1e-6, 1e6)] * 5 + [(0.0, 1.0)] * n_train
+
+Issue 10: Numerical Stability Solutions (continued)
+Solution 3: Scale input data
+# Normalize features to prevent overflow
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+X_scaled = scaler.fit_transform(X)
+
+Solution 4: Monitor parameter values
+# Check for extreme values during training
+if np.any(np.abs(params) > 1e6):
+    print("Warning: Large parameter values detected")
+
+General Troubleshooting Tips
+1. Always check error messages carefully
+2. Use print statements for debugging
+3. Start with small datasets
+4. Verify data quality before training
+5. Check package versions for compatibility
+6. Use virtual environments consistently
+7. Monitor system resources
+8. Keep backups of working code
+
+Debugging Commands
+# Check Python and package versions
+python --version
+pip list
+
+# Test basic functionality
+python -c "import numpy; print('NumPy OK')"
+python -c "import pandas; print('Pandas OK')"
+
+# Check data integrity
+python -c "import pandas as pd; data=pd.read_csv('your_data.csv'); print(data.info())"
+
+Getting Help
+If problems persist:
+1. Check the issue tracker on GitHub
+2. Review the API_REFERENCE.srt
+3. Consult the USAGE_EXAMPLES.srt
+4. Search for similar issues online
+5. Contact the development team
+6. Provide detailed error messages and system info
+
+Prevention Strategies
+1. Use version control (Git)
+2. Test with sample data first
+3. Document your workflow
+4. Keep dependencies updated
+5. Use consistent environments
+6. Monitor performance metrics
+7. Implement proper error handling
+8. Regular backups
+
+End of Troubleshooting Guide
+Return to MAIN_DOCUMENTATION.srt
+for overview and other documentation sections

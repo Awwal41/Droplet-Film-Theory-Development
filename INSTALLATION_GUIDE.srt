@@ -1,0 +1,228 @@
+Installation Guide
+Droplet-Film Theory Development
+Scripts 2.0
+
+System Requirements
+- Python 3.7 or higher
+- 8GB RAM minimum (16GB recommended)
+- 2GB free disk space
+- Internet connection for package installation
+
+Operating System Support
+- Windows 10/11 (64-bit)
+- macOS 10.14 or higher
+- Ubuntu 18.04 LTS or higher
+- CentOS 7 or higher
+
+Python Environment Setup
+1. Install Python from python.org
+2. Verify installation: python --version
+3. Create virtual environment (recommended)
+4. Activate virtual environment
+
+Virtual Environment Creation
+# Windows
+python -m venv dft_env
+dft_env\Scripts\activate
+
+# macOS/Linux
+python3 -m venv dft_env
+source dft_env/bin/activate
+
+Package Installation Methods
+Method 1: Using setup.py (recommended)
+Method 2: Manual installation
+Method 3: Using requirements.txt
+
+Method 1: Setup.py Installation
+# Navigate to project root directory
+cd /path/to/Droplet-Film-Theory-Development
+
+# Install in development mode
+pip install -e .
+
+Method 2: Manual Installation
+pip install numpy pandas scipy scikit-learn
+pip install matplotlib seaborn jupyter
+pip install feyn pysindy
+
+Method 3: Requirements.txt
+# Create requirements.txt if not exists
+# Install from requirements
+pip install -r requirements.txt
+
+Required Dependencies
+Core packages:
+- NumPy: Numerical operations
+- Pandas: Data handling
+- Scipy: Optimization algorithms
+- Scikit-learn: Machine learning utilities
+
+Required Dependencies (continued)
+Visualization packages:
+- Matplotlib: Basic plotting
+- Seaborn: Statistical visualization
+- Jupyter: Interactive notebooks
+
+Required Dependencies (continued)
+Specialized packages:
+- Feyn: QLattice integration
+- PySINDy: Symbolic regression
+- Additional ML libraries as needed
+
+Installation Verification
+# Test basic imports
+python -c "import numpy; print('NumPy:', numpy.__version__)"
+python -c "import pandas; print('Pandas:', pandas.__version__)"
+python -c "import scipy; print('Scipy:', scipy.__version__)"
+
+Installation Verification (continued)
+# Test project-specific imports
+python -c "from dft_model import DFT; print('DFT import successful')"
+python -c "from utils import ChiefBldr; print('Utils import successful')"
+
+Jupyter Setup
+# Install Jupyter if not already installed
+pip install jupyter notebook
+
+# Launch Jupyter
+jupyter notebook
+
+# Navigate to scripts_2.0 directory
+# Open desired notebook file
+
+Data Preparation
+# Ensure your dataset is in CSV format
+# Required columns must match exactly:
+# Dia, Dev(deg), Area (m2), z, GasDens, LiquidDens
+# g (m/s2), P/T, friction_factor, critical_film_thickness
+
+Common Installation Issues
+# Permission errors: Use --user flag or sudo
+pip install --user package_name
+
+# Version conflicts: Use virtual environment
+# Memory issues: Close other applications
+# Network issues: Use alternative package sources
+
+Alternative Package Sources
+# PyPI mirror
+pip install -i https://pypi.org/simple/ package_name
+
+# Conda (if using Anaconda)
+conda install package_name
+
+# Local installation from wheel files
+pip install package_name.whl
+
+Post-Installation Steps
+1. Verify all imports work correctly
+2. Test with sample data
+3. Run basic functionality tests
+4. Check Jupyter notebook execution
+5. Validate model training capabilities
+
+Troubleshooting Installation
+# Check Python path
+which python
+python -c "import sys; print(sys.path)"
+
+# Check package versions
+pip list | grep package_name
+
+# Reinstall if necessary
+pip uninstall package_name
+pip install package_name
+
+Development Environment Setup
+# Install development tools
+pip install black flake8 pytest
+
+# Code formatting
+black *.py
+
+# Linting
+flake8 *.py
+
+# Testing
+pytest
+
+IDE Configuration
+# VS Code
+- Install Python extension
+- Select Python interpreter
+- Configure linting and formatting
+
+# PyCharm
+- Configure project interpreter
+- Set up code style
+- Enable type checking
+
+Performance Optimization
+# Install optimized packages
+pip install numpy --upgrade
+pip install pandas --upgrade
+
+# Use conda for scientific packages
+conda install numpy pandas scipy
+
+# Consider using MKL libraries
+pip install mkl
+
+Security Considerations
+# Use virtual environments
+# Avoid installing packages globally
+# Keep packages updated
+# Use trusted package sources
+# Verify package signatures
+
+Maintenance and Updates
+# Update packages regularly
+pip install --upgrade package_name
+
+# Check for security updates
+pip list --outdated
+
+# Backup virtual environment
+# Document package versions
+
+Uninstallation
+# Remove specific packages
+pip uninstall package_name
+
+# Remove entire environment
+# Windows: rmdir /s dft_env
+# macOS/Linux: rm -rf dft_env
+
+# Clean pip cache
+pip cache purge
+
+Installation Checklist
+□ Python 3.7+ installed
+□ Virtual environment created
+□ Core packages installed
+□ Project-specific packages installed
+□ Jupyter working
+□ Imports successful
+□ Sample data ready
+□ Basic tests passing
+
+Next Steps After Installation
+1. Read USAGE_EXAMPLES.srt
+2. Review API_REFERENCE.srt
+3. Run sample notebooks
+4. Prepare your dataset
+5. Start with basic examples
+6. Explore advanced features
+
+Support and Resources
+# Official documentation
+# GitHub repository
+# Issue tracker
+# Community forums
+# Research papers
+# Tutorial videos
+
+End of Installation Guide
+Return to MAIN_DOCUMENTATION.srt
+for next steps and usage instructions

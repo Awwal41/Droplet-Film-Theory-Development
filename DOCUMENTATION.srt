@@ -1,0 +1,81 @@
+Droplet-Film Theory (DFT) Development
+Documentation for Scripts 2.0
+
+Project Overview
+This project implements physics-informed machine learning models
+for predicting liquid loading in gas wells using Droplet-Film Theory.
+
+Liquid loading occurs when gas velocity drops below critical levels,
+causing liquid accumulation in tubing or casing, reducing production.
+
+The project addresses two main modeling approaches:
+- Liquid droplet model for vertical wells
+- Liquid film model for horizontal wells
+
+Core Components
+The scripts_2.0 directory contains the main implementation:
+- dft_model.py: Core DFT physics model
+- utils.py: Utility functions and model wrappers
+- Multiple Jupyter notebooks for different approaches
+
+Documentation Structure
+This documentation is organized into multiple SRT files:
+- MAIN_DOCUMENTATION.srt (this file)
+- INSTALLATION_GUIDE.srt
+- USAGE_EXAMPLES.srt
+- API_REFERENCE.srt
+- TROUBLESHOOTING.srt
+
+Quick Start Guide
+1. Clone the repository: git clone [repository-url]
+2. Navigate to scripts_2.0 directory
+3. Install dependencies: pip install -r requirements.txt
+4. Run Jupyter notebooks or Python scripts
+5. Follow the examples in each notebook
+
+File Structure & Access Paths
+Repository structure:
+/scripts_2.0/
+  ├── dft_model.py      # Core DFT physics model
+  ├── utils.py          # Utility functions & wrappers
+  ├── DFT-PISR.ipynb   # Main implementation notebook
+  ├── xgboost.ipynb    # Gradient boosting approach
+  ├── sindy.ipynb      # SINDy symbolic regression
+  └── QLattice.ipynb   # Pure QLattice approach
+
+Key Features
+- Physics-informed modeling with Droplet-Film Theory
+- Multiple machine learning approaches
+- Comprehensive utility functions
+- Production-ready code structure
+- Extensive documentation system
+
+For detailed information, refer to:
+- INSTALLATION_GUIDE.srt: Setup and installation
+- USAGE_EXAMPLES.srt: Code examples and workflows
+- API_REFERENCE.srt: Technical specifications
+- TROUBLESHOOTING.srt: Common issues and solutions
+
+Model Advantages
+- Physics-informed: Incorporates known physical relationships
+- Adaptive: Adjusts to well characteristics
+- Robust: Handles various well deviation angles
+- Interpretable: Clear physical meaning of parameters
+
+Different Use Cases
+- Academic Research: Use DFT-PISR.ipynb for physics-based analysis
+- Industry Application: Use xgboost.ipynb for production deployment
+- Symbolic Discovery: Use sindy.ipynb for equation discovery
+- Automated Modeling: Use QLattice.ipynb for black-box optimization
+
+Contact and Support
+For questions or contributions:
+- Review project documentation
+- Check issue tracker
+- Consult research papers
+- Contact development team
+
+End of Main Documentation
+Thank you for using
+Droplet-Film Theory Development
+Scripts 2.0
