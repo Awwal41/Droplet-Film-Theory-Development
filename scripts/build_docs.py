@@ -416,10 +416,17 @@ def build_documentation():
             if asset_file.is_file():
                 shutil.copy2(asset_file, build_assets)
     
-    # Copy main index to build directory
+    # Copy main index to build directory (this will be the root index.html for GitHub Pages)
     main_index = Path('docs/index.html')
     if main_index.exists():
         shutil.copy2(main_index, build_dir)
+        print("Main index.html copied to build directory (will be root for GitHub Pages)")
+    
+    # Also create a copy at the root level for easier access
+    root_index = Path('docs/_build/index.html')
+    if main_index.exists():
+        shutil.copy2(main_index, root_index)
+        print("Root index.html created for GitHub Pages")
     
     print("Documentation build complete!")
     print("Files are ready in docs/_build/html/")
