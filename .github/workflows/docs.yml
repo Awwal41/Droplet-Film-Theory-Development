@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install srt-to-html
+          pip install pathlib2
           
       - name: Convert SRT to HTML
         run: |
