@@ -51,7 +51,6 @@ class QLatticeWrapper():
             criterion=self.criterion, 
             max_complexity=self.max_complexity,
             n_epochs=self.n_epochs,
-            verbose=False,
         )
 
         self.opt_model = models[0]
