@@ -244,9 +244,11 @@ class ChiefBldr:
         if self.scale:
             self.y_train_pred = self.scaler_y.inverse_transform(self.y_train_pred.reshape(-1, 1)).flatten()
             self.y_test_pred = self.scaler_y.inverse_transform(self.y_test_pred.reshape(-1, 1)).flatten()
-        
-        print(f"Training set score: {self.classification_scores(self.y_train_pred, self.gsflow_train, self.loading_train)}", file=sys.stderr)
-        print(f"Test set score: {self.classification_scores(self.y_test_pred, self.gsflow_test, self.loading_test)}", file=sys.stderr)
+            
+        print(f"Training set reg score: {np.sqrt(((self.y_train_pred - self.y_train) ** 2).mean())}")
+        print(f"Training set class score: {self.classification_scores(self.y_train_pred, self.gsflow_train, self.loading_train)}", file=sys.stderr)
+        print(f"Test set reg score: {np.sqrt(((self.y_test_pred - self.y_test) ** 2).mean())}")
+        print(f"Test set class score: {self.classification_scores(self.y_test_pred, self.gsflow_test, self.loading_test)}", file=sys.stderr)
 
         return self.model 
 
@@ -334,6 +336,7 @@ class ChiefBldr:
         self.cm = confusion_matrix(loading, loading_pred,  labels=[-1, 0, 1]) # compute confusion matrix 
 
         return self.acc
+    
     def plot_model_results(
         self, 
         trained_model,
