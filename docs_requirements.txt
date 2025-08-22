@@ -1,0 +1,8 @@
+# Documentation build requirements
+# These packages are needed to convert SRT files to HTML and build the docs site
+
+# Core dependencies
+pathlib2>=2.3.0; python_version < "3.4"
+
+# Optional: For enhanced SRT processing
+# srt>=3.5.0  # Uncomment if you want to use the srt library

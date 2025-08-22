@@ -7,6 +7,9 @@ from sklearn.model_selection import train_test_split, StratifiedKFold
 from sklearn.preprocessing import StandardScaler
 from typing import Optional, List, Callable, Dict, Any, List
 import itertools
+import matplotlib.pyplot as plt
+import seaborn as sns
+import matplotlib.patches as mpatches
 from pysindy import SINDy
 import feyn
 import pandas as pd
@@ -119,6 +122,8 @@ class ChiefBldr:
         self.feature_names = self.X.columns.tolist() # store feature namaes
         self.y = df['Qcr']
         self.gsflow = df['Gasflowrate']  # additional target for classification metrics
+        self.status_col = df['Test status']
+        self.df = df
 
         # lone hot encode loaded/unloaded/near loaded class labels
         self.loading = df['Test status'].apply(
@@ -151,6 +156,7 @@ class ChiefBldr:
 
             self.X_train_rdy = self.scaler_X.fit_transform(self.X_train)
             self.X_test_rdy = self.scaler_X.transform(self.X_test)
+            self.X_scaled = self.scaler_X.transform(self.X)
 
             self.y_train_rdy = self.scaler_y.fit_transform(self.y_train.values.reshape(-1, 1))
             self.y_test_rdy = self.scaler_y.transform(self.y_test.values.reshape(-1, 1))
@@ -328,6 +334,104 @@ class ChiefBldr:
         self.cm = confusion_matrix(loading, loading_pred,  labels=[-1, 0, 1]) # compute confusion matrix 
 
         return self.acc
+    def plot_model_results(
+        self, 
+        trained_model,
+        X_scaled, 
+        df, 
+        status_col,
+        model_name="Model",
+        output_file="scatter_plot.pdf"):
+        """
+        Plot predicted vs. measured well flow rates with categorical coloring.
 
+        Parameters
+        ----------
+        trained_model : sklearn-like estimator
+            Fitted model with .predict() method.
+        X_scaled : array-like
+            Scaled features for prediction.
+        df : pandas.DataFrame
+            DataFrame containing status labels for coloring.
+        status_col : str
+            Column in df that contains status labels.
+        model_name : str, optional
+            Title for the plot. Default is "Model".
+        output_file : str, optional
+            File name for saving the figure. Default is "scatter_plot.pdf".
+        """
+
+        color_map = {
+            'Loaded': '#FF6363',  # Light red
+            'Unloaded': '#3674B5',  # Light purple
+            'Questionable': '#D3D3D3',  # Light orange
+            'Near L.U': '#FFCC99'  # Light blue
+        }
+
+        # Get gasflow data from the dataframe
+        gasflow_subset = df['Gasflowrate']
+
+        # Predictions
+        y_pred_subset = trained_model.predict(X_scaled)
+
+        # Color assignment
+        colors = df[status_col].map(color_map).fillna('#D3D3D3')  # Light gray fallback
+
+        # Plot setup
+        plt.figure(figsize=(8, 6), dpi=300)
+        sns.set_theme(style="whitegrid", context="paper", font_scale=1.3, font='Arial')
+
+        # Scatter plot
+        plt.scatter(gasflow_subset, y_pred_subset, c=colors, alpha=1, s=100,
+                    edgecolors="gray", linewidth=0.5)
+
+        # Reference line
+        plt.plot([0, 350000], [0, 350000], '--', color='#FF6666', linewidth=1.5)
+
+        # Labels & Title
+        plt.title(f"{model_name} Results", fontsize=16, fontweight='bold', pad=15)
+        plt.xlabel("Measured Well Flow Rate (m³/day)", fontsize=14, fontweight='bold')
+        plt.ylabel("Predicted Critical Rate (m³/day)", fontsize=14, fontweight='bold')
+
+        # Grid & Limits
+        plt.grid(True, linestyle='--', alpha=0.7)
+        plt.xlim(0, 350000)
+        plt.ylim(0, 350000)
+
+        # Legend
+        legend_patches = [mpatches.Patch(color=color, label=status) 
+                          for status, color in color_map.items()]
+        plt.legend(handles=legend_patches, title='Actual Label', fontsize=12,
+                   title_fontsize=14, loc='best', frameon=True, edgecolor='gray')
+
+        # Save & Show
+        plt.tight_layout()
+        plt.savefig(output_file, format="pdf", dpi=300, bbox_inches='tight')
+        plt.show()
+        plt.close()
+        
+    def plot_results(self, trained_model, X_scaled, model_name="Model", output_file="scatter_plot.pdf"):
+            """
+            Convenience method to plot model results using the stored dataframe.
+            
+            Parameters
+            ----------
+            trained_model : sklearn-like estimator
+                Fitted model with .predict() method.
+            X_scaled : array-like
+                Scaled features for prediction.
+            model_name : str, optional
+                Title for the plot. Default is "Model".
+            output_file : str, optional
+                File name for saving the figure. Default is "scatter_plot.pdf".
+            """
+            return self.plot_model_results(
+                trained_model=trained_model,
+                X_scaled=X_scaled,
+                df=self.df,
+                status_col='Test status',
+                model_name=model_name,
+                output_file=output_file
+            )
     
 

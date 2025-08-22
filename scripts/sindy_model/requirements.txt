@@ -1,0 +1,23 @@
+# SINDy Model Requirements
+# Core scientific computing
+numpy>=1.21.0
+pandas>=1.3.0
+scipy>=1.7.0
+
+# Machine learning
+scikit-learn>=1.0.0
+
+# SINDy specific
+pysindy>=1.7.0
+
+# Visualization
+matplotlib>=3.5.0
+seaborn>=0.11.0
+
+# Optional: For better performance
+# numba>=0.56.0
+# cupy-cuda11x>=10.0.0  # If using CUDA
+
+# Development and testing
+# pytest>=6.0.0
+# jupyter>=1.0.0

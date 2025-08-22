@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
-pip install pysr
-
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split, StratifiedKFold
@@ -13,15 +10,35 @@ import seaborn as sns
 import matplotlib.patches as mpatches
 from pysr import PySRRegressor
 import matplotlib as mpl
+import os
 
-# Set matplotlib to use LaTeX for text rendering
-mpl.rcParams['text.usetex'] = True
-mpl.rcParams['font.family'] = 'serif'
-mpl.rcParams['font.serif'] = ['Computer Modern']
-mpl.rcParams['font.size'] = 14
+# Set matplotlib configuration for better compatibility
+plt.rcParams['figure.figsize'] = (10, 8)
+plt.rcParams['figure.dpi'] = 100
+plt.rcParams['font.size'] = 12
+plt.rcParams['axes.grid'] = True
+plt.rcParams['grid.alpha'] = 0.3
 
-# Load data
-df = pd.read_csv('/content/sample_data/processed_well_data.csv')
+# Try to set LaTeX if available, otherwise use default
+try:
+    mpl.rcParams['text.usetex'] = True
+    mpl.rcParams['font.family'] = 'serif'
+    mpl.rcParams['font.serif'] = ['Computer Modern']
+except:
+    mpl.rcParams['text.usetex'] = False
+    mpl.rcParams['font.family'] = 'sans-serif'
+
+# Load data with proper path handling
+data_path = os.path.join(os.path.dirname(__file__), '..', 'processed_well_data.csv')
+if not os.path.exists(data_path):
+    # Try alternative path
+    data_path = os.path.join(os.path.dirname(__file__), '..', '..', 'datasets', 'processed_well_data.csv')
+
+if not os.path.exists(data_path):
+    raise FileNotFoundError(f"Could not find processed_well_data.csv. Tried paths: {data_path}")
+
+print(f"Loading data from: {data_path}")
+df = pd.read_csv(data_path)
 
 # Define features and targets
 features = ['Dia', 'Dev_deg', 'Area_m2', 'z', 'GasDens', 'LiquidDens', 'g_m_s2', 'P_T', 'friction_factor', 'critical_film_thickness']
@@ -113,23 +130,30 @@ def evaluate_pysr(train_df, loading_class, cv_splits=5, maxsize=15, niterations=
     return np.mean(acc_scores)
 
 # Plot confusion matrix
-def plot_confusion_matrix(cm, title, filename):
-    plt.figure(figsize=(8, 6), dpi=300)
-    sns.set_theme(style="whitegrid", context="paper", font_scale=1.5)
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', cbar=False,
+def plot_confusion_matrix(cm, title, filename=None):
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', cbar=True,
                 xticklabels=['Unloaded', 'Near L.U', 'Loaded'],
                 yticklabels=['Unloaded', 'Near L.U', 'Loaded'],
-                annot_kws={"size": 16, "weight": "bold"})
-    plt.title(title, fontsize=18, fontweight='bold')
-    plt.xlabel('Predicted Label', fontsize=16, fontweight='bold')
-    plt.ylabel('True Label', fontsize=16, fontweight='bold')
+                annot_kws={"size": 14, "weight": "bold"})
+    plt.title(title, fontsize=16, fontweight='bold')
+    plt.xlabel('Predicted Label', fontsize=14, fontweight='bold')
+    plt.ylabel('True Label', fontsize=14, fontweight='bold')
     plt.tight_layout()
-    plt.savefig(filename, format="pdf", dpi=300, bbox_inches="tight")
+    
+    if filename:
+        plt.savefig(filename, format="pdf", dpi=300, bbox_inches="tight")
+    
+    plt.show()
     plt.close()
 
 # Evaluate with cross-validation
-cv_score = evaluate_pysr(train_df, loading_train, maxsize=15, niterations=100)
-print(f"Cross-validation accuracy: {cv_score*100:.2f}%")
+try:
+    cv_score = evaluate_pysr(train_df, loading_train, maxsize=15, niterations=100)
+    print(f"Cross-validation accuracy: {cv_score*100:.2f}%")
+except Exception as e:
+    print(f"Cross-validation failed: {e}")
+    cv_score = 0.0
 
 # Train final model
 model = PySRRegressor(
@@ -162,28 +186,83 @@ print("Confusion Matrix (Train):\n", train_cm)
 print("Confusion Matrix (Test):\n", test_cm)
 
 # Plot confusion matrices
-plt.rcParams['text.usetex'] = False
 plot_confusion_matrix(train_cm, "Confusion Matrix (Training Set)", "train_confusion_matrix.pdf")
 plot_confusion_matrix(test_cm, "Confusion Matrix (Test Set)", "test_confusion_matrix.pdf")
 
+# Create additional diagnostic plots
+def create_diagnostic_plots(y_true, y_pred, title_prefix):
+    """Create residual and prediction plots for model diagnostics"""
+    
+    # Residual plot
+    residuals = y_true - y_pred
+    
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
+    
+    # Residuals vs Predicted
+    ax1.scatter(y_pred, residuals, alpha=0.6, s=50)
+    ax1.axhline(y=0, color='red', linestyle='--', alpha=0.8)
+    ax1.set_xlabel('Predicted Values', fontweight='bold')
+    ax1.set_ylabel('Residuals', fontweight='bold')
+    ax1.set_title(f'{title_prefix} - Residuals vs Predicted', fontweight='bold')
+    ax1.grid(True, alpha=0.3)
+    
+    # Residuals histogram
+    ax2.hist(residuals, bins=30, alpha=0.7, edgecolor='black')
+    ax2.set_xlabel('Residuals', fontweight='bold')
+    ax2.set_ylabel('Frequency', fontweight='bold')
+    ax2.set_title(f'{title_prefix} - Residuals Distribution', fontweight='bold')
+    ax2.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    plt.savefig(f"{title_prefix.lower().replace(' ', '_')}_diagnostics.pdf", format="pdf", dpi=300, bbox_inches="tight")
+    plt.show()
+    plt.close()
+
+# Create diagnostic plots for training and test sets
+create_diagnostic_plots(y_train, y_train_pred, "Training Set")
+create_diagnostic_plots(y_test, y_test_pred, "Test Set")
+
 # Scatter plot
-color_map = {'Loaded': 'red', 'Unloaded': 'green', 'Questionable': 'orange', 'Near L.U': 'blue'}
+color_map = {
+    'Loaded': '#FF6363',  # Light red
+    'Unloaded': '#3674B5',  # Light purple
+    'Questionable': '#D3D3D3',  # Light orange
+    'Near L.U': '#FFCC99'  # Light blue
+}
 y_pred_scaled = model.predict(full_df[features])
 y_pred = scaler_y.inverse_transform(y_pred_scaled.reshape(-1, 1)).flatten()
 colors = df[status_col].map(color_map).fillna('gray')
 
-plt.figure(figsize=(10, 8), dpi=300)
-sns.set_theme(style="whitegrid", context="paper", font_scale=1.5)
-plt.scatter(gsflow, y_pred, c=colors, alpha=0.7, s=150, edgecolors="black")
-plt.plot([0, 350000], [0, 350000], '--r')
-plt.title("PySR Model", fontsize=18, fontweight='bold')
-plt.xlabel("Well measured flow rate (m³/day)", fontsize=18, fontweight='bold')
-plt.ylabel("Critical rate (m³/day)", fontsize=18, fontweight='bold')
-plt.grid(True)
+plt.figure(figsize=(10, 8))
+plt.scatter(gsflow, y_pred, c=colors, alpha=1, s=100, edgecolors="gray", linewidth=0.5)
+plt.plot([0, 350000], [0, 350000], '--', color='#FF6666', linewidth=1.5)
+plt.title("PySR Model"  , fontsize=16, fontweight='bold', pad=15)
+plt.xlabel("Well measured flow rate (m³/day)", fontsize=14, fontweight='bold')
+plt.ylabel("Critical rate (m³/day)", fontsize=14, fontweight='bold')
+plt.grid(True, alpha=0.3)
 plt.xlim(0, 350000)
 plt.ylim(0, 350000)
 legend_patches = [mpatches.Patch(color=color, label=status) for status, color in color_map.items()]
-plt.legend(handles=legend_patches, title='Actual label', fontsize=14, title_fontsize=16)
+plt.legend(handles=legend_patches, title='Actual label', fontsize=12, title_fontsize=14, loc='upper left')
 plt.tight_layout()
+
+# Save and display the plot
 plt.savefig("pysr_scatter.pdf", format="pdf", dpi=300, bbox_inches="tight")
+plt.show()
 plt.close()
+
+# Print final summary
+print("\n" + "="*60)
+print("PYSR MODEL TRAINING COMPLETE")
+print("="*60)
+print(f"Cross-validation accuracy: {cv_score*100:.2f}%")
+print(f"Training accuracy: {train_acc*100:.2f}%")
+print(f"Test accuracy: {test_acc*100:.2f}%")
+print(f"Best equation: {model.equations_[0] if hasattr(model, 'equations_') and len(model.equations_) > 0 else 'No equation found'}")
+print("\nPlots saved:")
+print("- train_confusion_matrix.pdf")
+print("- test_confusion_matrix.pdf") 
+print("- training_set_diagnostics.pdf")
+print("- test_set_diagnostics.pdf")
+print("- pysr_scatter.pdf")
+print("="*60)
