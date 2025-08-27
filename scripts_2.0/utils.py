@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import sys
 
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import accuracy_score, confusion_matrix, r2_score
 from sklearn.model_selection import train_test_split, StratifiedKFold 
 from sklearn.preprocessing import StandardScaler
 from typing import Optional, List, Callable, Dict, Any, List
@@ -245,9 +245,9 @@ class ChiefBldr:
             self.y_train_pred = self.scaler_y.inverse_transform(self.y_train_pred.reshape(-1, 1)).flatten()
             self.y_test_pred = self.scaler_y.inverse_transform(self.y_test_pred.reshape(-1, 1)).flatten()
             
-        print(f"Training set reg score: {np.sqrt(((self.y_train_pred - self.y_train) ** 2).mean())}")
+        print(f"Training set R2: {r2_score(self.y_train, self.y_train_pred)}")
         print(f"Training set class score: {self.classification_scores(self.y_train_pred, self.gsflow_train, self.loading_train)}", file=sys.stderr)
-        print(f"Test set reg score: {np.sqrt(((self.y_test_pred - self.y_test) ** 2).mean())}")
+        print(f"Test set R2: {r2_score(self.y_test, self.y_test_pred)}")
         print(f"Test set class score: {self.classification_scores(self.y_test_pred, self.gsflow_test, self.loading_test)}", file=sys.stderr)
 
         return self.model 
