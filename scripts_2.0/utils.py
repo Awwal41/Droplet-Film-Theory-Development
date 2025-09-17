@@ -217,15 +217,16 @@ class ChiefBldr:
 
                 # evaluate model on these params
                 model = build_model(hparams=hparams) # model defined and passed by user
-                self.score = self._cross_val(model=model) # perform k-fold CV for each set of hparams 
+                self.score, self.score_std = self._cross_val(model=model) # perform k-fold CV for each set of hparams 
 
                 # collect the best set of hyperparameters 
                 if self.score > self.best_score:
                     self.best_score  = self.score
+                    self.best_score_std    = self.score_std
                     self.best_params = hparams
 
             # print best score hparams from hyperparameter tuning 
-            print("Done. Best score =", self.best_score, file=sys.stderr)
+            print("Done. Best average score and std =", self.best_score, self.best_score_std, file=sys.stderr)
             print("Best hyperparameters:", self.best_params, file=sys.stderr)
 
             # retrain the model with the full training set and evalute test set performance 
@@ -245,8 +246,11 @@ class ChiefBldr:
             self.y_train_pred = self.scaler_y.inverse_transform(self.y_train_pred.reshape(-1, 1)).flatten()
             self.y_test_pred = self.scaler_y.inverse_transform(self.y_test_pred.reshape(-1, 1)).flatten()
             
+        # Trainin set metrics 
         print(f"Training set R2: {r2_score(self.y_train, self.y_train_pred)}")
         print(f"Training set class score: {self.classification_scores(self.y_train_pred, self.gsflow_train, self.loading_train)}", file=sys.stderr)
+        
+        # Test set metrics
         print(f"Test set R2: {r2_score(self.y_test, self.y_test_pred)}")
         print(f"Test set class score: {self.classification_scores(self.y_test_pred, self.gsflow_test, self.loading_test)}", file=sys.stderr)
 
@@ -304,8 +308,9 @@ class ChiefBldr:
             
         self.acc_cv_scores = acc_scores
         self.mean_acc = float(np.mean(self.acc_cv_scores))
+        self.std_acc = float(np.std(self.acc_cv_scores))
 
-        return self.mean_acc 
+        return self.mean_acc, self.std_acc
     
     def classification_scores(
         self, 
