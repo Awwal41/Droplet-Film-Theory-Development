@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usage Examples - DFT Documentation</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Usage Examples</h1>
+            <nav>
+                <a href="../index.html">Home</a>
+                <a href="documentation.html">Documentation</a>
+                <a href="installation_guide.html">Installation</a>
+                <a href="usage_examples.html">Usage</a>
+                <a href="api_reference.html">API Reference</a>
+                <a href="troubleshooting.html">Troubleshooting</a>
+            </nav>
+        </header>
+        
+        <main>
+            <div class="content">
+<h3>Usage Examples</h3>
+<h3>Droplet-Film Theory Development</h3>
+<h3>Scripts 2.0</h3>
+<h3>Basic Usage Examples</h3>
+<h3>This file contains practical code examples</h3>
+<p>for using the DFT implementation.</p>
+<p>Start with basic examples and progress to advanced usage.</p>
+<h3>Example 1: Basic Import and Setup</h3>
+<h3># Import required modules</h3>
+<h3>from dft_model import DFT</h3>
+<h3>from utils import ChiefBldr</h3>
+<h3>import pandas as pd</h3>
+<h3>import numpy as np</h3>
+<h3>Example 1: Data Loading</h3>
+<h3># Load your dataset</h3>
+<h3>data_path = "path/to/your/well_data.csv"</h3>
+<h3>data = pd.read_csv(data_path)</h3>
+<h3># Verify required columns exist</h3>
+<p>required_cols = ['Dia', 'Dev(deg)', 'Area (m2)', 'z',</p>
+<p>'GasDens', 'LiquidDens', 'g (m/s2)',</p>
+<p>'P/T', 'friction_factor', 'critical_film_thickness']</p>
+<h3>Example 1: Initialize ChiefBldr</h3>
+<h3># Initialize the data builder</h3>
+<h3>builder = ChiefBldr(</h3>
+<p>path=data_path,</p>
+<p>includ_cols=required_cols,</p>
+<p>test_size=0.20,</p>
+<h3>scale=False</h3>
+<h3>)</h3>
+<h3>Example 2: Basic DFT Model</h3>
+<h3># Create a simple DFT model</h3>
+<h3>dft_model = DFT(</h3>
+<p>seed=42,</p>
+<p>feature_tol=1.0,</p>
+<p>dev_tol=1e-3,</p>
+<h3>multiple_dev_policy="max"</h3>
+<h3>)</h3>
+<h3>Example 2: Model Training</h3>
+<h3># Train the model with basic parameters</h3>
+<h3>trained_model = builder.evolv_model(</h3>
+<p>build_model=lambda hparams: DFT(**hparams),</p>
+<p>hparam_grid={"dev_tol": [1e-3], "feature_tol": [1.0]},</p>
+<h3>k_folds=5</h3>
+<h3>)</h3>
+<h3>Example 2: Make Predictions</h3>
+<h3># Make predictions on new data</h3>
+<p>X_new = np.array([[0.1, 15.0, 0.00785, 1000, 1.2, 1000, 9.81, 101325/298, 0.02, 0.001]])</p>
+<h3>predictions = trained_model.predict(X_new)</h3>
+<p>print(f"Predicted critical flow rate: {predictions[0]:.2f}")</p>
+<h3>Example 3: Hyperparameter Optimization</h3>
+<h3># Define hyperparameter grid</h3>
+<h3>hparam_grid = {</h3>
+<p>"dev_tol": [1e-4, 1e-3, 1e-2],</p>
+<p>"feature_tol": [0.5, 1.0, 2.0],</p>
+<h3>"multiple_dev_policy": ["max", "min", "mean"]</h3>
+<h3>}</h3>
+<h3>Example 3: Advanced Training</h3>
+<h3># Train with hyperparameter optimization</h3>
+<h3>trained_model = builder.evolv_model(</h3>
+<p>build_model=lambda hparams: DFT(**hparams),</p>
+<p>hparam_grid=hparam_grid,</p>
+<h3>k_folds=5</h3>
+<h3>)</h3>
+<h3>Example 3: Access Results</h3>
+<h3># Access training results</h3>
+<h3>print(f"Training MSE: {builder.loss:.6f}")</h3>
+<p>print(f"Best parameters: {trained_model.opt_params[:5]}")</p>
+<h3># Get alpha values</h3>
+<h3>alpha_values = trained_model.opt_params[5:]</h3>
+<p>print(f"Alpha range: {alpha_values.min():.3f} to {alpha_values.max():.3f}")</p>
+<h3>Example 4: Performance Visualization</h3>
+<h3># Plot training performance</h3>
+<h3>import matplotlib.pyplot as plt</h3>
+<h3>plt.figure(figsize=(12, 5))</h3>
+<h3># Training performance</h3>
+<h3>plt.subplot(1, 2, 1)</h3>
+<p>plt.scatter(builder.y_train, builder.y_train_pred, alpha=0.7)</p>
+<p>plt.plot([builder.y.min(), builder.y.max()], [builder.y.min(), builder.y.max()], 'r--')</p>
+<h3>plt.xlabel("Actual Values")</h3>
+<h3>plt.ylabel("Predicted Values")</h3>
+<h3>plt.title("Training Performance")</h3>
+<h3>Example 4: Test Performance</h3>
+<h3># Test performance</h3>
+<h3>plt.subplot(1, 2, 2)</h3>
+<p>plt.scatter(builder.y_test, builder.y_test_pred, alpha=0.7, color='green')</p>
+<p>plt.plot([builder.y.min(), builder.y.max()], [builder.y.min(), builder.y.max()], 'r--')</p>
+<h3>plt.xlabel("Actual Values")</h3>
+<h3>plt.ylabel("Predicted Values")</h3>
+<h3>plt.title("Test Performance")</h3>
+<h3>plt.tight_layout()</h3>
+<h3>plt.show()</h3>
+<h3>Example 5: QLattice Integration</h3>
+<h3># Use QLattice for symbolic regression</h3>
+<h3>from utils import QLatticeWrapper</h3>
+<h3># Initialize QLattice wrapper</h3>
+<h3>ql_model = QLatticeWrapper(</h3>
+<p>feature_tags=builder.feature_names,</p>
+<p>output_tag="Qcr",</p>
+<p>max_complexity=8,</p>
+<h3>n_epochs=5</h3>
+<h3>)</h3>
+<h3>Example 5: QLattice Training</h3>
+<h3># Train QLattice model</h3>
+<h3>ql_model.fit(builder.X_train, builder.y_train)</h3>
+<h3># Get symbolic expression</h3>
+<h3>symbolic_expr = ql_model.express()</h3>
+<h3>print(f"Symbolic expression: {symbolic_expr}")</h3>
+<h3># Make predictions</h3>
+<h3>ql_predictions = ql_model.predict(builder.X_test)</h3>
+<h3>Example 6: Model Persistence</h3>
+<h3># Save trained model for production use</h3>
+<h3>import pickle</h3>
+<h3># Save DFT model</h3>
+<p>with open('trained_dft_model.pkl', 'wb') as f:</p>
+<h3>pickle.dump(trained_model, f)</h3>
+<h3># Save QLattice model</h3>
+<p>with open('trained_qlattice_model.pkl', 'wb') as f:</p>
+<h3>pickle.dump(ql_model, f)</h3>
+<h3>Example 6: Model Loading</h3>
+<h3># Load saved models</h3>
+<p>with open('trained_dft_model.pkl', 'rb') as f:</p>
+<h3>loaded_dft = pickle.load(f)</h3>
+<p>with open('trained_qlattice_model.pkl', 'rb') as f:</p>
+<h3>loaded_ql = pickle.load(f)</h3>
+<h3># Use loaded models</h3>
+<h3>predictions_dft = loaded_dft.predict(X_new)</h3>
+<h3>predictions_ql = loaded_ql.predict(X_new)</h3>
+<h3>Example 7: Custom Alpha Strategy</h3>
+<h3># Implement custom alpha assignment</h3>
+<p>def custom_alpha_strategy(X_new, X_train, alpha_train, dev_tol=1e-3):</p>
+<h3>alpha_used = []</h3>
+<p>dev_train = X_train[:, 1]  # Deviation angle column</p>
+<p>for i in range(len(X_new)):</p>
+<h3>d_new = X_new[i, 1]</h3>
+<p>match_idx = np.where(np.abs(dev_train - d_new) <= dev_tol)[0]</p>
+<p>if len(match_idx) == 0:</p>
+<h3>alpha_used.append(np.mean(alpha_train))</h3>
+<p>else:</p>
+<h3># Use custom logic here</h3>
+<p>alpha_used.append(np.median(alpha_train[match_idx]))</p>
+<h3>return np.array(alpha_used)</h3>
+<h3>Example 8: Batch Processing</h3>
+<h3># Process multiple datasets</h3>
+<p>datasets = ["well_data_1.csv", "well_data_2.csv", "well_data_3.csv"]</p>
+<h3>results = {}</h3>
+<p>for dataset in datasets:</p>
+<h3>builder = ChiefBldr(path=dataset, test_size=0.2)</h3>
+<h3>model = DFT(seed=42)</h3>
+<h3>trained = builder.evolv_model(</h3>
+<p>build_model=lambda hparams: DFT(**hparams),</p>
+<p>hparam_grid={"dev_tol": [1e-3]},</p>
+<h3>k_folds=3</h3>
+<h3>)</h3>
+<p>results[dataset] = {"model": trained, "mse": builder.loss}</p>
+<h3>Example 9: Cross-Validation Analysis</h3>
+<h3># Perform detailed cross-validation analysis</h3>
+<h3>from sklearn.model_selection import KFold</h3>
+<p>kf = KFold(n_splits=5, shuffle=True, random_state=42)</p>
+<h3>cv_scores = []</h3>
+<p>for train_idx, val_idx in kf.split(builder.X):</p>
+<h3>X_train_cv = builder.X[train_idx]</h3>
+<h3>y_train_cv = builder.y[train_idx]</h3>
+<h3>X_val_cv = builder.X[val_idx]</h3>
+<h3>y_val_cv = builder.y[val_idx]</h3>
+<h3>model_cv = DFT(seed=42)</h3>
+<h3>model_cv.fit(X_train_cv, y_train_cv)</h3>
+<h3>y_pred_cv = model_cv.predict(X_val_cv)</h3>
+<h3>mse = np.mean((y_val_cv - y_pred_cv) ** 2)</h3>
+<h3>cv_scores.append(mse)</h3>
+<h3>Example 9: CV Results Analysis</h3>
+<h3># Analyze cross-validation results</h3>
+<p>print(f"CV MSE: {np.mean(cv_scores):.6f} ± {np.std(cv_scores):.6f}")</p>
+<h3>print(f"CV scores: {cv_scores}")</h3>
+<h3># Plot CV results</h3>
+<h3>plt.figure(figsize=(8, 6))</h3>
+<h3>plt.plot(range(1, 6), cv_scores, 'bo-')</h3>
+<h3>plt.xlabel("Fold")</h3>
+<h3>plt.ylabel("MSE")</h3>
+<h3>plt.title("Cross-Validation Performance")</h3>
+<h3>plt.grid(True)</h3>
+<h3>plt.show()</h3>
+<h3>Example 10: Feature Importance Analysis</h3>
+<h3># Analyze feature importance by perturbation</h3>
+<p>def feature_importance_analysis(model, X_sample, feature_names):</p>
+<h3>base_pred = model.predict(X_sample)</h3>
+<h3>importance_scores = []</h3>
+<p>for i in range(X_sample.shape[1]):</p>
+<h3>X_perturbed = X_sample.copy()</h3>
+<h3>X_perturbed[:, i] *= 1.1  # 10% increase</h3>
+<h3>pred_perturbed = model.predict(X_perturbed)</h3>
+<p>importance = np.mean(np.abs(pred_perturbed - base_pred))</p>
+<h3>importance_scores.append(importance)</h3>
+<p>return dict(zip(feature_names, importance_scores))</p>
+<h3>Example 10: Feature Importance Results</h3>
+<h3># Calculate and display feature importance</h3>
+<p>X_sample = builder.X_test[:10]  # Use first 10 test samples</p>
+<p>importance = feature_importance_analysis(trained_model, X_sample, builder.feature_names)</p>
+<h3># Sort by importance</h3>
+<p>sorted_importance = sorted(importance.items(), key=lambda x: x[1], reverse=True)</p>
+<h3>print("Feature Importance:")</h3>
+<p>for feature, score in sorted_importance:</p>
+<h3>print(f"{feature}: {score:.6f}")</h3>
+<h3>Example 11: Production Deployment</h3>
+<h3># Production-ready prediction function</h3>
+<p>def predict_critical_flow_rate(well_data, model_path):</p>
+<h3>"""</h3>
+<p>Production function for critical flow rate prediction</p>
+<p>Args:</p>
+<h3>well_data: Dictionary with well parameters</h3>
+<h3>model_path: Path to saved model</h3>
+<p>Returns:</p>
+<h3>float: Predicted critical flow rate</h3>
+<h3>"""</h3>
+<h3># Load model</h3>
+<p>with open(model_path, 'rb') as f:</p>
+<h3>model = pickle.load(f)</h3>
+<h3># Prepare input data</h3>
+<p>X = np.array([[well_data['Dia'], well_data['Dev(deg)'],</p>
+<p>well_data['Area (m2)'], well_data['z'],</p>
+<p>well_data['GasDens'], well_data['LiquidDens'],</p>
+<p>well_data['g (m/s2)'], well_data['P/T'],</p>
+<p>well_data['friction_factor'], well_data['critical_film_thickness']]])</p>
+<h3># Make prediction</h3>
+<h3>prediction = model.predict(X)</h3>
+<h3>return prediction[0]</h3>
+<h3>Example 11: Production Usage</h3>
+<h3># Example production usage</h3>
+<h3>well_params = {</h3>
+<p>'Dia': 0.1,</p>
+<p>'Dev(deg)': 15.0,</p>
+<p>'Area (m2)': 0.00785,</p>
+<p>'z': 1000,</p>
+<p>'GasDens': 1.2,</p>
+<p>'LiquidDens': 1000,</p>
+<p>'g (m/s2)': 9.81,</p>
+<p>'P/T': 101325/298,</p>
+<p>'friction_factor': 0.02,</p>
+<h3>'critical_film_thickness': 0.001</h3>
+<h3>}</h3>
+<p>predicted_qcr = predict_critical_flow_rate(well_params, 'trained_dft_model.pkl')</p>
+<h3>print(f"Predicted Qcr: {predicted_qcr:.2f}")</h3>
+<h3>Example 12: Error Handling</h3>
+<h3># Robust prediction function with error handling</h3>
+<p>def robust_prediction(well_data, model_path):</p>
+<p>try:</p>
+<h3># Validate input data</h3>
+<p>required_keys = ['Dia', 'Dev(deg)', 'Area (m2)', 'z', 'GasDens',</p>
+<p>'LiquidDens', 'g (m/s2)', 'P/T', 'friction_factor',</p>
+<h3>'critical_film_thickness']</h3>
+<p>for key in required_keys:</p>
+<p>if key not in well_data:</p>
+<p>raise ValueError(f"Missing required parameter: {key}")</p>
+<h3># Make prediction</h3>
+<p>result = predict_critical_flow_rate(well_data, model_path)</p>
+<p>return {"success": True, "prediction": result, "error": None}</p>
+<p>except Exception as e:</p>
+<p>return {"success": False, "prediction": None, "error": str(e)}</p>
+<h3>Example 12: Error Handling Usage</h3>
+<h3># Test error handling</h3>
+<h3># Valid data</h3>
+<p>result_valid = robust_prediction(well_params, 'trained_dft_model.pkl')</p>
+<h3>print(f"Valid prediction: {result_valid}")</h3>
+<h3># Invalid data</h3>
+<p>invalid_params = {'Dia': 0.1}  # Missing parameters</p>
+<p>result_invalid = robust_prediction(invalid_params, 'trained_dft_model.pkl')</p>
+<h3>print(f"Invalid prediction: {result_invalid}")</h3>
+<h3>Complete Workflow Summary</h3>
+<p>1. Data Preparation: Ensure CSV format with required columns</p>
+<p>2. Environment Setup: Install dependencies and import modules</p>
+<p>3. Data Loading: Use ChiefBldr for data preprocessing</p>
+<p>4. Model Definition: Create DFT model with desired parameters</p>
+<p>5. Training: Use evolv_model for hyperparameter optimization</p>
+<p>6. Evaluation: Analyze performance metrics and visualize results</p>
+<p>7. Deployment: Save model and create production functions</p>
+<h3>Best Practices</h3>
+<h3>- Always use virtual environments</h3>
+<h3>- Validate input data before processing</h3>
+<h3>- Implement proper error handling</h3>
+<h3>- Document your workflows</h3>
+<h3>- Test with sample data first</h3>
+<h3>- Monitor model performance</h3>
+<h3>- Keep models updated</h3>
+<h3>- Use version control</h3>
+<h3>Next Steps</h3>
+<h3>1. Review API_REFERENCE.srt for technical details</h3>
+<h3>2. Check TROUBLESHOOTING.srt for common issues</h3>
+<h3>3. Experiment with different parameters</h3>
+<h3>4. Try different modeling approaches</h3>
+<h3>5. Contribute to the project</h3>
+<h3>6. Share your results</h3>
+<h3>End of Usage Examples</h3>
+<h3>Return to MAIN_DOCUMENTATION.srt</h3>
+<h3>for overview and other documentation sections</h3>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Generated on 2025-10-14 17:58:13</p>
+            <p>Droplet-Film Theory Development Project</p>
+        </footer>
+    </div>
+</body>
+</html>

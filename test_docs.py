@@ -32,16 +32,15 @@ def test_conversion():
     
     print("✅ All SRT files found")
     
-    # Check if scripts directory exists
-    if not os.path.exists('scripts'):
-        print("❌ Scripts directory not found")
+    # Check if conversion scripts exist
+    if not os.path.exists('convert_srt_to_html.py') or not os.path.exists('build_docs.py'):
+        print("❌ Conversion scripts not found")
         return False
     
-    print("✅ Scripts directory found")
+    print("✅ Conversion scripts found")
     
     # Try to import and run conversion
     try:
-        sys.path.append('scripts')
         from convert_srt_to_html import main as convert_main
         from build_docs import build_documentation
         

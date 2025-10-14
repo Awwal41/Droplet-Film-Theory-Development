@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Installation Guide - DFT Documentation</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Installation Guide</h1>
+            <nav>
+                <a href="../index.html">Home</a>
+                <a href="documentation.html">Documentation</a>
+                <a href="installation_guide.html">Installation</a>
+                <a href="usage_examples.html">Usage</a>
+                <a href="api_reference.html">API Reference</a>
+                <a href="troubleshooting.html">Troubleshooting</a>
+            </nav>
+        </header>
+        
+        <main>
+            <div class="content">
+<h3>Installation Guide</h3>
+<h3>Droplet-Film Theory Development</h3>
+<h3>Scripts 2.0</h3>
+<h3>System Requirements</h3>
+<h3>- Python 3.7 or higher</h3>
+<h3>- 8GB RAM minimum (16GB recommended)</h3>
+<h3>- 2GB free disk space</h3>
+<h3>- Internet connection for package installation</h3>
+<h3>Operating System Support</h3>
+<h3>- Windows 10/11 (64-bit)</h3>
+<h3>- macOS 10.14 or higher</h3>
+<h3>- Ubuntu 18.04 LTS or higher</h3>
+<h3>- CentOS 7 or higher</h3>
+<h3>Python Environment Setup</h3>
+<h3>1. Install Python from python.org</h3>
+<h3>2. Verify installation: python --version</h3>
+<h3>3. Create virtual environment (recommended)</h3>
+<h3>4. Activate virtual environment</h3>
+<h3>Virtual Environment Creation</h3>
+<h3># Windows</h3>
+<h3>python -m venv dft_env</h3>
+<h3>dft_env\Scripts\activate</h3>
+<h3># macOS/Linux</h3>
+<h3>python3 -m venv dft_env</h3>
+<h3>source dft_env/bin/activate</h3>
+<h3>Package Installation Methods</h3>
+<h3>Method 1: Using setup.py (recommended)</h3>
+<h3>Method 2: Manual installation</h3>
+<h3>Method 3: Using requirements.txt</h3>
+<h3>Method 1: Setup.py Installation</h3>
+<h3># Navigate to project root directory</h3>
+<h3>cd /path/to/Droplet-Film-Theory-Development</h3>
+<h3># Install in development mode</h3>
+<p>pip install -e .</p>
+<h3>Method 2: Manual Installation</h3>
+<h3>pip install numpy pandas scipy scikit-learn</h3>
+<h3>pip install matplotlib seaborn jupyter</h3>
+<h3>pip install feyn pysindy</h3>
+<h3>Method 3: Requirements.txt</h3>
+<h3># Create requirements.txt if not exists</h3>
+<h3># Install from requirements</h3>
+<h3>pip install -r requirements.txt</h3>
+<h3>Required Dependencies</h3>
+<p>Core packages:</p>
+<h3>- NumPy: Numerical operations</h3>
+<h3>- Pandas: Data handling</h3>
+<h3>- Scipy: Optimization algorithms</h3>
+<h3>- Scikit-learn: Machine learning utilities</h3>
+<h3>Required Dependencies (continued)</h3>
+<p>Visualization packages:</p>
+<h3>- Matplotlib: Basic plotting</h3>
+<h3>- Seaborn: Statistical visualization</h3>
+<h3>- Jupyter: Interactive notebooks</h3>
+<h3>Required Dependencies (continued)</h3>
+<p>Specialized packages:</p>
+<h3>- Feyn: QLattice integration</h3>
+<h3>- PySINDy: Symbolic regression</h3>
+<h3>- Additional ML libraries as needed</h3>
+<h3>Installation Verification</h3>
+<h3># Test basic imports</h3>
+<p>python -c "import numpy; print('NumPy:', numpy.__version__)"</p>
+<p>python -c "import pandas; print('Pandas:', pandas.__version__)"</p>
+<p>python -c "import scipy; print('Scipy:', scipy.__version__)"</p>
+<h3>Installation Verification (continued)</h3>
+<h3># Test project-specific imports</h3>
+<p>python -c "from dft_model import DFT; print('DFT import successful')"</p>
+<p>python -c "from utils import ChiefBldr; print('Utils import successful')"</p>
+<h3>Jupyter Setup</h3>
+<h3># Install Jupyter if not already installed</h3>
+<h3>pip install jupyter notebook</h3>
+<h3># Launch Jupyter</h3>
+<h3>jupyter notebook</h3>
+<h3># Navigate to scripts_2.0 directory</h3>
+<h3># Open desired notebook file</h3>
+<h3>Data Preparation</h3>
+<h3># Ensure your dataset is in CSV format</h3>
+<p># Required columns must match exactly:</p>
+<p># Dia, Dev(deg), Area (m2), z, GasDens, LiquidDens</p>
+<p># g (m/s2), P/T, friction_factor, critical_film_thickness</p>
+<h3>Common Installation Issues</h3>
+<h3># Permission errors: Use --user flag or sudo</h3>
+<h3>pip install --user package_name</h3>
+<h3># Version conflicts: Use virtual environment</h3>
+<h3># Memory issues: Close other applications</h3>
+<h3># Network issues: Use alternative package sources</h3>
+<h3>Alternative Package Sources</h3>
+<h3># PyPI mirror</h3>
+<p>pip install -i https://pypi.org/simple/ package_name</p>
+<h3># Conda (if using Anaconda)</h3>
+<h3>conda install package_name</h3>
+<h3># Local installation from wheel files</h3>
+<h3>pip install package_name.whl</h3>
+<h3>Post-Installation Steps</h3>
+<h3>1. Verify all imports work correctly</h3>
+<h3>2. Test with sample data</h3>
+<h3>3. Run basic functionality tests</h3>
+<h3>4. Check Jupyter notebook execution</h3>
+<h3>5. Validate model training capabilities</h3>
+<h3>Troubleshooting Installation</h3>
+<h3># Check Python path</h3>
+<h3>which python</h3>
+<h3>python -c "import sys; print(sys.path)"</h3>
+<h3># Check package versions</h3>
+<h3>pip list | grep package_name</h3>
+<h3># Reinstall if necessary</h3>
+<h3>pip uninstall package_name</h3>
+<h3>pip install package_name</h3>
+<h3>Development Environment Setup</h3>
+<h3># Install development tools</h3>
+<h3>pip install black flake8 pytest</h3>
+<h3># Code formatting</h3>
+<h3>black *.py</h3>
+<h3># Linting</h3>
+<h3>flake8 *.py</h3>
+<h3># Testing</h3>
+<h3>pytest</h3>
+<h3>IDE Configuration</h3>
+<h3># VS Code</h3>
+<h3>- Install Python extension</h3>
+<h3>- Select Python interpreter</h3>
+<h3>- Configure linting and formatting</h3>
+<h3># PyCharm</h3>
+<h3>- Configure project interpreter</h3>
+<h3>- Set up code style</h3>
+<h3>- Enable type checking</h3>
+<h3>Performance Optimization</h3>
+<h3># Install optimized packages</h3>
+<h3>pip install numpy --upgrade</h3>
+<h3>pip install pandas --upgrade</h3>
+<h3># Use conda for scientific packages</h3>
+<h3>conda install numpy pandas scipy</h3>
+<h3># Consider using MKL libraries</h3>
+<h3>pip install mkl</h3>
+<h3>Security Considerations</h3>
+<h3># Use virtual environments</h3>
+<h3># Avoid installing packages globally</h3>
+<h3># Keep packages updated</h3>
+<h3># Use trusted package sources</h3>
+<h3># Verify package signatures</h3>
+<h3>Maintenance and Updates</h3>
+<h3># Update packages regularly</h3>
+<h3>pip install --upgrade package_name</h3>
+<h3># Check for security updates</h3>
+<h3>pip list --outdated</h3>
+<h3># Backup virtual environment</h3>
+<h3># Document package versions</h3>
+<h3>Uninstallation</h3>
+<h3># Remove specific packages</h3>
+<h3>pip uninstall package_name</h3>
+<h3># Remove entire environment</h3>
+<h3># Windows: rmdir /s dft_env</h3>
+<h3># macOS/Linux: rm -rf dft_env</h3>
+<h3># Clean pip cache</h3>
+<h3>pip cache purge</h3>
+<h3>Installation Checklist</h3>
+<h3>□ Python 3.7+ installed</h3>
+<h3>□ Virtual environment created</h3>
+<h3>□ Core packages installed</h3>
+<h3>□ Project-specific packages installed</h3>
+<h3>□ Jupyter working</h3>
+<h3>□ Imports successful</h3>
+<h3>□ Sample data ready</h3>
+<h3>□ Basic tests passing</h3>
+<h3>Next Steps After Installation</h3>
+<h3>1. Read USAGE_EXAMPLES.srt</h3>
+<h3>2. Review API_REFERENCE.srt</h3>
+<h3>3. Run sample notebooks</h3>
+<h3>4. Prepare your dataset</h3>
+<h3>5. Start with basic examples</h3>
+<h3>6. Explore advanced features</h3>
+<h3>Support and Resources</h3>
+<h3># Official documentation</h3>
+<h3># GitHub repository</h3>
+<h3># Issue tracker</h3>
+<h3># Community forums</h3>
+<h3># Research papers</h3>
+<h3># Tutorial videos</h3>
+<h3>End of Installation Guide</h3>
+<h3>Return to MAIN_DOCUMENTATION.srt</h3>
+<h3>for next steps and usage instructions</h3>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Generated on 2025-10-14 17:58:13</p>
+            <p>Droplet-Film Theory Development Project</p>
+        </footer>
+    </div>
+</body>
+</html>
