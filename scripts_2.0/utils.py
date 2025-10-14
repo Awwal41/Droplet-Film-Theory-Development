@@ -225,10 +225,6 @@ class ChiefBldr:
                     self.best_score_std    = self.score_std
                     self.best_params = hparams
 
-            # print best score hparams from hyperparameter tuning 
-            print("Done. Best average score and std =", self.best_score, self.best_score_std, file=sys.stderr)
-            print("Best hyperparameters:", self.best_params, file=sys.stderr)
-
             # retrain the model with the full training set and evalute test set performance 
             print("Retraining optimized model on full training set", file=sys.stderr)
             self.model = build_model(hparams=self.best_params)
@@ -246,12 +242,9 @@ class ChiefBldr:
             self.y_train_pred = self.scaler_y.inverse_transform(self.y_train_pred.reshape(-1, 1)).flatten()
             self.y_test_pred = self.scaler_y.inverse_transform(self.y_test_pred.reshape(-1, 1)).flatten()
             
-        # Trainin set metrics 
-        print(f"Training set R2: {r2_score(self.y_train, self.y_train_pred)}")
-        print(f"Training set class score: {self.classification_scores(self.y_train_pred, self.gsflow_train, self.loading_train)}", file=sys.stderr)
-        
-        # Test set metrics
-        print(f"Test set R2: {r2_score(self.y_test, self.y_test_pred)}")
+        # print best score hparams from hyperparameter tuning and test set scores
+        print("Best cross-validation score and std =", self.best_score, self.best_score_std, file=sys.stderr)
+        print("Best hyperparameters:", self.best_params, file=sys.stderr)
         print(f"Test set class score: {self.classification_scores(self.y_test_pred, self.gsflow_test, self.loading_test)}", file=sys.stderr)
 
         return self.model 
