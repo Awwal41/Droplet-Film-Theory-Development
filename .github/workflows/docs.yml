@@ -35,11 +35,11 @@ jobs:
           
       - name: Convert SRT to HTML
         run: |
-          python scripts/convert_srt_to_html.py
+          python convert_srt_to_html.py
           
       - name: Build documentation site
         run: |
-          python scripts/build_docs.py
+          python build_docs.py
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
