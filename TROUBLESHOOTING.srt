@@ -1,62 +1,105 @@
 Troubleshooting Guide
-Droplet-Film Theory Development
-Scripts 2.0
-
+Droplet-Film Theory Development Project
 Common Issues and Solutions
-This file addresses frequently encountered problems
-and provides step-by-step solutions.
-Use this guide when you encounter errors or unexpected behavior.
 
-Issue 1: Import Errors
-Problem: ModuleNotFoundError when importing DFT or utils
+Introduction
+This guide addresses the most frequently encountered problems when using the DFT Development project. Each issue includes detailed diagnostic steps, multiple solution approaches, and prevention strategies.
 
-Common causes:
+The guide is organized by problem category, with solutions ranging from quick fixes to comprehensive debugging approaches.
+
+Installation and Environment Issues
+
+Issue 1: Python Import Errors
+Problem: ModuleNotFoundError when importing project modules
+
+Symptoms:
+- "ModuleNotFoundError: No module named 'scripts_2.0'"
+- "ImportError: cannot import name 'DFT'"
+- "ModuleNotFoundError: No module named 'feyn'"
+
+Root Causes:
+- Virtual environment not activated
 - Missing dependencies
 - Incorrect Python path
-- Virtual environment not activated
+- Package installation failures
 
-Issue 1: Import Error Solutions
-Solution 1: Install missing packages
-pip install numpy pandas scipy scikit-learn matplotlib seaborn
+Diagnostic Steps:
+1. Check Python environment:
+   python --version
+   which python
 
-Solution 2: Activate virtual environment
+2. Verify virtual environment activation:
+   echo $VIRTUAL_ENV  # Linux/Mac
+   echo %VIRTUAL_ENV%  # Windows
+
+3. Test basic imports:
+   python -c "import numpy; print('NumPy OK')"
+   python -c "import pandas; print('Pandas OK')"
+
+Solutions:
+Solution 1: Activate Virtual Environment
 # Windows
 dft_env\Scripts\activate
 
 # macOS/Linux
 source dft_env/bin/activate
 
-Issue 1: Import Error Solutions (continued)
-Solution 3: Check Python path
-python -c "import sys; print(sys.path)"
+Solution 2: Install Missing Dependencies
+pip install numpy pandas scipy scikit-learn matplotlib seaborn feyn pysindy
 
-Solution 4: Install in development mode
-cd /path/to/project
+Solution 3: Install Project in Development Mode
+cd /path/to/Droplet-Film-Theory-Development
 pip install -e .
 
-Issue 2: Data Loading Errors
-Problem: FileNotFoundError or pandas errors when loading data
+Solution 4: Fix Python Path
+import sys
+sys.path.append('/path/to/Droplet-Film-Theory-Development')
 
-Common causes:
-- Incorrect file path
-- Wrong file format
+Prevention:
+- Always use virtual environments
+- Document exact package versions
+- Use requirements.txt for reproducibility
+
+Issue 2: Data Loading and Format Errors
+Problem: Errors when loading or processing datasets
+
+Symptoms:
+- "FileNotFoundError: [Errno 2] No such file or directory"
+- "KeyError: 'Dia'"
+- "ValueError: could not convert string to float"
+- "pandas.errors.EmptyDataError"
+
+Root Causes:
+- Incorrect file paths
 - Missing required columns
-- File permissions
+- Data format inconsistencies
+- File permission issues
 
-Issue 2: Data Loading Solutions
-Solution 1: Verify file path
-import os
-print(os.path.exists("your_data.csv"))
-print(os.path.abspath("your_data.csv"))
+Diagnostic Steps:
+1. Verify file existence:
+   import os
+   print(os.path.exists("your_data.csv"))
+   print(os.path.abspath("your_data.csv"))
 
-Solution 2: Check file format
-# Ensure CSV format
-import pandas as pd
-data = pd.read_csv("your_data.csv")
-print(data.columns.tolist())
+2. Check file format:
+   import pandas as pd
+   data = pd.read_csv("your_data.csv", nrows=5)
+   print(data.columns.tolist())
+   print(data.dtypes)
 
-Issue 2: Data Loading Solutions (continued)
-Solution 3: Verify required columns
+3. Validate data content:
+   print(data.head())
+   print(data.describe())
+
+Solutions:
+Solution 1: Fix File Paths
+# Use absolute paths
+data_path = os.path.abspath("datasets/well_data.csv")
+
+# Check current working directory
+print(os.getcwd())
+
+Solution 2: Validate Required Columns
 required_cols = ['Dia', 'Dev(deg)', 'Area (m2)', 'z', 
                  'GasDens', 'LiquidDens', 'g (m/s2)', 
                  'P/T', 'friction_factor', 'critical_film_thickness']
@@ -64,96 +107,535 @@ required_cols = ['Dia', 'Dev(deg)', 'Area (m2)', 'z',
 missing_cols = [col for col in required_cols if col not in data.columns]
 if missing_cols:
     print(f"Missing columns: {missing_cols}")
+    # Add missing columns with default values
+    for col in missing_cols:
+        data[col] = 0.0
 
-Issue 3: Memory Errors
-Problem: MemoryError during training or data processing
+Solution 3: Handle Data Format Issues
+# Clean data before processing
+data = data.dropna()  # Remove rows with missing values
+data = data.replace([np.inf, -np.inf], np.nan).dropna()  # Remove infinite values
 
-Common causes:
-- Dataset too large
-- Insufficient RAM
-- Memory leaks
-- Large hyperparameter grid
+# Convert data types
+numeric_cols = ['Dia', 'Dev(deg)', 'Area (m2)', 'z', 
+                'GasDens', 'LiquidDens', 'g (m/s2)', 
+                'P/T', 'friction_factor', 'critical_film_thickness']
+for col in numeric_cols:
+    data[col] = pd.to_numeric(data[col], errors='coerce')
 
-Issue 3: Memory Error Solutions
-Solution 1: Reduce dataset size
-# Use data sampling during development
+Solution 4: Fix File Permissions
+# Check file permissions
+import stat
+file_stat = os.stat("your_data.csv")
+print(f"Readable: {bool(file_stat.st_mode & stat.S_IRUSR)}")
+print(f"Writable: {bool(file_stat.st_mode & stat.S_IWUSR)}")
+
+Prevention:
+- Use consistent file naming conventions
+- Validate data before processing
+- Implement data quality checks
+- Use version control for datasets
+
+Issue 3: Memory and Performance Issues
+Problem: Out of memory or slow performance
+
+Symptoms:
+- "MemoryError: Unable to allocate array"
+- "Killed: 9" (Linux/Mac)
+- Extremely slow training times
+- System becomes unresponsive
+
+Root Causes:
+- Dataset too large for available memory
+- Inefficient data structures
+- Large hyperparameter grids
+- Memory leaks in optimization
+
+Diagnostic Steps:
+1. Check system memory:
+   import psutil
+   print(f"Available memory: {psutil.virtual_memory().available / 1e9:.1f} GB")
+
+2. Monitor memory usage:
+   import tracemalloc
+   tracemalloc.start()
+   # Your code here
+   current, peak = tracemalloc.get_traced_memory()
+   print(f"Current memory usage: {current / 1e6:.1f} MB")
+   print(f"Peak memory usage: {peak / 1e6:.1f} MB")
+
+3. Profile data size:
+   print(f"Dataset shape: {data.shape}")
+   print(f"Memory usage: {data.memory_usage(deep=True).sum() / 1e6:.1f} MB")
+
+Solutions:
+Solution 1: Reduce Dataset Size
+# Use data sampling for development
 data_sample = data.sample(n=1000, random_state=42)
 
-Solution 2: Reduce hyperparameter grid
+# Use stratified sampling for balanced representation
+from sklearn.model_selection import train_test_split
+X_sample, _, y_sample, _ = train_test_split(
+    X, y, train_size=1000, random_state=42, stratify=y
+)
+
+Solution 2: Optimize Hyperparameter Grid
+# Use smaller, focused grid
 hparam_grid = {
     "dev_tol": [1e-3],  # Single value instead of list
     "feature_tol": [1.0],
     "multiple_dev_policy": ["max"]
 }
 
-Issue 3: Memory Error Solutions (continued)
-Solution 3: Process data in chunks
-# For large datasets
+# Use fewer cross-validation folds
+k_folds = 3  # Instead of 5 or 10
+
+Solution 3: Process Data in Chunks
+# For very large datasets
 chunk_size = 1000
+results = []
+
 for i in range(0, len(data), chunk_size):
     chunk = data[i:i+chunk_size]
     # Process chunk
+    chunk_result = process_chunk(chunk)
+    results.append(chunk_result)
 
-Solution 4: Close other applications
-# Free up system memory
+Solution 4: Use Memory-Efficient Data Types
+# Use smaller data types where possible
+data = data.astype({
+    'Dia': 'float32',
+    'Dev(deg)': 'float32',
+    'Area (m2)': 'float32'
+})
 
-Issue 4: Optimization Convergence Errors
-Problem: RuntimeError: "Optimization failed" during training
+Prevention:
+- Start with small datasets during development
+- Monitor memory usage regularly
+- Use appropriate data types
+- Implement data streaming for large files
 
-Common causes:
-- Poor initial parameters
-- Inappropriate bounds
+Issue 4: Optimization Convergence Problems
+Problem: Model training fails to converge
+
+Symptoms:
+- "RuntimeError: Optimization failed"
+- "ConvergenceWarning: Optimization terminated early"
+- Very poor model performance
+- Unrealistic parameter values
+
+Root Causes:
+- Poor initial parameter values
+- Inappropriate optimization bounds
 - Insufficient iterations
 - Numerical instability
+- Poor data quality
 
-Issue 4: Optimization Error Solutions
-Solution 1: Increase optimization iterations
-# Modify dft_model.py
-result = minimize(self._loss, x0=x0, bounds=bounds, method="Powell",
-                  options={'maxiter': 10000, 'maxfun': 20000})
+Diagnostic Steps:
+1. Check optimization status:
+   result = minimize(...)
+   print(f"Success: {result.success}")
+   print(f"Message: {result.message}")
+   print(f"Function evaluations: {result.nfev}")
 
-Solution 2: Adjust initial parameters
-x0 = np.concatenate(([0.1, 0.1, 0.1, 0.1, 0.1], np.full(n_train, 0.5)))
+2. Analyze parameter values:
+   print(f"Parameter range: {params.min():.6f} to {params.max():.6f}")
+   print(f"Parameter mean: {params.mean():.6f}")
 
-Issue 4: Optimization Error Solutions (continued)
-Solution 3: Check data scaling
-# Ensure data is properly scaled
+3. Check data quality:
+   print(f"Data range: {X.min():.6f} to {X.max():.6f}")
+   print(f"Data mean: {X.mean():.6f}")
+   print(f"NaN values: {np.isnan(X).sum()}")
+
+Solutions:
+Solution 1: Adjust Optimization Parameters
+# Increase iterations and function calls
+result = minimize(
+    self._loss, x0=x0, bounds=bounds, method="Powell",
+    options={'maxiter': 10000, 'maxfun': 20000}
+)
+
+# Try different optimization methods
+from scipy.optimize import differential_evolution
+result = differential_evolution(self._loss, bounds, maxiter=1000)
+
+Solution 2: Improve Initial Parameters
+# Use better initial values
+x0 = np.concatenate((
+    [0.1, 0.1, 0.1, 0.1, 0.1],  # Global parameters
+    np.full(n_train, 0.5)  # Alpha values
+))
+
+# Use parameter estimation from data
+p1_init = np.sqrt(np.mean(y) / np.mean(X[:, 0]))
+x0[0] = p1_init
+
+Solution 3: Scale Input Data
+# Normalize features to prevent overflow
 from sklearn.preprocessing import StandardScaler
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
-Solution 4: Verify data quality
-# Check for NaN or infinite values
-print(f"NaN values: {np.isnan(X).sum()}")
-print(f"Inf values: {np.isinf(X).sum()}")
+# Use scaled data for training
+model.fit(X_scaled, y)
 
-Issue 5: Performance Issues
-Problem: Slow training or poor model performance
+Solution 4: Add Numerical Stability
+# Add small epsilon to prevent division by zero
+epsilon = 1e-8
+z = np.maximum(z, epsilon)
+GasDens = np.maximum(GasDens, epsilon)
 
-Common causes:
-- Large hyperparameter grid
-- Too many cross-validation folds
-- Inefficient data structures
-- Suboptimal parameters
+# Use log-space optimization for positive parameters
+def log_loss(log_params):
+    params = np.exp(log_params)
+    return self._loss(params)
 
-Issue 5: Performance Solutions
-Solution 1: Optimize hyperparameter grid
-# Use smaller, focused grid
+Prevention:
+- Always scale input data
+- Use appropriate initial values
+- Monitor optimization progress
+- Validate data quality before training
+
+Issue 5: QLattice Connection Problems
+Problem: Cannot connect to Feyn QLattice service
+
+Symptoms:
+- "ConnectionError: Failed to connect to QLattice"
+- "TimeoutError: Connection timed out"
+- "AuthenticationError: Invalid credentials"
+
+Root Causes:
+- Network connectivity issues
+- Invalid API credentials
+- Service unavailability
+- Firewall restrictions
+
+Diagnostic Steps:
+1. Test network connectivity:
+   import requests
+   try:
+       response = requests.get("https://api.feynlab.com", timeout=10)
+       print(f"Connection status: {response.status_code}")
+   except Exception as e:
+       print(f"Connection failed: {e}")
+
+2. Check Feyn configuration:
+   import feyn
+   print(f"Feyn version: {feyn.__version__}")
+
+3. Test QLattice connection:
+   try:
+       ql = feyn.connect_qlattice()
+       print("QLattice connection successful")
+   except Exception as e:
+       print(f"QLattice connection failed: {e}")
+
+Solutions:
+Solution 1: Check Network Settings
+# Test basic connectivity
+import socket
+try:
+    socket.create_connection(("api.feynlab.com", 443), timeout=10)
+    print("Network connection OK")
+except OSError:
+    print("Network connection failed")
+
+# Check proxy settings
+import os
+print(f"HTTP_PROXY: {os.environ.get('HTTP_PROXY', 'Not set')}")
+print(f"HTTPS_PROXY: {os.environ.get('HTTPS_PROXY', 'Not set')}")
+
+Solution 2: Verify API Credentials
+# Check if Feyn is properly configured
+import feyn
+try:
+    ql = feyn.connect_qlattice()
+    print("Authentication successful")
+except Exception as e:
+    print(f"Authentication failed: {e}")
+    print("Please check your Feyn account and API key")
+
+Solution 3: Use Alternative Symbolic Regression
+# Fall back to PySINDy if QLattice fails
+from pysindy import SINDy
+
+sindy_model = SINDy(
+    optimizer='STLSQ',
+    feature_library='polynomial',
+    feature_names=builder.feature_names
+)
+sindy_model.fit(X_train, y_train)
+print(f"SINDy equation: {sindy_model.equations()}")
+
+Solution 4: Implement Offline Mode
+# Create a mock QLattice wrapper for offline use
+class OfflineQLatticeWrapper:
+    def __init__(self, feature_tags, output_tag="Qcr"):
+        self.feature_tags = feature_tags
+        self.output_tag = output_tag
+        self.model = None
+    
+    def fit(self, X, y):
+        # Use simple linear regression as fallback
+        from sklearn.linear_model import LinearRegression
+        self.model = LinearRegression()
+        self.model.fit(X, y)
+    
+    def predict(self, X):
+        return self.model.predict(X)
+    
+    def express(self):
+        return "Linear regression (offline mode)"
+
+Prevention:
+- Test QLattice connection during installation
+- Implement fallback methods
+- Monitor service status
+- Keep credentials secure
+
+Issue 6: Model Performance Issues
+Problem: Poor model performance or unexpected results
+
+Symptoms:
+- Very low R² scores (< 0.5)
+- High prediction errors
+- Overfitting (good training, poor test performance)
+- Unrealistic predictions
+
+Root Causes:
+- Insufficient or poor quality data
+- Inappropriate hyperparameters
+- Data leakage
+- Model complexity mismatch
+
+Diagnostic Steps:
+1. Analyze performance metrics:
+   print(f"Training MSE: {train_mse:.6f}")
+   print(f"Test MSE: {test_mse:.6f}")
+   print(f"Training R²: {train_r2:.4f}")
+   print(f"Test R²: {test_r2:.4f}")
+
+2. Check for overfitting:
+   if train_r2 - test_r2 > 0.2:
+       print("Warning: Potential overfitting detected")
+
+3. Analyze prediction errors:
+   residuals = y_test - y_pred
+   print(f"Residual statistics:")
+   print(f"  Mean: {residuals.mean():.6f}")
+   print(f"  Std: {residuals.std():.6f}")
+   print(f"  Max: {residuals.max():.6f}")
+   print(f"  Min: {residuals.min():.6f}")
+
+Solutions:
+Solution 1: Improve Data Quality
+# Remove outliers
+from scipy import stats
+z_scores = np.abs(stats.zscore(data))
+data_clean = data[(z_scores < 3).all(axis=1)]
+
+# Check for data leakage
+print("Checking for data leakage...")
+if np.array_equal(X_train, X_test):
+    print("Warning: Training and test sets are identical!")
+
+Solution 2: Optimize Hyperparameters
+# Use more comprehensive hyperparameter search
 hparam_grid = {
-    "dev_tol": [1e-3, 1e-2],  # Fewer values
-    "feature_tol": [0.5, 1.0, 2.0],
-    "multiple_dev_policy": ["max", "mean"]
+    "dev_tol": [1e-5, 1e-4, 1e-3, 1e-2],
+    "feature_tol": [0.1, 0.5, 1.0, 2.0, 5.0],
+    "multiple_dev_policy": ["max", "min", "mean", "median"]
 }
 
-Solution 2: Reduce cross-validation folds
-k_folds = 3  # Instead of 5 or 10
+# Use more cross-validation folds
+k_folds = 10
 
-Issue 5: Performance Solutions (continued)
-Solution 3: Use data sampling for development
-# Sample data for faster development
-data_dev = data.sample(n=500, random_state=42)
+Solution 3: Regularize the Model
+# Add regularization to prevent overfitting
+def regularized_loss(self, params):
+    mse = self._loss(params)
+    # Add L2 regularization
+    l2_penalty = 0.01 * np.sum(params[5:]**2)
+    return mse + l2_penalty
 
-Solution 4: Profile your code
+Solution 4: Use Ensemble Methods
+# Combine multiple models
+from sklearn.ensemble import VotingRegressor
+
+ensemble = VotingRegressor([
+    ('dft', dft_model),
+    ('linear', LinearRegression()),
+    ('ridge', Ridge(alpha=1.0))
+])
+ensemble.fit(X_train, y_train)
+
+Prevention:
+- Always use cross-validation
+- Monitor train/test performance gap
+- Validate data quality before training
+- Use appropriate model complexity
+
+Issue 7: Visualization and Plotting Errors
+Problem: Errors when creating plots or visualizations
+
+Symptoms:
+- "RuntimeError: Invalid DISPLAY variable"
+- "UserWarning: Matplotlib is currently using agg"
+- "ValueError: x and y must have same first dimension"
+- Blank or empty plots
+
+Root Causes:
+- Backend configuration issues
+- Data type mismatches
+- Missing display (headless environments)
+- Memory issues with large datasets
+
+Diagnostic Steps:
+1. Check matplotlib backend:
+   import matplotlib
+   print(f"Backend: {matplotlib.get_backend()}")
+
+2. Test basic plotting:
+   import matplotlib.pyplot as plt
+   plt.figure()
+   plt.plot([1, 2, 3], [1, 4, 2])
+   plt.show()
+
+3. Check data compatibility:
+   print(f"X shape: {X.shape}")
+   print(f"y shape: {y.shape}")
+   print(f"X dtype: {X.dtype}")
+   print(f"y dtype: {y.dtype}")
+
+Solutions:
+Solution 1: Configure Matplotlib Backend
+# For headless environments
+import matplotlib
+matplotlib.use('Agg')  # Non-interactive backend
+
+# For Jupyter notebooks
+%matplotlib inline
+
+# For interactive environments
+matplotlib.use('TkAgg')  # or 'Qt5Agg'
+
+Solution 2: Fix Data Type Issues
+# Ensure data is numeric
+X = X.astype(np.float64)
+y = y.astype(np.float64)
+
+# Remove NaN values
+mask = ~(np.isnan(X).any(axis=1) | np.isnan(y))
+X = X[mask]
+y = y[mask]
+
+Solution 3: Handle Large Datasets
+# Sample data for visualization
+n_samples = min(1000, len(X))
+indices = np.random.choice(len(X), n_samples, replace=False)
+X_plot = X[indices]
+y_plot = y[indices]
+
+# Use efficient plotting methods
+plt.scatter(y_plot, y_pred[indices], alpha=0.5, s=1)
+
+Solution 4: Alternative Visualization
+# Use plotly for interactive plots
+import plotly.graph_objects as go
+import plotly.express as px
+
+fig = px.scatter(x=y_test, y=y_pred, title="Model Performance")
+fig.show()
+
+# Use seaborn for better error handling
+import seaborn as sns
+sns.scatterplot(x=y_test, y=y_pred)
+
+Prevention:
+- Test plotting functionality during setup
+- Use appropriate backends for your environment
+- Validate data before plotting
+- Consider data size for visualization
+
+Issue 8: Cross-Validation Errors
+Problem: Errors during k-fold cross-validation
+
+Symptoms:
+- "ValueError: n_splits=5 cannot be greater than the number of samples"
+- "TypeError: 'NoneType' object is not iterable"
+- "MemoryError during cross-validation"
+
+Root Causes:
+- Insufficient data for requested folds
+- Data splitting issues
+- Memory constraints
+- Invalid fold configuration
+
+Diagnostic Steps:
+1. Check data size:
+   print(f"Data size: {len(X)}")
+   print(f"Requested folds: {k_folds}")
+   if len(X) < k_folds:
+       print("Error: Not enough data for requested folds")
+
+2. Test basic splitting:
+   from sklearn.model_selection import KFold
+   kf = KFold(n_splits=min(k_folds, len(X)//2))
+   for train_idx, val_idx in kf.split(X):
+       print(f"Train: {len(train_idx)}, Val: {len(val_idx)}")
+
+Solutions:
+Solution 1: Adjust Fold Count
+# Use appropriate number of folds
+k_folds = min(k_folds, len(X) // 2)
+if k_folds < 2:
+    k_folds = 2
+
+# Use leave-one-out for very small datasets
+if len(X) < 10:
+    from sklearn.model_selection import LeaveOneOut
+    cv = LeaveOneOut()
+else:
+    cv = KFold(n_splits=k_folds)
+
+Solution 2: Fix Data Splitting
+# Ensure proper data splitting
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Use stratified splitting for classification
+from sklearn.model_selection import StratifiedKFold
+skf = StratifiedKFold(n_splits=k_folds, shuffle=True, random_state=42)
+
+Solution 3: Reduce Memory Usage
+# Use smaller datasets for cross-validation
+X_cv = X[:1000]  # Limit to 1000 samples
+y_cv = y[:1000]
+
+# Process folds sequentially instead of in parallel
+for train_idx, val_idx in kf.split(X_cv):
+    # Process one fold at a time
+    pass
+
+Prevention:
+- Check data size before cross-validation
+- Use appropriate fold counts
+- Monitor memory usage
+- Test with small datasets first
+
+General Debugging Strategies
+
+1. Enable Verbose Logging
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
+2. Use Debugging Tools
+import pdb
+pdb.set_trace()  # Set breakpoint
+
+3. Profile Performance
 import cProfile
 profiler = cProfile.Profile()
 profiler.enable()
@@ -161,213 +643,41 @@ profiler.enable()
 profiler.disable()
 profiler.print_stats(sort='cumulative')
 
-Issue 6: Visualization Errors
-Problem: Matplotlib or plotting errors
+4. Check System Resources
+import psutil
+print(f"CPU usage: {psutil.cpu_percent()}%")
+print(f"Memory usage: {psutil.virtual_memory().percent}%")
+print(f"Disk usage: {psutil.disk_usage('/').percent}%")
 
-Common causes:
-- Backend issues
-- Missing display
-- Data type mismatches
-- Memory issues
-
-Issue 6: Visualization Solutions
-Solution 1: Set matplotlib backend
-import matplotlib
-matplotlib.use('Agg')  # For non-interactive environments
-
-Solution 2: Check data types
-# Ensure data is numeric
-print(f"Data types: {X.dtype}")
-print(f"Target types: {y.dtype}")
-
-Issue 6: Visualization Solutions (continued)
-Solution 3: Handle missing values
-# Remove or fill missing values
-data_clean = data.dropna()
-# OR
-data_filled = data.fillna(method='ffill')
-
-Solution 4: Use alternative plotting
-# Try seaborn for better error handling
-import seaborn as sns
-sns.scatterplot(x=y_actual, y=y_predicted)
-
-Issue 7: QLattice Connection Errors
-Problem: Connection errors with Feyn QLattice
-
-Common causes:
-- Network connectivity issues
-- Invalid API credentials
-- Service unavailability
-- Version compatibility
-
-Issue 7: QLattice Solutions
-Solution 1: Check network connection
-import requests
-try:
-    response = requests.get("https://api.feynlab.com")
-    print(f"Connection status: {response.status_code}")
-except:
-    print("Network connection failed")
-
-Solution 2: Verify API credentials
-# Check if feyn is properly configured
-import feyn
-print(f"Feyn version: {feyn.__version__}")
-
-Issue 7: QLattice Solutions (continued)
-Solution 3: Use alternative symbolic regression
-# Fall back to PySINDy if QLattice fails
-from pysindy import SINDy
-sindy_model = SINDy()
-sindy_model.fit(X_train, y_train)
-
-Solution 4: Check service status
-# Visit Feyn status page or contact support
-
-Issue 8: Model Persistence Errors
-Problem: Errors when saving or loading models
-
-Common causes:
-- Insufficient disk space
-- Permission issues
-- Version compatibility
-- Corrupted files
-
-Issue 8: Model Persistence Solutions
-Solution 1: Check disk space
-import shutil
-total, used, free = shutil.disk_usage(".")
-print(f"Free space: {free // (1024**3)} GB")
-
-Solution 2: Use alternative serialization
-# Try joblib for large models
-import joblib
-joblib.dump(model, 'model.joblib')
-loaded_model = joblib.load('model.joblib')
-
-Issue 8: Model Persistence Solutions (continued)
-Solution 3: Save only essential data
-# Save only model parameters
-model_params = {
-    'opt_params': model.opt_params,
-    'feature_tol': model.feature_tol,
-    'dev_tol': model.dev_tol
-}
-
-import json
-with open('model_params.json', 'w') as f:
-    json.dump(model_params, f)
-
-Solution 4: Check file permissions
-# Ensure write permissions
-import os
-print(f"Writable: {os.access('.', os.W_OK)}")
-
-Issue 9: Cross-Validation Errors
-Problem: Errors during k-fold cross-validation
-
-Common causes:
-- Insufficient data
-- Invalid fold splitting
-- Memory issues
-- Data leakage
-
-Issue 9: Cross-Validation Solutions
-Solution 1: Check data size
-if len(X) < k_folds:
-    print(f"Data size ({len(X)}) too small for {k_folds} folds")
-    k_folds = min(k_folds, len(X) // 2)
-
-Solution 2: Use stratified splitting
-from sklearn.model_selection import StratifiedKFold
-skf = StratifiedKFold(n_splits=k_folds, shuffle=True, random_state=42)
-
-Issue 9: Cross-Validation Solutions (continued)
-Solution 3: Handle small datasets
-# Use leave-one-out for very small datasets
-if len(X) < 10:
-    from sklearn.model_selection import LeaveOneOut
-    cv = LeaveOneOut()
-else:
-    cv = KFold(n_splits=min(k_folds, len(X)//2))
-
-Solution 4: Check for data leakage
-# Ensure no overlap between train/validation sets
-
-Issue 10: Numerical Stability Issues
-Problem: NaN or infinite values in predictions
-
-Common causes:
-- Division by zero
-- Overflow in calculations
-- Poor data scaling
-- Extreme parameter values
-
-Issue 10: Numerical Stability Solutions
-Solution 1: Add numerical guards
-# In physics equation, add small epsilon
-epsilon = 1e-8
-z = np.maximum(z, epsilon)
-GasDens = np.maximum(GasDens, epsilon)
-
-Solution 2: Check parameter bounds
-# Ensure parameters stay within reasonable bounds
-bounds = [(1e-6, 1e6)] * 5 + [(0.0, 1.0)] * n_train
-
-Issue 10: Numerical Stability Solutions (continued)
-Solution 3: Scale input data
-# Normalize features to prevent overflow
-from sklearn.preprocessing import MinMaxScaler
-scaler = MinMaxScaler()
-X_scaled = scaler.fit_transform(X)
-
-Solution 4: Monitor parameter values
-# Check for extreme values during training
-if np.any(np.abs(params) > 1e6):
-    print("Warning: Large parameter values detected")
-
-General Troubleshooting Tips
-1. Always check error messages carefully
-2. Use print statements for debugging
-3. Start with small datasets
-4. Verify data quality before training
-5. Check package versions for compatibility
-6. Use virtual environments consistently
-7. Monitor system resources
-8. Keep backups of working code
-
-Debugging Commands
-# Check Python and package versions
-python --version
-pip list
-
-# Test basic functionality
-python -c "import numpy; print('NumPy OK')"
-python -c "import pandas; print('Pandas OK')"
-
-# Check data integrity
-python -c "import pandas as pd; data=pd.read_csv('your_data.csv'); print(data.info())"
+5. Validate Inputs
+def validate_inputs(X, y):
+    assert X.shape[0] == y.shape[0], "X and y must have same number of samples"
+    assert not np.isnan(X).any(), "X contains NaN values"
+    assert not np.isnan(y).any(), "y contains NaN values"
+    assert not np.isinf(X).any(), "X contains infinite values"
+    assert not np.isinf(y).any(), "y contains infinite values"
 
 Getting Help
 If problems persist:
-1. Check the issue tracker on GitHub
-2. Review the API_REFERENCE.srt
-3. Consult the USAGE_EXAMPLES.srt
-4. Search for similar issues online
-5. Contact the development team
-6. Provide detailed error messages and system info
+
+1. Check the GitHub issues page
+2. Review the API reference for detailed information
+3. Consult the usage examples for similar cases
+4. Search online for similar error messages
+5. Contact the development team with:
+   - Complete error message
+   - System information
+   - Code snippet that reproduces the issue
+   - Expected vs actual behavior
 
 Prevention Strategies
-1. Use version control (Git)
-2. Test with sample data first
-3. Document your workflow
+1. Use version control for code and data
+2. Test with sample data before full datasets
+3. Document your workflow and parameters
 4. Keep dependencies updated
 5. Use consistent environments
 6. Monitor performance metrics
 7. Implement proper error handling
-8. Regular backups
+8. Regular backups of important work
 
-End of Troubleshooting Guide
-Return to MAIN_DOCUMENTATION.srt
-for overview and other documentation sections
+This troubleshooting guide covers the most common issues encountered when using the DFT Development project. For additional support, please refer to the project repository or contact the development team.

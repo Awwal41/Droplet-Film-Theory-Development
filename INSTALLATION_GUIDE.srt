@@ -1,228 +1,351 @@
 Installation Guide
-Droplet-Film Theory Development
-Scripts 2.0
+Droplet-Film Theory Development Project
+Complete Setup Instructions
 
 System Requirements
-- Python 3.7 or higher
-- 8GB RAM minimum (16GB recommended)
+Before installing the DFT Development project, ensure your system meets the following requirements:
+
+Minimum System Requirements
+- Python 3.7 or higher (Python 3.9+ recommended)
+- 8GB RAM (16GB recommended for large datasets)
 - 2GB free disk space
 - Internet connection for package installation
+- Operating System: Windows 10/11, macOS 10.14+, or Ubuntu 18.04+
 
-Operating System Support
-- Windows 10/11 (64-bit)
-- macOS 10.14 or higher
-- Ubuntu 18.04 LTS or higher
-- CentOS 7 or higher
+Recommended System Configuration
+- Python 3.9 or 3.10
+- 16GB RAM or more
+- 5GB free disk space
+- SSD storage for better performance
+- Multi-core processor for faster training
 
 Python Environment Setup
-1. Install Python from python.org
-2. Verify installation: python --version
-3. Create virtual environment (recommended)
-4. Activate virtual environment
+The project requires a properly configured Python environment. We strongly recommend using a virtual environment to avoid conflicts with other projects.
 
-Virtual Environment Creation
-# Windows
+Step 1: Install Python
+Download and install Python from the official website (python.org):
+- Choose Python 3.9 or 3.10 for best compatibility
+- Ensure "Add Python to PATH" is checked during installation
+- Verify installation by opening a terminal and running: python --version
+
+Step 2: Create Virtual Environment
+Create a dedicated virtual environment for the project:
+
+Windows:
 python -m venv dft_env
 dft_env\Scripts\activate
 
-# macOS/Linux
+macOS/Linux:
 python3 -m venv dft_env
 source dft_env/bin/activate
 
+Step 3: Upgrade pip
+Ensure you have the latest version of pip:
+python -m pip install --upgrade pip
+
 Package Installation Methods
-Method 1: Using setup.py (recommended)
-Method 2: Manual installation
-Method 3: Using requirements.txt
+The project can be installed using several methods. Choose the one that best fits your needs:
 
-Method 1: Setup.py Installation
-# Navigate to project root directory
-cd /path/to/Droplet-Film-Theory-Development
+Method 1: Complete Installation (Recommended)
+This method installs all dependencies and the project in development mode:
 
-# Install in development mode
+1. Clone the repository:
+git clone https://github.com/your-username/Droplet-Film-Theory-Development.git
+cd Droplet-Film-Theory-Development
+
+2. Install the project and dependencies:
 pip install -e .
 
 Method 2: Manual Installation
-pip install numpy pandas scipy scikit-learn
-pip install matplotlib seaborn jupyter
-pip install feyn pysindy
+Install packages individually for more control:
 
-Method 3: Requirements.txt
-# Create requirements.txt if not exists
-# Install from requirements
+Core Dependencies:
+pip install numpy>=1.21.0
+pip install pandas>=1.3.0
+pip install scipy>=1.7.0
+pip install scikit-learn>=1.0.0
+
+Visualization Dependencies:
+pip install matplotlib>=3.4.0
+pip install seaborn>=0.11.0
+pip install plotly>=5.0.0
+
+Jupyter and Development:
+pip install jupyter>=1.0.0
+pip install notebook>=6.4.0
+pip install ipywidgets>=7.6.0
+
+Specialized ML Libraries:
+pip install feyn>=3.0.0
+pip install pysindy>=1.6.0
+pip install xgboost>=1.5.0
+
+Method 3: Using Requirements File
+Install from the provided requirements file:
+
 pip install -r requirements.txt
 
-Required Dependencies
-Core packages:
-- NumPy: Numerical operations
-- Pandas: Data handling
-- Scipy: Optimization algorithms
-- Scikit-learn: Machine learning utilities
+If requirements.txt doesn't exist, create it with:
+pip freeze > requirements.txt
 
-Required Dependencies (continued)
-Visualization packages:
-- Matplotlib: Basic plotting
-- Seaborn: Statistical visualization
-- Jupyter: Interactive notebooks
+Verification and Testing
+After installation, verify that everything is working correctly:
 
-Required Dependencies (continued)
-Specialized packages:
-- Feyn: QLattice integration
-- PySINDy: Symbolic regression
-- Additional ML libraries as needed
+Step 1: Test Basic Imports
+Run the following commands to test core functionality:
 
-Installation Verification
-# Test basic imports
-python -c "import numpy; print('NumPy:', numpy.__version__)"
-python -c "import pandas; print('Pandas:', pandas.__version__)"
-python -c "import scipy; print('Scipy:', scipy.__version__)"
+python -c "import numpy; print('NumPy version:', numpy.__version__)"
+python -c "import pandas; print('Pandas version:', pandas.__version__)"
+python -c "import scipy; print('SciPy version:', scipy.__version__)"
+python -c "import sklearn; print('Scikit-learn version:', sklearn.__version__)"
 
-Installation Verification (continued)
-# Test project-specific imports
-python -c "from dft_model import DFT; print('DFT import successful')"
-python -c "from utils import ChiefBldr; print('Utils import successful')"
+Step 2: Test Project-Specific Imports
+Verify that the project modules can be imported:
 
-Jupyter Setup
-# Install Jupyter if not already installed
-pip install jupyter notebook
+python -c "from scripts_2.0.dft_model import DFT; print('DFT import successful')"
+python -c "from scripts_2.0.utils import ChiefBldr; print('ChiefBldr import successful')"
+python -c "from scripts_2.0.utils import QLatticeWrapper; print('QLatticeWrapper import successful')"
 
-# Launch Jupyter
+Step 3: Run Basic Functionality Test
+Test the core functionality with a simple example:
+
+python -c "
+import numpy as np
+from scripts_2.0.dft_model import DFT
+
+# Create sample data
+X = np.random.rand(10, 10)
+y = np.random.rand(10)
+
+# Test DFT model
+model = DFT(seed=42)
+model.fit(X, y)
+predictions = model.predict(X)
+print('DFT model test successful')
+"
+
+Jupyter Notebook Setup
+For interactive development and exploration:
+
+Step 1: Install Jupyter
+pip install jupyter notebook ipywidgets
+
+Step 2: Launch Jupyter
 jupyter notebook
 
-# Navigate to scripts_2.0 directory
-# Open desired notebook file
+Step 3: Navigate to Project
+Open the scripts_2.0 directory and explore the available notebooks:
+- DFT-PISR.ipynb: Main physics-informed implementation
+- xgboost.ipynb: Gradient boosting approach
+- sindy.ipynb: Symbolic regression analysis
+- QLattice.ipynb: Automated model discovery
 
 Data Preparation
-# Ensure your dataset is in CSV format
-# Required columns must match exactly:
-# Dia, Dev(deg), Area (m2), z, GasDens, LiquidDens
-# g (m/s2), P/T, friction_factor, critical_film_thickness
+Before using the project, prepare your dataset:
+
+Required Data Format
+Your data must be in CSV format with the following columns:
+- Dia: Well diameter (meters)
+- Dev(deg): Well deviation angle (degrees)
+- Area (m2): Cross-sectional area (square meters)
+- z: Elevation change (meters)
+- GasDens: Gas density (kg/m³)
+- LiquidDens: Liquid density (kg/m³)
+- g (m/s2): Gravitational acceleration (m/s²)
+- P/T: Pressure/Temperature ratio (Pa/K)
+- friction_factor: Friction factor (dimensionless)
+- critical_film_thickness: Critical film thickness (meters)
+
+Data Validation
+Use the following code to validate your data:
+
+import pandas as pd
+import numpy as np
+
+def validate_data(file_path):
+    data = pd.read_csv(file_path)
+    required_cols = ['Dia', 'Dev(deg)', 'Area (m2)', 'z', 
+                     'GasDens', 'LiquidDens', 'g (m/s2)', 
+                     'P/T', 'friction_factor', 'critical_film_thickness']
+    
+    missing_cols = [col for col in required_cols if col not in data.columns]
+    if missing_cols:
+        print(f"Missing columns: {missing_cols}")
+        return False
+    
+    print("All required columns present")
+    print(f"Data shape: {data.shape}")
+    print(f"Data types:\n{data.dtypes}")
+    
+    return True
+
+# Validate your data
+validate_data("your_data.csv")
 
 Common Installation Issues
-# Permission errors: Use --user flag or sudo
+Here are solutions to frequently encountered problems:
+
+Issue 1: Permission Errors
+Problem: "Permission denied" when installing packages
+Solution: Use the --user flag or create a virtual environment
 pip install --user package_name
 
-# Version conflicts: Use virtual environment
-# Memory issues: Close other applications
-# Network issues: Use alternative package sources
-
-Alternative Package Sources
-# PyPI mirror
-pip install -i https://pypi.org/simple/ package_name
-
-# Conda (if using Anaconda)
-conda install package_name
-
-# Local installation from wheel files
-pip install package_name.whl
-
-Post-Installation Steps
-1. Verify all imports work correctly
-2. Test with sample data
-3. Run basic functionality tests
-4. Check Jupyter notebook execution
-5. Validate model training capabilities
-
-Troubleshooting Installation
-# Check Python path
-which python
-python -c "import sys; print(sys.path)"
-
-# Check package versions
-pip list | grep package_name
-
-# Reinstall if necessary
-pip uninstall package_name
+Issue 2: Version Conflicts
+Problem: Package version conflicts
+Solution: Use a fresh virtual environment
+python -m venv fresh_env
+fresh_env\Scripts\activate
 pip install package_name
 
+Issue 3: Memory Issues
+Problem: Out of memory during installation
+Solution: Close other applications and try again
+- Close unnecessary programs
+- Restart your computer
+- Use pip install --no-cache-dir package_name
+
+Issue 4: Network Issues
+Problem: Package download failures
+Solution: Use alternative package sources
+pip install -i https://pypi.org/simple/ package_name
+pip install --trusted-host pypi.org --trusted-host pypi.python.org package_name
+
+Issue 5: Compilation Errors
+Problem: C/C++ compilation errors on Windows
+Solution: Install Microsoft Visual C++ Build Tools
+- Download from Microsoft website
+- Install "C++ build tools" workload
+- Restart terminal and try again
+
+Issue 6: QLattice Connection Issues
+Problem: Cannot connect to Feyn QLattice
+Solution: Check network and credentials
+- Ensure internet connection
+- Verify Feyn account setup
+- Check firewall settings
+- Try alternative symbolic regression (PySINDy)
+
 Development Environment Setup
-# Install development tools
-pip install black flake8 pytest
+For contributors and advanced users:
 
-# Code formatting
-black *.py
+Code Quality Tools
+pip install black flake8 pytest mypy
 
-# Linting
-flake8 *.py
+Code Formatting
+black scripts_2.0/*.py
 
-# Testing
-pytest
+Linting
+flake8 scripts_2.0/*.py
+
+Type Checking
+mypy scripts_2.0/*.py
+
+Testing
+pytest tests/
 
 IDE Configuration
-# VS Code
-- Install Python extension
-- Select Python interpreter
-- Configure linting and formatting
+For popular IDEs:
 
-# PyCharm
-- Configure project interpreter
-- Set up code style
-- Enable type checking
+Visual Studio Code
+1. Install Python extension
+2. Select Python interpreter (virtual environment)
+3. Configure settings.json:
+{
+    "python.defaultInterpreterPath": "./dft_env/Scripts/python.exe",
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true,
+    "python.formatting.provider": "black"
+}
+
+PyCharm
+1. Open project in PyCharm
+2. Configure project interpreter (virtual environment)
+3. Enable code inspection
+4. Set up code style (PEP 8)
 
 Performance Optimization
-# Install optimized packages
+For better performance with large datasets:
+
+Install Optimized Packages
 pip install numpy --upgrade
 pip install pandas --upgrade
+pip install scipy --upgrade
 
-# Use conda for scientific packages
-conda install numpy pandas scipy
+Use Conda for Scientific Packages
+conda install numpy pandas scipy scikit-learn matplotlib
 
-# Consider using MKL libraries
+Install Intel MKL Libraries
 pip install mkl
 
 Security Considerations
-# Use virtual environments
-# Avoid installing packages globally
-# Keep packages updated
-# Use trusted package sources
-# Verify package signatures
+- Always use virtual environments
+- Keep packages updated regularly
+- Use trusted package sources
+- Verify package signatures when possible
+- Never install packages as root/admin unless necessary
 
 Maintenance and Updates
-# Update packages regularly
-pip install --upgrade package_name
+Regular maintenance ensures optimal performance:
 
-# Check for security updates
+Update Packages
+pip install --upgrade package_name
 pip list --outdated
 
-# Backup virtual environment
-# Document package versions
+Check for Security Updates
+pip audit
+
+Backup Environment
+pip freeze > requirements_backup.txt
+
+Clean Up
+pip cache purge
 
 Uninstallation
-# Remove specific packages
+To remove the project and dependencies:
+
+Remove Virtual Environment
+# Windows
+rmdir /s dft_env
+
+# macOS/Linux
+rm -rf dft_env
+
+Remove Packages
 pip uninstall package_name
 
-# Remove entire environment
-# Windows: rmdir /s dft_env
-# macOS/Linux: rm -rf dft_env
-
-# Clean pip cache
+Clean Pip Cache
 pip cache purge
 
 Installation Checklist
-□ Python 3.7+ installed
-□ Virtual environment created
-□ Core packages installed
-□ Project-specific packages installed
-□ Jupyter working
-□ Imports successful
-□ Sample data ready
-□ Basic tests passing
+Use this checklist to verify your installation:
 
-Next Steps After Installation
-1. Read USAGE_EXAMPLES.srt
-2. Review API_REFERENCE.srt
-3. Run sample notebooks
-4. Prepare your dataset
-5. Start with basic examples
-6. Explore advanced features
+□ Python 3.7+ installed and accessible
+□ Virtual environment created and activated
+□ Core packages installed (numpy, pandas, scipy, sklearn)
+□ Visualization packages installed (matplotlib, seaborn)
+□ Jupyter notebook working
+□ Project modules importing successfully
+□ Basic functionality test passing
+□ Sample data prepared and validated
+□ Jupyter notebooks opening correctly
+
+Next Steps
+After successful installation:
+
+1. Read the main documentation for project overview
+2. Explore the usage examples for practical implementation
+3. Review the API reference for technical details
+4. Check the troubleshooting guide for common issues
+5. Start with the DFT-PISR.ipynb notebook
+6. Prepare your own dataset for analysis
 
 Support and Resources
-# Official documentation
-# GitHub repository
-# Issue tracker
-# Community forums
-# Research papers
-# Tutorial videos
+If you encounter issues:
 
-End of Installation Guide
-Return to MAIN_DOCUMENTATION.srt
-for next steps and usage instructions
+1. Check this installation guide first
+2. Review the troubleshooting section
+3. Search the GitHub issues
+4. Contact the development team
+5. Join the community discussions
+
+The project is actively maintained and supported by the development team and community contributors.
