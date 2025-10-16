@@ -125,7 +125,9 @@ def format_content_for_html(content):
             paragraph_text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', paragraph_text)
             # Handle links
             paragraph_text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', paragraph_text)
-            formatted_lines.append(f'<p class="paragraph">{paragraph_text}</p>')
+            # Only add paragraph if there's actual content
+            if paragraph_text.strip():
+                formatted_lines.append(f'<p class="paragraph">{paragraph_text}</p>')
             current_paragraph = []
     
     def create_anchor_id(text):
@@ -143,8 +145,9 @@ def format_content_for_html(content):
             if in_list:
                 formatted_lines.append('</ul>')
                 in_list = False
-            # Add spacing between sections
-            formatted_lines.append('<br>')
+            # Add spacing between sections - only if we have content
+            if formatted_lines and not formatted_lines[-1].startswith('<br>'):
+                formatted_lines.append('<br>')
             continue
         
         # Handle code blocks
@@ -162,8 +165,19 @@ def format_content_for_html(content):
             formatted_lines.append(f'<span class="code-line">{line}</span>')
             continue
         
+        # Handle main headers (User Guide, API Reference, etc.)
+        if line in ['User Guide', 'API Reference', 'Examples and Tutorials', 'Introduction', 'Installation', 'Quick Start', 'Data Format', 'Running DFT Development', 'Troubleshooting', 'Examples', 'Performance', 'How-to Guides', 'Tutorial Scripts']:
+            flush_paragraph()
+            if in_list:
+                formatted_lines.append('</ul>')
+                in_list = False
+            
+            # Create anchor ID for the main header
+            anchor_id = create_anchor_id(line)
+            formatted_lines.append(f'<h1 id="{anchor_id}" class="main-header">{line}</h1>')
+        
         # Handle numbered sections (e.g., "1. Introduction", "2.1. Overview")
-        if re.match(r'^\d+\.', line) or re.match(r'^\d+\.\d+\.', line):
+        elif re.match(r'^\d+\.', line) or re.match(r'^\d+\.\d+\.', line):
             flush_paragraph()
             if in_list:
                 formatted_lines.append('</ul>')
@@ -176,17 +190,6 @@ def format_content_for_html(content):
                 formatted_lines.append(f'<h3 id="{anchor_id}" class="subsection">{line}</h3>')
             else:
                 formatted_lines.append(f'<h2 id="{anchor_id}" class="section">{line}</h2>')
-        
-        # Handle main headers (User Guide, API Reference, etc.)
-        elif line in ['User Guide', 'API Reference', 'Examples and Tutorials', 'Introduction', 'Installation', 'Quick Start', 'Data Format', 'Running DFT Development', 'Troubleshooting', 'Examples', 'Performance', 'How-to Guides', 'Tutorial Scripts']:
-            flush_paragraph()
-            if in_list:
-                formatted_lines.append('</ul>')
-                in_list = False
-            
-            # Create anchor ID for the main header
-            anchor_id = create_anchor_id(line)
-            formatted_lines.append(f'<h1 id="{anchor_id}" class="main-header">{line}</h1>')
         
         # Handle subheaders with asterisks
         elif line.startswith('* ') and len(line) < 100:
@@ -427,12 +430,32 @@ main {
 
 /* Add spacing between sections */
 .content > * + * {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
 }
 
 /* Smooth scrolling for anchor links */
 html {
     scroll-behavior: smooth;
+}
+
+/* Ensure proper spacing for all content elements */
+.content h1,
+.content h2,
+.content h3,
+.content h4 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.content p {
+    margin-bottom: 1.5rem;
+}
+
+/* Fix spacing issues */
+.content br {
+    display: block;
+    margin: 1rem 0;
+    line-height: 1;
 }
 
 /* LAMMPS-style headers */

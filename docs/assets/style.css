@@ -114,12 +114,32 @@ main {
 
 /* Add spacing between sections */
 .content > * + * {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
 }
 
 /* Smooth scrolling for anchor links */
 html {
     scroll-behavior: smooth;
+}
+
+/* Ensure proper spacing for all content elements */
+.content h1,
+.content h2,
+.content h3,
+.content h4 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.content p {
+    margin-bottom: 1.5rem;
+}
+
+/* Fix spacing issues */
+.content br {
+    display: block;
+    margin: 1rem 0;
+    line-height: 1;
 }
 
 /* LAMMPS-style headers */
