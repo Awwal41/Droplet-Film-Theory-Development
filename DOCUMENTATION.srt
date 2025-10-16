@@ -5,18 +5,19 @@ Version: 2.0
 
 About DFT Development and this manual
 
-DFT Development stands for **D**roplet-**F**ilm **T**heory Development for **P**hysics-**I**nformed **M**achine **L**earning.
+DFT Development stands for Droplet-Film Theory Development for Physics-Informed Machine Learning.
 
 DFT Development is a comprehensive framework for predicting liquid loading in gas wells using physics-informed machine learning. The framework combines fundamental Droplet-Film Theory principles with advanced machine learning techniques to provide accurate, interpretable predictions of critical flow rates. Originally developed for petroleum engineering applications, DFT Development now includes contributions from multiple research groups and supports various modeling approaches including PySINDY, PySR, XGBoost, and QLattice. The project is open-source software distributed under the terms of the MIT License.
+
 The DFT Development website provides comprehensive information about the framework. It includes links to this documentation, example notebooks, and a GitHub repository where all development is coordinated.
 
 ---
 
 The content for this manual is part of the DFT Development distribution in its docs directory.
 
-* The version of the manual on the project website corresponds to the latest DFT Development release. It is available at: [project-docs-url]
-* A version of the manual corresponding to the latest stable release is available online at: [stable-docs-url]
-* A version of the most recently added features is available at: [latest-docs-url]
+The version of the manual on the project website corresponds to the latest DFT Development release. It is available at: [project-docs-url].
+A version of the manual corresponding to the latest stable release is available online at: [stable-docs-url].
+A version of the most recently added features is available at: [latest-docs-url].
 
 If needed, you can build a copy on your local machine of the manual (HTML pages) for the version of DFT Development you have downloaded. Follow the steps in the Installation Guide.
 
@@ -24,9 +25,9 @@ If needed, you can build a copy on your local machine of the manual (HTML pages)
 
 The manual is organized into three parts:
 
-1. The **User Guide** with information about how to obtain, configure, install, and use DFT Development,
-2. The **API Reference** with detailed technical documentation of all classes, methods, and parameters,
-3. The **Examples and Tutorials** with practical examples, use cases, and step-by-step tutorials.
+The User Guide with information about how to obtain, configure, install, and use DFT Development,
+The API Reference with detailed technical documentation of all classes, methods, and parameters,
+The Examples and Tutorials with practical examples, use cases, and step-by-step tutorials.
 
 ---
 
@@ -38,145 +39,145 @@ After becoming familiar with DFT Development, consider bookmarking this page, si
 
 User Guide
 
-* 1. Introduction
-  * 1.1. Overview of DFT Development
-  * 1.2. What does a DFT Development version mean
-  * 1.3. DFT Development features
-  * 1.4. DFT Development applications
-  * 1.5. DFT Development compatibility
-  * 1.6. DFT Development open-source license
-  * 1.7. Authors of DFT Development
-  * 1.8. Citing DFT Development
-  * 1.9. Additional resources
+1. Introduction
+  1.1. Overview of DFT Development
+  1.2. What does a DFT Development version mean
+  1.3. DFT Development features
+  1.4. DFT Development applications
+  1.5. DFT Development compatibility
+  1.6. DFT Development open-source license
+  1.7. Authors of DFT Development
+  1.8. Citing DFT Development
+  1.9. Additional resources
 
-* 2. Installation
-  * 2.1. System requirements
-  * 2.2. Python environment setup
-  * 2.3. Package installation methods
-  * 2.4. Verification and testing
-  * 2.5. Jupyter notebook setup
-  * 2.6. Data preparation
-  * 2.7. Common installation issues
-  * 2.8. Development environment setup
+2. Installation
+  2.1. System requirements
+  2.2. Python environment setup
+  2.3. Package installation methods
+  2.4. Verification and testing
+  2.5. Jupyter notebook setup
+  2.6. Data preparation
+  2.7. Common installation issues
+  2.8. Development environment setup
 
-* 3. Quick Start
-  * 3.1. Basic workflow
-  * 3.2. Your first prediction
-  * 3.3. Understanding the output
-  * 3.4. Next steps
+3. Quick Start
+  3.1. Basic workflow
+  3.2. Your first prediction
+  3.3. Understanding the output
+  3.4. Next steps
 
-* 4. Data Format
-  * 4.1. Required input parameters
-  * 4.2. Data validation
-  * 4.3. Data preprocessing
-  * 4.4. Common data issues
+4. Data Format
+  4.1. Required input parameters
+  4.2. Data validation
+  4.3. Data preprocessing
+  4.4. Common data issues
 
-* 5. Running DFT Development
-  * 5.1. Basic usage
-  * 5.2. Command-line options
-  * 5.3. Jupyter notebook usage
-  * 5.4. Output formats
-  * 5.5. Error handling
+5. Running DFT Development
+  5.1. Basic usage
+  5.2. Command-line options
+  5.3. Jupyter notebook usage
+  5.4. Output formats
+  5.5. Error handling
 
-* 6. Troubleshooting
-  * 6.1. Common issues
-  * 6.2. Installation problems
-  * 6.3. Data loading errors
-  * 6.4. Memory and performance issues
-  * 6.5. Model convergence problems
-  * 6.6. Getting help
+6. Troubleshooting
+  6.1. Common issues
+  6.2. Installation problems
+  6.3. Data loading errors
+  6.4. Memory and performance issues
+  6.5. Model convergence problems
+  6.6. Getting help
 
-* 7. Examples
-  * 7.1. Basic examples
-  * 7.2. Advanced examples
-  * 7.3. Production deployment
-  * 7.4. Custom implementations
+7. Examples
+  7.1. Basic examples
+  7.2. Advanced examples
+  7.3. Production deployment
+  7.4. Custom implementations
 
-* 8. Performance
-  * 8.1. Benchmarks
-  * 8.2. Performance optimization
-  * 8.3. Memory management
-  * 8.4. Parallel processing
+8. Performance
+  8.1. Benchmarks
+  8.2. Performance optimization
+  8.3. Memory management
+  8.4. Parallel processing
 
-* 9. How-to Guides
-  * 9.1. General how-to
-  * 9.2. Data preparation how-to
-  * 9.3. Model training how-to
-  * 9.4. Visualization how-to
-  * 9.5. Deployment how-to
+9. How-to Guides
+  9.1. General how-to
+  9.2. Data preparation how-to
+  9.3. Model training how-to
+  9.4. Visualization how-to
+  9.5. Deployment how-to
 
-* 10. Tutorial Scripts
-  * 10.1. Basic tutorials
-  * 10.2. Advanced tutorials
-  * 10.3. Case studies
+10. Tutorial Scripts
+  10.1. Basic tutorials
+  10.2. Advanced tutorials
+  10.3. Case studies
 
 ## API Reference
 
 API Reference
 
-* 1. Core Classes
-  * 1.1. DFT Class
-  * 1.2. ChiefBldr Class
-  * 1.3. QLatticeWrapper Class
+1. Core Classes
+  1.1. DFT Class
+  1.2. ChiefBldr Class
+  1.3. QLatticeWrapper Class
 
-* 2. Data Management
-  * 2.1. Data loading and validation
-  * 2.2. Preprocessing functions
-  * 2.3. Feature engineering
+2. Data Management
+  2.1. Data loading and validation
+  2.2. Preprocessing functions
+  2.3. Feature engineering
 
-* 3. Model Training
-  * 3.1. Hyperparameter optimization
-  * 3.2. Cross-validation
-  * 3.3. Model evaluation
+3. Model Training
+  3.1. Hyperparameter optimization
+  3.2. Cross-validation
+  3.3. Model evaluation
 
-* 4. Prediction Methods
-  * 4.1. DFT prediction
-  * 4.2. QLattice prediction
-  * 4.3. Ensemble methods
+4. Prediction Methods
+  4.1. DFT prediction
+  4.2. QLattice prediction
+  4.3. Ensemble methods
 
-* 5. Utility Functions
-  * 5.1. Visualization utilities
-  * 5.2. Performance metrics
-  * 5.3. Data export functions
+5. Utility Functions
+  5.1. Visualization utilities
+  5.2. Performance metrics
+  5.3. Data export functions
 
-* 6. Configuration
-  * 6.1. Model parameters
-  * 6.2. Training options
-  * 6.3. Output settings
+6. Configuration
+  6.1. Model parameters
+  6.2. Training options
+  6.3. Output settings
 
 ## Examples and Tutorials
 
 Examples and Tutorials
 
-* 1. Basic Examples
-  * 1.1. Simple prediction
-  * 1.2. Data loading and validation
-  * 1.3. Model training
-  * 1.4. Making predictions
+1. Basic Examples
+  1.1. Simple prediction
+  1.2. Data loading and validation
+  1.3. Model training
+  1.4. Making predictions
 
-* 2. Intermediate Examples
-  * 2.1. Hyperparameter optimization
-  * 2.2. Cross-validation analysis
-  * 2.3. Model comparison
-  * 2.4. Visualization
+2. Intermediate Examples
+  2.1. Hyperparameter optimization
+  2.2. Cross-validation analysis
+  2.3. Model comparison
+  2.4. Visualization
 
-* 3. Advanced Examples
-  * 3.1. Custom alpha strategies
-  * 3.2. Ensemble methods
-  * 3.3. Production deployment
-  * 3.4. Batch processing
+3. Advanced Examples
+  3.1. Custom alpha strategies
+  3.2. Ensemble methods
+  3.3. Production deployment
+  3.4. Batch processing
 
-* 4. Case Studies
-  * 4.1. Vertical well analysis
-  * 4.2. Horizontal well analysis
-  * 4.3. Multi-well comparison
-  * 4.4. Real-world applications
+4. Case Studies
+  4.1. Vertical well analysis
+  4.2. Horizontal well analysis
+  4.3. Multi-well comparison
+  4.4. Real-world applications
 
-* 5. Tutorial Notebooks
-  * 5.1. DFT-PISR.ipynb
-  * 5.2. xgboost.ipynb
-  * 5.3. sindy.ipynb
-  * 5.4. QLattice.ipynb
+5. Tutorial Notebooks
+  5.1. DFT-PISR.ipynb
+  5.2. xgboost.ipynb
+  5.3. sindy.ipynb
+  5.4. QLattice.ipynb
 
 ---
 
@@ -272,7 +273,7 @@ The DFT Development framework can be installed using several methods, each offer
 
 The complete installation method involves cloning the repository from GitHub and installing the project in development mode. First, clone the repository using `git clone https://github.com/your-username/Droplet-Film-Theory-Development.git`, then navigate to the project directory with `cd Droplet-Film-Theory-Development`. Finally, install the project and all dependencies using `pip install -e .`. This method ensures that all dependencies are installed with compatible versions and that the project is properly configured.
 
-The manual installation method provides more control over the installation process by allowing you to install packages individually. This method is useful when you need to customize the installation or when you encounter issues with the complete installation. Install the core dependencies first using `pip install numpy pandas scipy scikit-learn`, then add visualization packages with `pip install matplotlib seaborn jupyter`, and finally install specialized machine learning libraries with `pip install feyn pysindy xgboost`.
+The manual installation method provides more control over the installation process by allowing you to install packages individually. This method is useful when you need to customize the installation or when you encounter issues with the complete installation. Install the core dependencies first using `pip install numpy pandas scipy scikit-learn`, then add visualization packages with `pip install matplotlib seaborn jupyter`, and finally install specialized machine learning libraries with `pip install feyn pysindy xgboost pysr`.
 
 The requirements file method provides a middle ground between complete and manual installation. If a requirements.txt file exists in the project directory, you can install all dependencies using `pip install -r requirements.txt`. This method ensures that all packages are installed with the exact versions that were tested and verified by the development team.
 
@@ -294,7 +295,7 @@ Install Jupyter and related packages using `pip install jupyter notebook ipywidg
 
 Launch Jupyter by running `jupyter notebook` in your terminal. This command starts the Jupyter server and opens your web browser to the notebook interface. Navigate to the scripts_2.0 directory to access the example notebooks that demonstrate various aspects of the DFT Development framework.
 
-The framework includes several example notebooks that showcase different modeling approaches and use cases. The DFT-PISR.ipynb notebook demonstrates the main physics-informed implementation, while xgboost.ipynb shows the gradient boosting approach. The sindy.ipynb notebook illustrates symbolic regression analysis, and QLattice.ipynb demonstrates automated model discovery.
+The framework includes several example notebooks that showcase different modeling approaches and use cases. The DFT-PISR.ipynb notebook demonstrates the main physics-informed implementation, while xgboost.ipynb shows the gradient boosting approach. The sindy.ipynb notebook illustrates symbolic regression analysis using PySINDY, and QLattice.ipynb demonstrates automated model discovery using QLattice.
 
 ### 2.6. Data preparation
 
@@ -488,7 +489,7 @@ To use Jupyter notebooks with the framework, first ensure that Jupyter is instal
 
 Navigate to the scripts_2.0 directory to access the example notebooks that demonstrate various aspects of the framework. These notebooks provide comprehensive examples of different modeling approaches and use cases, making them excellent starting points for your own analysis.
 
-The framework includes several example notebooks that showcase different capabilities and approaches. The DFT-PISR.ipynb notebook demonstrates the main physics-informed implementation, while xgboost.ipynb shows the gradient boosting approach. The sindy.ipynb notebook illustrates symbolic regression analysis, and QLattice.ipynb demonstrates automated model discovery.
+The framework includes several example notebooks that showcase different capabilities and approaches. The DFT-PISR.ipynb notebook demonstrates the main physics-informed implementation, while xgboost.ipynb shows the gradient boosting approach. The sindy.ipynb notebook illustrates symbolic regression analysis using PySINDY, and QLattice.ipynb demonstrates automated model discovery using QLattice.
 
 Each notebook is designed to be self-contained and includes detailed explanations of the concepts and methods being demonstrated. The notebooks progress from basic examples to more advanced topics, making them suitable for users with varying levels of experience.
 
