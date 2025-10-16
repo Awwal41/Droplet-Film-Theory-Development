@@ -175,6 +175,17 @@ def format_content_for_html(content):
             formatted_lines.append(f'<h1 id="{anchor_id}" class="main-header">{header_text}</h1>')
             continue
         
+        # Handle markdown subsection headers (### 6.1. Common issues)
+        if line.startswith('### '):
+            flush_paragraph()
+            if in_list:
+                formatted_lines.append('</ul>')
+                in_list = False
+            header_text = line[4:].strip()
+            anchor_id = create_anchor_id(header_text)
+            formatted_lines.append(f'<h3 id="{anchor_id}" class="subsection">{header_text}</h3>')
+            continue
+        
         # Handle main headers (User Guide, API Reference, etc.) - but skip if we just processed a markdown header
         if line in ['User Guide', 'API Reference', 'Examples and Tutorials', 'Introduction', 'Installation', 'Quick Start', 'Data Format', 'Running DFT Development', 'Troubleshooting', 'Examples', 'Performance', 'How-to Guides', 'Tutorial Scripts']:
             # Skip if this is a duplicate of a markdown header we just processed
