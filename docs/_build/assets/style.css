@@ -112,14 +112,41 @@ main {
     padding: 1rem 0;
 }
 
-/* Add spacing between sections */
-.content > * + * {
-    margin-top: 1rem;
-}
-
 /* Smooth scrolling for anchor links */
 html {
     scroll-behavior: smooth;
+}
+
+/* Ensure proper spacing for all content elements */
+.content h1,
+.content h2,
+.content h3,
+.content h4 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.content p {
+    margin-bottom: 1.5rem;
+}
+
+/* Add spacing between different elements */
+.content > * + h1,
+.content > * + h2,
+.content > * + h3,
+.content > * + h4 {
+    margin-top: 2.5rem;
+}
+
+.content > * + p {
+    margin-top: 1rem;
+}
+
+/* Horizontal rule styling */
+.content hr {
+    border: none;
+    border-top: 2px solid #e0e0e0;
+    margin: 2rem 0;
 }
 
 /* LAMMPS-style headers */

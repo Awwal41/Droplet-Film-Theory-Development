@@ -110,7 +110,7 @@ def convert_srt_to_html(srt_file, output_dir):
     return output_file
 
 def format_content_for_html(content):
-    """Format content for HTML display with essay-like structure"""
+    """Format content for HTML display with proper structure"""
     lines = content.split('\n')
     formatted_lines = []
     in_code_block = False
@@ -140,14 +140,13 @@ def format_content_for_html(content):
     
     for i, line in enumerate(lines):
         line = line.strip()
+        
+        # Handle empty lines
         if not line:
             flush_paragraph()
             if in_list:
                 formatted_lines.append('</ul>')
                 in_list = False
-            # Add spacing between sections - only if we have content
-            if formatted_lines and not formatted_lines[-1].startswith('<br>'):
-                formatted_lines.append('<br>')
             continue
         
         # Handle code blocks
@@ -165,6 +164,17 @@ def format_content_for_html(content):
             formatted_lines.append(f'<span class="code-line">{line}</span>')
             continue
         
+        # Handle markdown headers (## User Guide)
+        if line.startswith('## '):
+            flush_paragraph()
+            if in_list:
+                formatted_lines.append('</ul>')
+                in_list = False
+            header_text = line[3:].strip()
+            anchor_id = create_anchor_id(header_text)
+            formatted_lines.append(f'<h1 id="{anchor_id}" class="main-header">{header_text}</h1>')
+            continue
+        
         # Handle main headers (User Guide, API Reference, etc.)
         if line in ['User Guide', 'API Reference', 'Examples and Tutorials', 'Introduction', 'Installation', 'Quick Start', 'Data Format', 'Running DFT Development', 'Troubleshooting', 'Examples', 'Performance', 'How-to Guides', 'Tutorial Scripts']:
             flush_paragraph()
@@ -175,9 +185,10 @@ def format_content_for_html(content):
             # Create anchor ID for the main header
             anchor_id = create_anchor_id(line)
             formatted_lines.append(f'<h1 id="{anchor_id}" class="main-header">{line}</h1>')
+            continue
         
         # Handle numbered sections (e.g., "1. Introduction", "2.1. Overview")
-        elif re.match(r'^\d+\.', line) or re.match(r'^\d+\.\d+\.', line):
+        if re.match(r'^\d+\.', line) or re.match(r'^\d+\.\d+\.', line):
             flush_paragraph()
             if in_list:
                 formatted_lines.append('</ul>')
@@ -190,9 +201,10 @@ def format_content_for_html(content):
                 formatted_lines.append(f'<h3 id="{anchor_id}" class="subsection">{line}</h3>')
             else:
                 formatted_lines.append(f'<h2 id="{anchor_id}" class="section">{line}</h2>')
+            continue
         
         # Handle subheaders with asterisks
-        elif line.startswith('* ') and len(line) < 100:
+        if line.startswith('* ') and len(line) < 100:
             flush_paragraph()
             if in_list:
                 formatted_lines.append('</ul>')
@@ -200,37 +212,49 @@ def format_content_for_html(content):
             clean_line = line[2:].strip()
             anchor_id = create_anchor_id(clean_line)
             formatted_lines.append(f'<h4 id="{anchor_id}" class="subheader">{clean_line}</h4>')
+            continue
         
         # Handle code snippets (lines starting with specific patterns)
-        elif line.startswith(('python', 'bash', 'pip install', 'git clone', 'cd ', 'python -c', 'import ', 'from ', 'def ', 'class ', 'if ', 'for ', 'while ', 'try:', 'except:', 'with ')):
+        if line.startswith(('python', 'bash', 'pip install', 'git clone', 'cd ', 'python -c', 'import ', 'from ', 'def ', 'class ', 'if ', 'for ', 'while ', 'try:', 'except:', 'with ')):
             flush_paragraph()
             if in_list:
                 formatted_lines.append('</ul>')
                 in_list = False
             formatted_lines.append(f'<div class="code-snippet">{line}</div>')
+            continue
         
         # Handle bullet points - convert to flowing text
-        elif line.startswith('- ') or line.startswith('* '):
+        if line.startswith('- ') or line.startswith('* '):
             if not in_list:
                 in_list = True
                 formatted_lines.append('<ul class="flowing-list">')
             clean_line = line[2:].strip()
             formatted_lines.append(f'<li class="flowing-item">{clean_line}</li>')
+            continue
         
         # Handle numbered lists - convert to flowing text
-        elif re.match(r'^\d+\. ', line):
+        if re.match(r'^\d+\. ', line):
             if not in_list:
                 in_list = True
                 formatted_lines.append('<ul class="flowing-list">')
             clean_line = re.sub(r'^\d+\. ', '', line)
             formatted_lines.append(f'<li class="flowing-item">{clean_line}</li>')
+            continue
         
-        # Regular paragraphs - accumulate text for better flow
-        else:
+        # Handle horizontal rules
+        if line == '---':
+            flush_paragraph()
             if in_list:
                 formatted_lines.append('</ul>')
                 in_list = False
-            current_paragraph.append(line)
+            formatted_lines.append('<hr>')
+            continue
+        
+        # Regular paragraphs - accumulate text for better flow
+        if in_list:
+            formatted_lines.append('</ul>')
+            in_list = False
+        current_paragraph.append(line)
     
     # Flush any remaining paragraph
     flush_paragraph()
@@ -428,11 +452,6 @@ main {
     padding: 1rem 0;
 }
 
-/* Add spacing between sections */
-.content > * + * {
-    margin-top: 1.5rem;
-}
-
 /* Smooth scrolling for anchor links */
 html {
     scroll-behavior: smooth;
@@ -451,11 +470,23 @@ html {
     margin-bottom: 1.5rem;
 }
 
-/* Fix spacing issues */
-.content br {
-    display: block;
-    margin: 1rem 0;
-    line-height: 1;
+/* Add spacing between different elements */
+.content > * + h1,
+.content > * + h2,
+.content > * + h3,
+.content > * + h4 {
+    margin-top: 2.5rem;
+}
+
+.content > * + p {
+    margin-top: 1rem;
+}
+
+/* Horizontal rule styling */
+.content hr {
+    border: none;
+    border-top: 2px solid #e0e0e0;
+    margin: 2rem 0;
 }
 
 /* LAMMPS-style headers */
