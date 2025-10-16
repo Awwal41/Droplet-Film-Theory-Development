@@ -10,6 +10,7 @@
     <div class="container">
         <header>
             <h1>Installation Guide</h1>
+            <p>Droplet-Film Theory Development Project</p>
             <nav>
                 <a href="../index.html">Home</a>
                 <a href="documentation.html">Documentation</a>
@@ -21,282 +22,298 @@
         </header>
         
         <main>
+            <div class="sidebar">
+                <h3>Contents</h3>
+                <ul>
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#quick-start">Quick Start</a></li>
+                    <li><a href="#data-format">Data Format</a></li>
+                    <li><a href="#running">Running DFT Development</a></li>
+                    <li><a href="#troubleshooting">Troubleshooting</a></li>
+                    <li><a href="#examples">Examples</a></li>
+                    <li><a href="#performance">Performance</a></li>
+                    <li><a href="#how-to">How-to Guides</a></li>
+                    <li><a href="#tutorials">Tutorial Scripts</a></li>
+                </ul>
+            </div>
+            
             <div class="content">
-<h3>Installation Guide</h3>
-<h3>Droplet-Film Theory Development Project</h3>
-<h3>Complete Setup Instructions</h3>
-<h3>System Requirements</h3>
-<p>Before installing the DFT Development project, ensure your system meets the following requirements:</p>
-<h3>Minimum System Requirements</h3>
-<h3>- Python 3.7 or higher (Python 3.9+ recommended)</h3>
-<h3>- 8GB RAM (16GB recommended for large datasets)</h3>
-<h3>- 2GB free disk space</h3>
-<h3>- Internet connection for package installation</h3>
-<p>- Operating System: Windows 10/11, macOS 10.14+, or Ubuntu 18.04+</p>
-<h3>Recommended System Configuration</h3>
-<h3>- Python 3.9 or 3.10</h3>
-<h3>- 16GB RAM or more</h3>
-<h3>- 5GB free disk space</h3>
-<h3>- SSD storage for better performance</h3>
-<h3>- Multi-core processor for faster training</h3>
-<h3>Python Environment Setup</h3>
-<p>The project requires a properly configured Python environment. We strongly recommend using a virtual environment to avoid conflicts with other projects.</p>
-<h3>Step 1: Install Python</h3>
-<p>Download and install Python from the official website (python.org):</p>
-<p>- Choose Python 3.9 or 3.10 for best compatibility</p>
-<p>- Ensure "Add Python to PATH" is checked during installation</p>
-<p>- Verify installation by opening a terminal and running: python --version</p>
-<h3>Step 2: Create Virtual Environment</h3>
-<p>Create a dedicated virtual environment for the project:</p>
-<p>Windows:</p>
-<h3>python -m venv dft_env</h3>
-<h3>dft_env\Scripts\activate</h3>
-<p>macOS/Linux:</p>
-<h3>python3 -m venv dft_env</h3>
-<h3>source dft_env/bin/activate</h3>
-<h3>Step 3: Upgrade pip</h3>
-<p>Ensure you have the latest version of pip:</p>
-<h3>python -m pip install --upgrade pip</h3>
-<h3>Package Installation Methods</h3>
-<p>The project can be installed using several methods. Choose the one that best fits your needs:</p>
-<h3>Method 1: Complete Installation (Recommended)</h3>
-<p>This method installs all dependencies and the project in development mode:</p>
-<p>1. Clone the repository:</p>
-<p>git clone https://github.com/your-username/Droplet-Film-Theory-Development.git</p>
-<h3>cd Droplet-Film-Theory-Development</h3>
-<p>2. Install the project and dependencies:</p>
-<p>pip install -e .</p>
-<h3>Method 2: Manual Installation</h3>
-<p>Install packages individually for more control:</p>
-<p>Core Dependencies:</p>
-<h3>pip install numpy>=1.21.0</h3>
-<h3>pip install pandas>=1.3.0</h3>
-<h3>pip install scipy>=1.7.0</h3>
-<h3>pip install scikit-learn>=1.0.0</h3>
-<p>Visualization Dependencies:</p>
-<h3>pip install matplotlib>=3.4.0</h3>
-<h3>pip install seaborn>=0.11.0</h3>
-<h3>pip install plotly>=5.0.0</h3>
-<p>Jupyter and Development:</p>
-<h3>pip install jupyter>=1.0.0</h3>
-<h3>pip install notebook>=6.4.0</h3>
-<h3>pip install ipywidgets>=7.6.0</h3>
-<p>Specialized ML Libraries:</p>
-<h3>pip install feyn>=3.0.0</h3>
-<h3>pip install pysindy>=1.6.0</h3>
-<h3>pip install xgboost>=1.5.0</h3>
-<h3>Method 3: Using Requirements File</h3>
-<p>Install from the provided requirements file:</p>
-<h3>pip install -r requirements.txt</h3>
-<p>If requirements.txt doesn't exist, create it with:</p>
-<h3>pip freeze > requirements.txt</h3>
-<h3>Verification and Testing</h3>
-<p>After installation, verify that everything is working correctly:</p>
-<h3>Step 1: Test Basic Imports</h3>
-<p>Run the following commands to test core functionality:</p>
-<p>python -c "import numpy; print('NumPy version:', numpy.__version__)"</p>
-<p>python -c "import pandas; print('Pandas version:', pandas.__version__)"</p>
-<p>python -c "import scipy; print('SciPy version:', scipy.__version__)"</p>
-<p>python -c "import sklearn; print('Scikit-learn version:', sklearn.__version__)"</p>
-<h3>Step 2: Test Project-Specific Imports</h3>
-<p>Verify that the project modules can be imported:</p>
-<p>python -c "from scripts_2.0.dft_model import DFT; print('DFT import successful')"</p>
-<p>python -c "from scripts_2.0.utils import ChiefBldr; print('ChiefBldr import successful')"</p>
-<p>python -c "from scripts_2.0.utils import QLatticeWrapper; print('QLatticeWrapper import successful')"</p>
-<h3>Step 3: Run Basic Functionality Test</h3>
-<p>Test the core functionality with a simple example:</p>
-<h3>python -c "</h3>
-<h3>import numpy as np</h3>
-<h3>from scripts_2.0.dft_model import DFT</h3>
-<h3># Create sample data</h3>
-<h3>X = np.random.rand(10, 10)</h3>
-<h3>y = np.random.rand(10)</h3>
-<h3># Test DFT model</h3>
-<h3>model = DFT(seed=42)</h3>
-<h3>model.fit(X, y)</h3>
-<h3>predictions = model.predict(X)</h3>
-<h3>print('DFT model test successful')</h3>
-<h3>"</h3>
-<h3>Jupyter Notebook Setup</h3>
-<p>For interactive development and exploration:</p>
-<h3>Step 1: Install Jupyter</h3>
-<h3>pip install jupyter notebook ipywidgets</h3>
-<h3>Step 2: Launch Jupyter</h3>
-<h3>jupyter notebook</h3>
-<h3>Step 3: Navigate to Project</h3>
-<p>Open the scripts_2.0 directory and explore the available notebooks:</p>
-<p>- DFT-PISR.ipynb: Main physics-informed implementation</p>
-<h3>- xgboost.ipynb: Gradient boosting approach</h3>
-<h3>- sindy.ipynb: Symbolic regression analysis</h3>
-<h3>- QLattice.ipynb: Automated model discovery</h3>
-<h3>Data Preparation</h3>
-<p>Before using the project, prepare your dataset:</p>
-<h3>Required Data Format</h3>
-<p>Your data must be in CSV format with the following columns:</p>
-<h3>- Dia: Well diameter (meters)</h3>
-<h3>- Dev(deg): Well deviation angle (degrees)</h3>
-<h3>- Area (m2): Cross-sectional area (square meters)</h3>
-<h3>- z: Elevation change (meters)</h3>
-<h3>- GasDens: Gas density (kg/m³)</h3>
-<h3>- LiquidDens: Liquid density (kg/m³)</h3>
-<h3>- g (m/s2): Gravitational acceleration (m/s²)</h3>
-<h3>- P/T: Pressure/Temperature ratio (Pa/K)</h3>
-<p>- friction_factor: Friction factor (dimensionless)</p>
-<p>- critical_film_thickness: Critical film thickness (meters)</p>
-<h3>Data Validation</h3>
-<p>Use the following code to validate your data:</p>
-<h3>import pandas as pd</h3>
-<h3>import numpy as np</h3>
-<p>def validate_data(file_path):</p>
-<h3>data = pd.read_csv(file_path)</h3>
-<p>required_cols = ['Dia', 'Dev(deg)', 'Area (m2)', 'z',</p>
-<p>'GasDens', 'LiquidDens', 'g (m/s2)',</p>
-<p>'P/T', 'friction_factor', 'critical_film_thickness']</p>
-<p>missing_cols = [col for col in required_cols if col not in data.columns]</p>
-<p>if missing_cols:</p>
-<h3>print(f"Missing columns: {missing_cols}")</h3>
-<h3>return False</h3>
-<h3>print("All required columns present")</h3>
-<h3>print(f"Data shape: {data.shape}")</h3>
-<h3>print(f"Data types:\n{data.dtypes}")</h3>
-<h3>return True</h3>
-<h3># Validate your data</h3>
-<h3>validate_data("your_data.csv")</h3>
-<h3>Common Installation Issues</h3>
-<p>Here are solutions to frequently encountered problems:</p>
-<h3>Issue 1: Permission Errors</h3>
-<p>Problem: "Permission denied" when installing packages</p>
-<p>Solution: Use the --user flag or create a virtual environment</p>
-<h3>pip install --user package_name</h3>
-<h3>Issue 2: Version Conflicts</h3>
-<h3>Problem: Package version conflicts</h3>
-<h3>Solution: Use a fresh virtual environment</h3>
-<h3>python -m venv fresh_env</h3>
-<h3>fresh_env\Scripts\activate</h3>
-<h3>pip install package_name</h3>
-<h3>Issue 3: Memory Issues</h3>
-<h3>Problem: Out of memory during installation</h3>
-<h3>Solution: Close other applications and try again</h3>
-<h3>- Close unnecessary programs</h3>
-<h3>- Restart your computer</h3>
-<h3>- Use pip install --no-cache-dir package_name</h3>
-<h3>Issue 4: Network Issues</h3>
-<h3>Problem: Package download failures</h3>
-<h3>Solution: Use alternative package sources</h3>
-<p>pip install -i https://pypi.org/simple/ package_name</p>
-<p>pip install --trusted-host pypi.org --trusted-host pypi.python.org package_name</p>
-<h3>Issue 5: Compilation Errors</h3>
-<h3>Problem: C/C++ compilation errors on Windows</h3>
-<p>Solution: Install Microsoft Visual C++ Build Tools</p>
-<h3>- Download from Microsoft website</h3>
-<h3>- Install "C++ build tools" workload</h3>
-<h3>- Restart terminal and try again</h3>
-<h3>Issue 6: QLattice Connection Issues</h3>
-<h3>Problem: Cannot connect to Feyn QLattice</h3>
-<h3>Solution: Check network and credentials</h3>
-<h3>- Ensure internet connection</h3>
-<h3>- Verify Feyn account setup</h3>
-<h3>- Check firewall settings</h3>
-<h3>- Try alternative symbolic regression (PySINDy)</h3>
-<h3>Development Environment Setup</h3>
-<p>For contributors and advanced users:</p>
-<h3>Code Quality Tools</h3>
-<h3>pip install black flake8 pytest mypy</h3>
-<h3>Code Formatting</h3>
-<h3>black scripts_2.0/*.py</h3>
-<h3>Linting</h3>
-<h3>flake8 scripts_2.0/*.py</h3>
-<h3>Type Checking</h3>
-<h3>mypy scripts_2.0/*.py</h3>
-<h3>Testing</h3>
-<h3>pytest tests/</h3>
-<h3>IDE Configuration</h3>
-<p>For popular IDEs:</p>
-<h3>Visual Studio Code</h3>
-<h3>1. Install Python extension</h3>
-<p>2. Select Python interpreter (virtual environment)</p>
-<p>3. Configure settings.json:</p>
-<h3>{</h3>
-<p>"python.defaultInterpreterPath": "./dft_env/Scripts/python.exe",</p>
-<p>"python.linting.enabled": true,</p>
-<p>"python.linting.flake8Enabled": true,</p>
-<h3>"python.formatting.provider": "black"</h3>
-<h3>}</h3>
-<h3>PyCharm</h3>
-<h3>1. Open project in PyCharm</h3>
-<p>2. Configure project interpreter (virtual environment)</p>
-<h3>3. Enable code inspection</h3>
-<h3>4. Set up code style (PEP 8)</h3>
-<h3>Performance Optimization</h3>
-<p>For better performance with large datasets:</p>
-<h3>Install Optimized Packages</h3>
-<h3>pip install numpy --upgrade</h3>
-<h3>pip install pandas --upgrade</h3>
-<h3>pip install scipy --upgrade</h3>
-<h3>Use Conda for Scientific Packages</h3>
-<p>conda install numpy pandas scipy scikit-learn matplotlib</p>
-<h3>Install Intel MKL Libraries</h3>
-<h3>pip install mkl</h3>
-<h3>Security Considerations</h3>
-<h3>- Always use virtual environments</h3>
-<h3>- Keep packages updated regularly</h3>
-<h3>- Use trusted package sources</h3>
-<h3>- Verify package signatures when possible</h3>
-<p>- Never install packages as root/admin unless necessary</p>
-<h3>Maintenance and Updates</h3>
-<p>Regular maintenance ensures optimal performance:</p>
-<h3>Update Packages</h3>
-<h3>pip install --upgrade package_name</h3>
-<h3>pip list --outdated</h3>
-<h3>Check for Security Updates</h3>
-<h3>pip audit</h3>
-<h3>Backup Environment</h3>
-<h3>pip freeze > requirements_backup.txt</h3>
-<h3>Clean Up</h3>
-<h3>pip cache purge</h3>
-<h3>Uninstallation</h3>
-<p>To remove the project and dependencies:</p>
-<h3>Remove Virtual Environment</h3>
-<h3># Windows</h3>
-<h3>rmdir /s dft_env</h3>
-<h3># macOS/Linux</h3>
-<h3>rm -rf dft_env</h3>
-<h3>Remove Packages</h3>
-<h3>pip uninstall package_name</h3>
-<h3>Clean Pip Cache</h3>
-<h3>pip cache purge</h3>
-<h3>Installation Checklist</h3>
-<p>Use this checklist to verify your installation:</p>
-<h3>□ Python 3.7+ installed and accessible</h3>
-<h3>□ Virtual environment created and activated</h3>
-<p>□ Core packages installed (numpy, pandas, scipy, sklearn)</p>
-<p>□ Visualization packages installed (matplotlib, seaborn)</p>
-<h3>□ Jupyter notebook working</h3>
-<h3>□ Project modules importing successfully</h3>
-<h3>□ Basic functionality test passing</h3>
-<h3>□ Sample data prepared and validated</h3>
-<h3>□ Jupyter notebooks opening correctly</h3>
-<h3>Next Steps</h3>
-<p>After successful installation:</p>
-<p>1. Read the main documentation for project overview</p>
-<p>2. Explore the usage examples for practical implementation</p>
-<h3>3. Review the API reference for technical details</h3>
-<p>4. Check the troubleshooting guide for common issues</p>
-<h3>5. Start with the DFT-PISR.ipynb notebook</h3>
-<h3>6. Prepare your own dataset for analysis</h3>
-<h3>Support and Resources</h3>
-<p>If you encounter issues:</p>
-<h3>1. Check this installation guide first</h3>
-<h3>2. Review the troubleshooting section</h3>
-<h3>3. Search the GitHub issues</h3>
-<h3>4. Contact the development team</h3>
-<h3>5. Join the community discussions</h3>
-<p>The project is actively maintained and supported by the development team and community contributors.</p>
+<p class="paragraph">Installation Guide</p>
+<p class="paragraph">Droplet-Film Theory Development Project</p>
+<p class="paragraph">Complete Setup Instructions</p>
+<p class="paragraph">System Requirements</p>
+<p class="paragraph">Before installing the DFT Development project, ensure your system meets the following requirements:</p>
+<p class="paragraph">Minimum System Requirements</p>
+<li class="bullet-point">Python 3.7 or higher (Python 3.9+ recommended)</li>
+<li class="bullet-point">8GB RAM (16GB recommended for large datasets)</li>
+<li class="bullet-point">2GB free disk space</li>
+<li class="bullet-point">Internet connection for package installation</li>
+<li class="bullet-point">Operating System: Windows 10/11, macOS 10.14+, or Ubuntu 18.04+</li>
+<p class="paragraph">Recommended System Configuration</p>
+<li class="bullet-point">Python 3.9 or 3.10</li>
+<li class="bullet-point">16GB RAM or more</li>
+<li class="bullet-point">5GB free disk space</li>
+<li class="bullet-point">SSD storage for better performance</li>
+<li class="bullet-point">Multi-core processor for faster training</li>
+<p class="paragraph">Python Environment Setup</p>
+<p class="paragraph">The project requires a properly configured Python environment. We strongly recommend using a virtual environment to avoid conflicts with other projects.</p>
+<p class="paragraph">Step 1: Install Python</p>
+<p class="paragraph">Download and install Python from the official website (python.org):</p>
+<li class="bullet-point">Choose Python 3.9 or 3.10 for best compatibility</li>
+<li class="bullet-point">Ensure "Add Python to PATH" is checked during installation</li>
+<li class="bullet-point">Verify installation by opening a terminal and running: python --version</li>
+<p class="paragraph">Step 2: Create Virtual Environment</p>
+<p class="paragraph">Create a dedicated virtual environment for the project:</p>
+<p class="paragraph">Windows:</p>
+<div class="code-snippet">python -m venv dft_env</div>
+<p class="paragraph">dft_env\Scripts\activate</p>
+<p class="paragraph">macOS/Linux:</p>
+<div class="code-snippet">python3 -m venv dft_env</div>
+<p class="paragraph">source dft_env/bin/activate</p>
+<p class="paragraph">Step 3: Upgrade pip</p>
+<p class="paragraph">Ensure you have the latest version of pip:</p>
+<div class="code-snippet">python -m pip install --upgrade pip</div>
+<p class="paragraph">Package Installation Methods</p>
+<p class="paragraph">The project can be installed using several methods. Choose the one that best fits your needs:</p>
+<p class="paragraph">Method 1: Complete Installation (Recommended)</p>
+<p class="paragraph">This method installs all dependencies and the project in development mode:</p>
+<h2 class="section">1. Clone the repository:</h2>
+<div class="code-snippet">git clone https://github.com/your-username/Droplet-Film-Theory-Development.git</div>
+<div class="code-snippet">cd Droplet-Film-Theory-Development</div>
+<h2 class="section">2. Install the project and dependencies:</h2>
+<div class="code-snippet">pip install -e .</div>
+<p class="paragraph">Method 2: Manual Installation</p>
+<p class="paragraph">Install packages individually for more control:</p>
+<p class="paragraph">Core Dependencies:</p>
+<div class="code-snippet">pip install numpy>=1.21.0</div>
+<div class="code-snippet">pip install pandas>=1.3.0</div>
+<div class="code-snippet">pip install scipy>=1.7.0</div>
+<div class="code-snippet">pip install scikit-learn>=1.0.0</div>
+<p class="paragraph">Visualization Dependencies:</p>
+<div class="code-snippet">pip install matplotlib>=3.4.0</div>
+<div class="code-snippet">pip install seaborn>=0.11.0</div>
+<div class="code-snippet">pip install plotly>=5.0.0</div>
+<p class="paragraph">Jupyter and Development:</p>
+<div class="code-snippet">pip install jupyter>=1.0.0</div>
+<div class="code-snippet">pip install notebook>=6.4.0</div>
+<div class="code-snippet">pip install ipywidgets>=7.6.0</div>
+<p class="paragraph">Specialized ML Libraries:</p>
+<div class="code-snippet">pip install feyn>=3.0.0</div>
+<div class="code-snippet">pip install pysindy>=1.6.0</div>
+<div class="code-snippet">pip install xgboost>=1.5.0</div>
+<p class="paragraph">Method 3: Using Requirements File</p>
+<p class="paragraph">Install from the provided requirements file:</p>
+<div class="code-snippet">pip install -r requirements.txt</div>
+<p class="paragraph">If requirements.txt doesn't exist, create it with:</p>
+<p class="paragraph">pip freeze > requirements.txt</p>
+<p class="paragraph">Verification and Testing</p>
+<p class="paragraph">After installation, verify that everything is working correctly:</p>
+<p class="paragraph">Step 1: Test Basic Imports</p>
+<p class="paragraph">Run the following commands to test core functionality:</p>
+<div class="code-snippet">python -c "import numpy; print('NumPy version:', numpy.__version__)"</div>
+<div class="code-snippet">python -c "import pandas; print('Pandas version:', pandas.__version__)"</div>
+<div class="code-snippet">python -c "import scipy; print('SciPy version:', scipy.__version__)"</div>
+<div class="code-snippet">python -c "import sklearn; print('Scikit-learn version:', sklearn.__version__)"</div>
+<p class="paragraph">Step 2: Test Project-Specific Imports</p>
+<p class="paragraph">Verify that the project modules can be imported:</p>
+<div class="code-snippet">python -c "from scripts_2.0.dft_model import DFT; print('DFT import successful')"</div>
+<div class="code-snippet">python -c "from scripts_2.0.utils import ChiefBldr; print('ChiefBldr import successful')"</div>
+<div class="code-snippet">python -c "from scripts_2.0.utils import QLatticeWrapper; print('QLatticeWrapper import successful')"</div>
+<p class="paragraph">Step 3: Run Basic Functionality Test</p>
+<p class="paragraph">Test the core functionality with a simple example:</p>
+<div class="code-snippet">python -c "</div>
+<div class="code-snippet">import numpy as np</div>
+<div class="code-snippet">from scripts_2.0.dft_model import DFT</div>
+<p class="paragraph"># Create sample data</p>
+<p class="paragraph">X = np.random.rand(10, 10)</p>
+<p class="paragraph">y = np.random.rand(10)</p>
+<p class="paragraph"># Test DFT model</p>
+<p class="paragraph">model = DFT(seed=42)</p>
+<p class="paragraph">model.fit(X, y)</p>
+<p class="paragraph">predictions = model.predict(X)</p>
+<p class="paragraph">print('DFT model test successful')</p>
+<p class="paragraph">"</p>
+<p class="paragraph">Jupyter Notebook Setup</p>
+<p class="paragraph">For interactive development and exploration:</p>
+<p class="paragraph">Step 1: Install Jupyter</p>
+<div class="code-snippet">pip install jupyter notebook ipywidgets</div>
+<p class="paragraph">Step 2: Launch Jupyter</p>
+<p class="paragraph">jupyter notebook</p>
+<p class="paragraph">Step 3: Navigate to Project</p>
+<p class="paragraph">Open the scripts_2.0 directory and explore the available notebooks:</p>
+<li class="bullet-point">DFT-PISR.ipynb: Main physics-informed implementation</li>
+<li class="bullet-point">xgboost.ipynb: Gradient boosting approach</li>
+<li class="bullet-point">sindy.ipynb: Symbolic regression analysis</li>
+<li class="bullet-point">QLattice.ipynb: Automated model discovery</li>
+<p class="paragraph">Data Preparation</p>
+<p class="paragraph">Before using the project, prepare your dataset:</p>
+<p class="paragraph">Required Data Format</p>
+<p class="paragraph">Your data must be in CSV format with the following columns:</p>
+<li class="bullet-point">Dia: Well diameter (meters)</li>
+<li class="bullet-point">Dev(deg): Well deviation angle (degrees)</li>
+<li class="bullet-point">Area (m2): Cross-sectional area (square meters)</li>
+<li class="bullet-point">z: Elevation change (meters)</li>
+<li class="bullet-point">GasDens: Gas density (kg/m³)</li>
+<li class="bullet-point">LiquidDens: Liquid density (kg/m³)</li>
+<li class="bullet-point">g (m/s2): Gravitational acceleration (m/s²)</li>
+<li class="bullet-point">P/T: Pressure/Temperature ratio (Pa/K)</li>
+<li class="bullet-point">friction_factor: Friction factor (dimensionless)</li>
+<li class="bullet-point">critical_film_thickness: Critical film thickness (meters)</li>
+<p class="paragraph">Data Validation</p>
+<p class="paragraph">Use the following code to validate your data:</p>
+<div class="code-snippet">import pandas as pd</div>
+<div class="code-snippet">import numpy as np</div>
+<div class="code-snippet">def validate_data(file_path):</div>
+<p class="paragraph">data = pd.read_csv(file_path)</p>
+<p class="paragraph">required_cols = ['Dia', 'Dev(deg)', 'Area (m2)', 'z',</p>
+<p class="paragraph">'GasDens', 'LiquidDens', 'g (m/s2)',</p>
+<p class="paragraph">'P/T', 'friction_factor', 'critical_film_thickness']</p>
+<p class="paragraph">missing_cols = [col for col in required_cols if col not in data.columns]</p>
+<div class="code-snippet">if missing_cols:</div>
+<p class="paragraph">print(f"Missing columns: {missing_cols}")</p>
+<p class="paragraph">return False</p>
+<p class="paragraph">print("All required columns present")</p>
+<p class="paragraph">print(f"Data shape: {data.shape}")</p>
+<p class="paragraph">print(f"Data types:\n{data.dtypes}")</p>
+<p class="paragraph">return True</p>
+<p class="paragraph"># Validate your data</p>
+<p class="paragraph">validate_data("your_data.csv")</p>
+<p class="paragraph">Common Installation Issues</p>
+<p class="paragraph">Here are solutions to frequently encountered problems:</p>
+<p class="paragraph">Issue 1: Permission Errors</p>
+<p class="paragraph">Problem: "Permission denied" when installing packages</p>
+<p class="paragraph">Solution: Use the --user flag or create a virtual environment</p>
+<div class="code-snippet">pip install --user package_name</div>
+<p class="paragraph">Issue 2: Version Conflicts</p>
+<p class="paragraph">Problem: Package version conflicts</p>
+<p class="paragraph">Solution: Use a fresh virtual environment</p>
+<div class="code-snippet">python -m venv fresh_env</div>
+<p class="paragraph">fresh_env\Scripts\activate</p>
+<div class="code-snippet">pip install package_name</div>
+<p class="paragraph">Issue 3: Memory Issues</p>
+<p class="paragraph">Problem: Out of memory during installation</p>
+<p class="paragraph">Solution: Close other applications and try again</p>
+<li class="bullet-point">Close unnecessary programs</li>
+<li class="bullet-point">Restart your computer</li>
+<li class="bullet-point">Use pip install --no-cache-dir package_name</li>
+<p class="paragraph">Issue 4: Network Issues</p>
+<p class="paragraph">Problem: Package download failures</p>
+<p class="paragraph">Solution: Use alternative package sources</p>
+<div class="code-snippet">pip install -i https://pypi.org/simple/ package_name</div>
+<div class="code-snippet">pip install --trusted-host pypi.org --trusted-host pypi.python.org package_name</div>
+<p class="paragraph">Issue 5: Compilation Errors</p>
+<p class="paragraph">Problem: C/C++ compilation errors on Windows</p>
+<p class="paragraph">Solution: Install Microsoft Visual C++ Build Tools</p>
+<li class="bullet-point">Download from Microsoft website</li>
+<li class="bullet-point">Install "C++ build tools" workload</li>
+<li class="bullet-point">Restart terminal and try again</li>
+<p class="paragraph">Issue 6: QLattice Connection Issues</p>
+<p class="paragraph">Problem: Cannot connect to Feyn QLattice</p>
+<p class="paragraph">Solution: Check network and credentials</p>
+<li class="bullet-point">Ensure internet connection</li>
+<li class="bullet-point">Verify Feyn account setup</li>
+<li class="bullet-point">Check firewall settings</li>
+<li class="bullet-point">Try alternative symbolic regression (PySINDy)</li>
+<p class="paragraph">Development Environment Setup</p>
+<p class="paragraph">For contributors and advanced users:</p>
+<p class="paragraph">Code Quality Tools</p>
+<div class="code-snippet">pip install black flake8 pytest mypy</div>
+<p class="paragraph">Code Formatting</p>
+<p class="paragraph">black scripts_2.0/*.py</p>
+<p class="paragraph">Linting</p>
+<p class="paragraph">flake8 scripts_2.0/*.py</p>
+<p class="paragraph">Type Checking</p>
+<p class="paragraph">mypy scripts_2.0/*.py</p>
+<p class="paragraph">Testing</p>
+<p class="paragraph">pytest tests/</p>
+<p class="paragraph">IDE Configuration</p>
+<p class="paragraph">For popular IDEs:</p>
+<p class="paragraph">Visual Studio Code</p>
+<h2 class="section">1. Install Python extension</h2>
+<h2 class="section">2. Select Python interpreter (virtual environment)</h2>
+<h2 class="section">3. Configure settings.json:</h2>
+<p class="paragraph">{</p>
+<p class="paragraph">"python.defaultInterpreterPath": "./dft_env/Scripts/python.exe",</p>
+<p class="paragraph">"python.linting.enabled": true,</p>
+<p class="paragraph">"python.linting.flake8Enabled": true,</p>
+<p class="paragraph">"python.formatting.provider": "black"</p>
+<p class="paragraph">}</p>
+<p class="paragraph">PyCharm</p>
+<h2 class="section">1. Open project in PyCharm</h2>
+<h2 class="section">2. Configure project interpreter (virtual environment)</h2>
+<h2 class="section">3. Enable code inspection</h2>
+<h2 class="section">4. Set up code style (PEP 8)</h2>
+<p class="paragraph">Performance Optimization</p>
+<p class="paragraph">For better performance with large datasets:</p>
+<p class="paragraph">Install Optimized Packages</p>
+<div class="code-snippet">pip install numpy --upgrade</div>
+<div class="code-snippet">pip install pandas --upgrade</div>
+<div class="code-snippet">pip install scipy --upgrade</div>
+<p class="paragraph">Use Conda for Scientific Packages</p>
+<p class="paragraph">conda install numpy pandas scipy scikit-learn matplotlib</p>
+<p class="paragraph">Install Intel MKL Libraries</p>
+<div class="code-snippet">pip install mkl</div>
+<p class="paragraph">Security Considerations</p>
+<li class="bullet-point">Always use virtual environments</li>
+<li class="bullet-point">Keep packages updated regularly</li>
+<li class="bullet-point">Use trusted package sources</li>
+<li class="bullet-point">Verify package signatures when possible</li>
+<li class="bullet-point">Never install packages as root/admin unless necessary</li>
+<p class="paragraph">Maintenance and Updates</p>
+<p class="paragraph">Regular maintenance ensures optimal performance:</p>
+<p class="paragraph">Update Packages</p>
+<div class="code-snippet">pip install --upgrade package_name</div>
+<p class="paragraph">pip list --outdated</p>
+<p class="paragraph">Check for Security Updates</p>
+<p class="paragraph">pip audit</p>
+<p class="paragraph">Backup Environment</p>
+<p class="paragraph">pip freeze > requirements_backup.txt</p>
+<p class="paragraph">Clean Up</p>
+<p class="paragraph">pip cache purge</p>
+<p class="paragraph">Uninstallation</p>
+<p class="paragraph">To remove the project and dependencies:</p>
+<p class="paragraph">Remove Virtual Environment</p>
+<p class="paragraph"># Windows</p>
+<p class="paragraph">rmdir /s dft_env</p>
+<p class="paragraph"># macOS/Linux</p>
+<p class="paragraph">rm -rf dft_env</p>
+<p class="paragraph">Remove Packages</p>
+<p class="paragraph">pip uninstall package_name</p>
+<p class="paragraph">Clean Pip Cache</p>
+<p class="paragraph">pip cache purge</p>
+<p class="paragraph">Installation Checklist</p>
+<p class="paragraph">Use this checklist to verify your installation:</p>
+<p class="paragraph">□ Python 3.7+ installed and accessible</p>
+<p class="paragraph">□ Virtual environment created and activated</p>
+<p class="paragraph">□ Core packages installed (numpy, pandas, scipy, sklearn)</p>
+<p class="paragraph">□ Visualization packages installed (matplotlib, seaborn)</p>
+<p class="paragraph">□ Jupyter notebook working</p>
+<p class="paragraph">□ Project modules importing successfully</p>
+<p class="paragraph">□ Basic functionality test passing</p>
+<p class="paragraph">□ Sample data prepared and validated</p>
+<p class="paragraph">□ Jupyter notebooks opening correctly</p>
+<p class="paragraph">Next Steps</p>
+<p class="paragraph">After successful installation:</p>
+<h2 class="section">1. Read the main documentation for project overview</h2>
+<h2 class="section">2. Explore the usage examples for practical implementation</h2>
+<h2 class="section">3. Review the API reference for technical details</h2>
+<h2 class="section">4. Check the troubleshooting guide for common issues</h2>
+<h2 class="section">5. Start with the DFT-PISR.ipynb notebook</h2>
+<h2 class="section">6. Prepare your own dataset for analysis</h2>
+<p class="paragraph">Support and Resources</p>
+<p class="paragraph">If you encounter issues:</p>
+<h2 class="section">1. Check this installation guide first</h2>
+<h2 class="section">2. Review the troubleshooting section</h2>
+<h2 class="section">3. Search the GitHub issues</h2>
+<h2 class="section">4. Contact the development team</h2>
+<h2 class="section">5. Join the community discussions</h2>
+<p class="paragraph">The project is actively maintained and supported by the development team and community contributors.</p>
             </div>
         </main>
         
         <footer>
-            <p>Generated on 2025-10-14 18:09:55</p>
+            <p>Generated on 2025-10-15 20:28:33</p>
             <p>Droplet-Film Theory Development Project</p>
         </footer>
     </div>

@@ -10,6 +10,7 @@
     <div class="container">
         <header>
             <h1>API Reference</h1>
+            <p>Droplet-Film Theory Development Project</p>
             <nav>
                 <a href="../index.html">Home</a>
                 <a href="documentation.html">Documentation</a>
@@ -21,295 +22,311 @@
         </header>
         
         <main>
+            <div class="sidebar">
+                <h3>Contents</h3>
+                <ul>
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#quick-start">Quick Start</a></li>
+                    <li><a href="#data-format">Data Format</a></li>
+                    <li><a href="#running">Running DFT Development</a></li>
+                    <li><a href="#troubleshooting">Troubleshooting</a></li>
+                    <li><a href="#examples">Examples</a></li>
+                    <li><a href="#performance">Performance</a></li>
+                    <li><a href="#how-to">How-to Guides</a></li>
+                    <li><a href="#tutorials">Tutorial Scripts</a></li>
+                </ul>
+            </div>
+            
             <div class="content">
-<h3>API Reference</h3>
-<h3>Droplet-Film Theory Development Project</h3>
-<h3>Technical Documentation</h3>
-<h3>Overview</h3>
-<p>This document provides comprehensive technical documentation for all classes, methods, and parameters in the DFT Development project. The API is designed to be both powerful and user-friendly, supporting both research and industrial applications.</p>
-<p>The project follows object-oriented design principles with clear separation of concerns between physics modeling, data management, and machine learning components.</p>
-<h2>Core Classes and Modules</h2>
-<p>The project consists of several key modules:</p>
-<h3>- dft_model.py: Core physics model implementation</h3>
-<h3>- utils.py: Data management and utility functions</h3>
-<p>- Individual Jupyter notebooks for different approaches</p>
-<h3>DFT Class - Core Physics Model</h3>
-<p>The DFT class implements the Droplet-Film Theory physics model for predicting critical flow rates in gas wells.</p>
-<h3>Class Definition</h3>
-<p>class DFT:</p>
-<h3>"""</h3>
-<p>Droplet-Film Theory model for predicting critical flow rates in gas wells.</p>
-<p>This class implements a physics-informed machine learning approach that combines</p>
-<p>fundamental fluid dynamics principles with data-driven optimization to predict</p>
-<p>when gas wells will experience liquid loading.</p>
-<h3>"""</h3>
-<h3>Constructor</h3>
-<p>__init__(self, seed=42, feature_tol=1.0, dev_tol=1e-3, multiple_dev_policy="max")</p>
-<p>Parameters:</p>
-<p>- seed (int): Random seed for reproducibility. Default: 42</p>
-<p>- feature_tol (float): Feature distance threshold for matching. Default: 1.0</p>
-<p>- dev_tol (float): Deviation tolerance for angle matching. Default: 1e-3</p>
-<p>- multiple_dev_policy (str): Policy for handling multiple matches. Options: "max", "min", "mean", "median". Default: "max"</p>
-<p>Attributes:</p>
-<h3>- seed: Random seed value</h3>
-<h3>- feature_tol: Feature tolerance threshold</h3>
-<h3>- dev_tol: Deviation tolerance threshold</h3>
-<p>- multiple_dev_policy: Multiple match handling policy</p>
-<p>- opt_params: Optimized parameters (set after fitting)</p>
-<p>- n_train: Number of training samples (set after fitting)</p>
-<h3>Methods</h3>
-<h3>fit(self, X, y)</h3>
-<p>Train the DFT model on provided data.</p>
-<p>Parameters:</p>
-<p>- X (np.ndarray): Input features array with shape (n_samples, 10)</p>
-<p>- y (np.ndarray): Target values array with shape (n_samples,)</p>
-<p>Returns:</p>
-<h3>- self: Fitted model instance</h3>
-<p>Features (in order):</p>
-<h3>1. Dia: Well diameter (meters)</h3>
-<h3>2. Dev(deg): Well deviation angle (degrees)</h3>
-<p>3. Area (m2): Cross-sectional area (square meters)</p>
-<h3>4. z: Elevation change (meters)</h3>
-<h3>5. GasDens: Gas density (kg/m³)</h3>
-<h3>6. LiquidDens: Liquid density (kg/m³)</h3>
-<h3>7. g (m/s2): Gravitational acceleration (m/s²)</h3>
-<h3>8. P/T: Pressure/Temperature ratio (Pa/K)</h3>
-<p>9. friction_factor: Friction factor (dimensionless)</p>
-<p>10. critical_film_thickness: Critical film thickness (meters)</p>
-<p>Implementation Details:</p>
-<p>- Uses Powell optimization method from scipy.optimize</p>
-<p>- Optimizes 5 global parameters (p1-p5) plus alpha values for each training sample</p>
-<h3>- Bounds: p1-p5 unbounded, alpha in [0, 1]</h3>
-<p>- Maximum iterations: 5000, maximum function calls: 10000</p>
-<p>predict(self, X, dev_train=None, alpha_strategy='enhanced_dev_based')</p>
-<p>Make predictions on new data.</p>
-<p>Parameters:</p>
-<p>- X (np.ndarray): New input data with shape (n_samples, 10)</p>
-<p>- dev_train (np.ndarray, optional): Training deviation angles for alpha assignment</p>
-<p>- alpha_strategy (str): Alpha assignment strategy. Must be 'enhanced_dev_based'</p>
-<p>Returns:</p>
-<p>- np.ndarray: Predicted values with shape (n_samples,)</p>
-<p>Alpha Assignment Strategy:</p>
-<p>The method uses a sophisticated three-tier strategy based on well deviation angle:</p>
-<h3>1. Dev < 10°: Regular deviation-based matching</h3>
-<h3>- Find training samples within dev_tol</h3>
-<p>- Apply multiple_dev_policy if multiple matches found</p>
-<h3>- Use mean training alpha if no matches</h3>
-<h3>2. 10° ≤ Dev < 20°: Minimum alpha strategy</h3>
-<h3>- Find training samples within dev_tol</h3>
-<h3>- Use minimum alpha among matches</h3>
-<h3>- Use mean training alpha if no matches</h3>
-<h3>3. Dev ≥ 20°: Full-feature matching</h3>
-<p>- Compute Euclidean distance to all training samples</p>
-<p>- Use closest sample's alpha if distance < feature_tol</p>
-<h3>- Use mean training alpha otherwise</h3>
-<h3>_eq(self, params, X)</h3>
-<p>Compute predicted values using the physics equation.</p>
-<p>Parameters:</p>
-<p>- params (np.ndarray): Model parameters (5 global + alpha values)</p>
-<p>- X (np.ndarray): Input features with shape (n_samples, 10)</p>
-<p>Returns:</p>
-<p>- np.ndarray: Predicted values with shape (n_samples,)</p>
-<p>Physics Equation:</p>
-<p>Qcr = p1 × √(|term1 × α + (1-α) × term2| × (1/z) × (P/T))</p>
-<p>Where:</p>
-<p>- term1 = (2 × g × Dia × (1 - 3×(Dia/h_cr) + 3×(Dia/h_cr)²) × (ρ_l - ρ_g) × cos(Dev) / (f × ρ_g)) × p4</p>
-<p>- term2 = |sin(p5 × Dev)|^p3 × ((ρ_l - ρ_g)^p2 / ρ_g²)</p>
-<h3>_loss(self, params)</h3>
-<p>Compute loss function for optimization.</p>
-<p>Parameters:</p>
-<h3>- params (np.ndarray): Model parameters</h3>
-<p>Returns:</p>
-<h3>- float: Mean squared error loss</h3>
-<h3>ChiefBldr Class - Data Management</h3>
-<p>The ChiefBldr class handles dataset loading, preprocessing, model training, and evaluation.</p>
-<h3>Class Definition</h3>
-<p>class ChiefBldr:</p>
-<h3>"""</h3>
-<p>Data management and model training utility class.</p>
-<p>This class provides comprehensive functionality for loading datasets,</p>
-<p>splitting data, training models, and evaluating performance.</p>
-<h3>"""</h3>
-<h3>Constructor</h3>
-<p>__init__(self, path, seed=42, drop_cols=None, includ_cols=None, test_size=0.20, scale=False)</p>
-<p>Parameters:</p>
-<h3>- path (str): Path to dataset file (CSV format)</h3>
-<p>- seed (int): Random seed for reproducibility. Default: 42</p>
-<p>- drop_cols (List[str], optional): Columns to exclude from analysis</p>
-<p>- includ_cols (List[str], optional): Columns to include in analysis</p>
-<p>- test_size (float): Fraction of data for test set. Default: 0.20</p>
-<p>- scale (bool): Whether to scale features. Default: False</p>
-<p>Attributes (set after initialization):</p>
-<p>- X (np.ndarray): Full feature matrix with shape (n_samples, n_features)</p>
-<p>- y (np.ndarray): Target values with shape (n_samples,)</p>
-<h3>- X_train (np.ndarray): Training features</h3>
-<h3>- X_test (np.ndarray): Test features</h3>
-<h3>- y_train (np.ndarray): Training targets</h3>
-<h3>- y_test (np.ndarray): Test targets</h3>
-<p>- feature_names (List[str]): List of feature column names</p>
-<p>- scaler (StandardScaler): Fitted scaler (if scale=True)</p>
-<h3>Methods</h3>
-<p>evolv_model(self, build_model, hparam_grid, k_folds=5)</p>
-<p>Train model with hyperparameter optimization.</p>
-<p>Parameters:</p>
-<p>- build_model (Callable): Function that creates model from hyperparameters</p>
-<p>- hparam_grid (Dict): Dictionary of hyperparameter lists to try</p>
-<p>- k_folds (int): Number of cross-validation folds. Default: 5</p>
-<p>Returns:</p>
-<h3>- Any: Best trained model</h3>
-<p>Implementation Details:</p>
-<p>- Performs grid search over all hyperparameter combinations</p>
-<p>- Uses k-fold cross-validation for each combination</p>
-<p>- Selects best model based on validation performance</p>
-<h3>- Stores training and test predictions</h3>
-<h3>- Computes performance metrics (MSE, R²)</h3>
-<p>Performance Metrics (set after training):</p>
-<p>- loss (float): Mean squared error on training data</p>
-<p>- r2_score (float): R-squared correlation coefficient</p>
-<h3>- y_train_pred (np.ndarray): Training predictions</h3>
-<h3>- y_test_pred (np.ndarray): Test predictions</h3>
-<h3>QLatticeWrapper Class - Symbolic Regression</h3>
-<p>The QLatticeWrapper class provides interface to Feyn QLattice for automated symbolic regression.</p>
-<h3>Class Definition</h3>
-<p>class QLatticeWrapper:</p>
-<h3>"""</h3>
-<p>Wrapper class for Feyn QLattice symbolic regression.</p>
-<p>This class provides a scikit-learn compatible interface to QLattice,</p>
-<p>enabling automated discovery of mathematical expressions from data.</p>
-<h3>"""</h3>
-<h3>Constructor</h3>
-<p>__init__(self, feature_tags, output_tag="Qcr", seed=42, max_complexity=10, n_epochs=10, criterion="bic")</p>
-<p>Parameters:</p>
-<h3>- feature_tags (List[str]): List of feature names</h3>
-<p>- output_tag (str): Target variable name. Default: "Qcr"</p>
-<p>- seed (int): Random seed for reproducibility. Default: 42</p>
-<p>- max_complexity (int): Maximum model complexity. Default: 10</p>
-<p>- n_epochs (int): Number of training epochs. Default: 10</p>
-<p>- criterion (str): Model selection criterion. Options: "bic", "aic", "r2". Default: "bic"</p>
-<p>Attributes:</p>
-<h3>- seed: Random seed value</h3>
-<h3>- feature_tags: List of feature names</h3>
-<h3>- output_tag: Target variable name</h3>
-<h3>- max_complexity: Maximum model complexity</h3>
-<h3>- n_epochs: Number of training epochs</h3>
-<h3>- criterion: Model selection criterion</h3>
-<h3>- ql: QLattice connection object</h3>
-<h3>- opt_model: Optimized model (set after fitting)</h3>
-<h3>- y_pred: Predictions (set after fitting)</h3>
-<h3>Methods</h3>
-<h3>fit(self, X, y)</h3>
-<p>Train the QLattice model.</p>
-<p>Parameters:</p>
-<p>- X (np.ndarray): Input features with shape (n_samples, n_features)</p>
-<p>- y (np.ndarray): Target values with shape (n_samples,)</p>
-<p>Returns:</p>
-<h3>- self: Fitted model instance</h3>
-<p>Implementation Details:</p>
-<h3>- Converts NumPy arrays to pandas DataFrames</h3>
-<h3>- Connects to QLattice service</h3>
-<h3>- Trains model with specified parameters</h3>
-<h3>- Selects best model based on criterion</h3>
-<h3>predict(self, X)</h3>
-<p>Make predictions on new data.</p>
-<p>Parameters:</p>
-<p>- X (np.ndarray): Input features with shape (n_samples, n_features)</p>
-<p>Returns:</p>
-<p>- np.ndarray: Predicted values with shape (n_samples,)</p>
-<h3>express(self)</h3>
-<p>Get symbolic expression of the trained model.</p>
-<p>Returns:</p>
-<h3>- sympy.Expr: Symbolic expression in SymPy format</h3>
-<h3>Data Format Requirements</h3>
-<p>Input CSV files must contain exactly these columns:</p>
-<h3>1. Dia (float): Well diameter in meters</h3>
-<p>2. Dev(deg) (float): Well deviation angle in degrees</p>
-<p>3. Area (m2) (float): Cross-sectional area in square meters</p>
-<h3>4. z (float): Elevation change in meters</h3>
-<h3>5. GasDens (float): Gas density in kg/m³</h3>
-<h3>6. LiquidDens (float): Liquid density in kg/m³</h3>
-<p>7. g (m/s2) (float): Gravitational acceleration in m/s²</p>
-<p>8. P/T (float): Pressure/Temperature ratio in Pa/K</p>
-<p>9. friction_factor (float): Friction factor (dimensionless)</p>
-<p>10. critical_film_thickness (float): Critical film thickness in meters</p>
-<h3>Data Validation</h3>
-<p>The ChiefBldr class automatically validates data format and handles common issues:</p>
-<h3>- Missing value detection and handling</h3>
-<h3>- Data type validation</h3>
-<h3>- Column name verification</h3>
-<h3>- Range checking for physical parameters</h3>
-<h3>Error Handling</h3>
-<p>The API includes comprehensive error handling for:</p>
-<h3>- Invalid input data formats</h3>
-<h3>- Missing required columns</h3>
-<h3>- Optimization convergence failures</h3>
-<h3>- Memory allocation issues</h3>
-<h3>- Network connectivity problems (QLattice)</h3>
-<h3>Performance Considerations</h3>
-<p>Memory Usage:</p>
-<h3>- Scales linearly with dataset size</h3>
-<h3>- DFT model: O(n_samples × n_features)</h3>
-<h3>- ChiefBldr: O(n_samples × n_features)</h3>
-<p>- QLattice: O(n_samples × n_features × complexity)</p>
-<p>Training Time:</p>
-<h3>- DFT model: O(n_samples × n_iterations)</h3>
-<p>- ChiefBldr: O(n_combinations × k_folds × n_samples)</p>
-<h3>- QLattice: O(n_epochs × complexity × n_samples)</h3>
-<p>Scalability:</p>
-<p>- Use data sampling for large datasets during development</p>
-<p>- Consider parallel processing for hyperparameter optimization</p>
-<h3>- Monitor memory usage with large feature spaces</h3>
-<h3>Integration Capabilities</h3>
-<p>The API is designed for seamless integration with:</p>
-<h3>- Scikit-learn: Compatible fit/predict interface</h3>
-<h3>- Pandas: DataFrame input/output support</h3>
-<h3>- NumPy: Array-based operations</h3>
-<h3>- Matplotlib/Seaborn: Visualization integration</h3>
-<h3>- Jupyter: Interactive development support</h3>
-<h3>Type Hints</h3>
-<p>All functions include comprehensive type hints for better IDE support and code documentation:</p>
-<h3>```python</h3>
-<p>from typing import Optional, List, Callable, Dict, Any, Union</p>
-<h3>import numpy as np</h3>
-<h3>import pandas as pd</h3>
-<h3>```</h3>
-<h3>Development and Testing</h3>
-<p>The codebase includes:</p>
-<h3>- Comprehensive docstrings for all functions</h3>
-<h3>- Type hints for better code clarity</h3>
-<h3>- Unit test framework support</h3>
-<h3>- Error message localization</h3>
-<h3>- Logging capabilities for debugging</h3>
-<h3>Future API Extensions</h3>
-<p>Planned additions include:</p>
-<p>- Additional physics models (drift-flux, mechanistic)</p>
-<h3>- Ensemble methods for improved accuracy</h3>
-<h3>- Real-time prediction capabilities</h3>
-<h3>- REST API endpoints for web integration</h3>
-<h3>- Cloud deployment support</h3>
-<h3>- GPU acceleration for large datasets</h3>
-<h3>Migration Guide</h3>
-<p>For users upgrading from previous versions:</p>
-<p>1. Update import statements if module structure changed</p>
-<h3>2. Check parameter names for any modifications</h3>
-<h3>3. Verify data format compatibility</h3>
-<h3>4. Test with sample data before full deployment</h3>
-<h3>5. Review performance metrics for any changes</h3>
-<h3>Deprecation Notices</h3>
-<h3>- No deprecated features in current version</h3>
-<p>- Future deprecations will be announced with 6-month notice</p>
-<p>- Migration guides will be provided for all breaking changes</p>
-<h3>Support and Resources</h3>
-<p>- GitHub repository: Primary source for code and issues</p>
-<p>- Documentation: Comprehensive guides and examples</p>
-<h3>- Community forums: User discussions and support</h3>
-<h3>- Issue tracker: Bug reports and feature requests</h3>
-<p>- Research papers: Scientific background and validation</p>
-<p>This API reference provides complete technical documentation for the DFT Development project. For additional examples and tutorials, refer to the Usage Examples guide and individual Jupyter notebooks.</p>
+<h1 class="main-header">API Reference</h1>
+<p class="paragraph">Droplet-Film Theory Development Project</p>
+<p class="paragraph">Technical Documentation</p>
+<p class="paragraph">Overview</p>
+<p class="paragraph">This document provides comprehensive technical documentation for all classes, methods, and parameters in the DFT Development project. The API is designed to be both powerful and user-friendly, supporting both research and industrial applications.</p>
+<p class="paragraph">The project follows object-oriented design principles with clear separation of concerns between physics modeling, data management, and machine learning components.</p>
+<p class="paragraph">Core Classes and Modules</p>
+<p class="paragraph">The project consists of several key modules:</p>
+<li class="bullet-point">dft_model.py: Core physics model implementation</li>
+<li class="bullet-point">utils.py: Data management and utility functions</li>
+<li class="bullet-point">Individual Jupyter notebooks for different approaches</li>
+<p class="paragraph">DFT Class - Core Physics Model</p>
+<p class="paragraph">The DFT class implements the Droplet-Film Theory physics model for predicting critical flow rates in gas wells.</p>
+<p class="paragraph">Class Definition</p>
+<div class="code-snippet">class DFT:</div>
+<p class="paragraph">"""</p>
+<p class="paragraph">Droplet-Film Theory model for predicting critical flow rates in gas wells.</p>
+<p class="paragraph">This class implements a physics-informed machine learning approach that combines</p>
+<p class="paragraph">fundamental fluid dynamics principles with data-driven optimization to predict</p>
+<p class="paragraph">when gas wells will experience liquid loading.</p>
+<p class="paragraph">"""</p>
+<p class="paragraph">Constructor</p>
+<p class="paragraph">__init__(self, seed=42, feature_tol=1.0, dev_tol=1e-3, multiple_dev_policy="max")</p>
+<p class="paragraph">Parameters:</p>
+<li class="bullet-point">seed (int): Random seed for reproducibility. Default: 42</li>
+<li class="bullet-point">feature_tol (float): Feature distance threshold for matching. Default: 1.0</li>
+<li class="bullet-point">dev_tol (float): Deviation tolerance for angle matching. Default: 1e-3</li>
+<li class="bullet-point">multiple_dev_policy (str): Policy for handling multiple matches. Options: "max", "min", "mean", "median". Default: "max"</li>
+<p class="paragraph">Attributes:</p>
+<li class="bullet-point">seed: Random seed value</li>
+<li class="bullet-point">feature_tol: Feature tolerance threshold</li>
+<li class="bullet-point">dev_tol: Deviation tolerance threshold</li>
+<li class="bullet-point">multiple_dev_policy: Multiple match handling policy</li>
+<li class="bullet-point">opt_params: Optimized parameters (set after fitting)</li>
+<li class="bullet-point">n_train: Number of training samples (set after fitting)</li>
+<p class="paragraph">Methods</p>
+<p class="paragraph">fit(self, X, y)</p>
+<p class="paragraph">Train the DFT model on provided data.</p>
+<p class="paragraph">Parameters:</p>
+<li class="bullet-point">X (np.ndarray): Input features array with shape (n_samples, 10)</li>
+<li class="bullet-point">y (np.ndarray): Target values array with shape (n_samples,)</li>
+<p class="paragraph">Returns:</p>
+<li class="bullet-point">self: Fitted model instance</li>
+<p class="paragraph">Features (in order):</p>
+<h2 class="section">1. Dia: Well diameter (meters)</h2>
+<h2 class="section">2. Dev(deg): Well deviation angle (degrees)</h2>
+<h2 class="section">3. Area (m2): Cross-sectional area (square meters)</h2>
+<h2 class="section">4. z: Elevation change (meters)</h2>
+<h2 class="section">5. GasDens: Gas density (kg/m³)</h2>
+<h2 class="section">6. LiquidDens: Liquid density (kg/m³)</h2>
+<h2 class="section">7. g (m/s2): Gravitational acceleration (m/s²)</h2>
+<h2 class="section">8. P/T: Pressure/Temperature ratio (Pa/K)</h2>
+<h2 class="section">9. friction_factor: Friction factor (dimensionless)</h2>
+<h2 class="section">10. critical_film_thickness: Critical film thickness (meters)</h2>
+<p class="paragraph">Implementation Details:</p>
+<li class="bullet-point">Uses Powell optimization method from scipy.optimize</li>
+<li class="bullet-point">Optimizes 5 global parameters (p1-p5) plus alpha values for each training sample</li>
+<li class="bullet-point">Bounds: p1-p5 unbounded, alpha in [0, 1]</li>
+<li class="bullet-point">Maximum iterations: 5000, maximum function calls: 10000</li>
+<p class="paragraph">predict(self, X, dev_train=None, alpha_strategy='enhanced_dev_based')</p>
+<p class="paragraph">Make predictions on new data.</p>
+<p class="paragraph">Parameters:</p>
+<li class="bullet-point">X (np.ndarray): New input data with shape (n_samples, 10)</li>
+<li class="bullet-point">dev_train (np.ndarray, optional): Training deviation angles for alpha assignment</li>
+<li class="bullet-point">alpha_strategy (str): Alpha assignment strategy. Must be 'enhanced_dev_based'</li>
+<p class="paragraph">Returns:</p>
+<li class="bullet-point">np.ndarray: Predicted values with shape (n_samples,)</li>
+<p class="paragraph">Alpha Assignment Strategy:</p>
+<p class="paragraph">The method uses a sophisticated three-tier strategy based on well deviation angle:</p>
+<h2 class="section">1. Dev < 10°: Regular deviation-based matching</h2>
+<li class="bullet-point">Find training samples within dev_tol</li>
+<li class="bullet-point">Apply multiple_dev_policy if multiple matches found</li>
+<li class="bullet-point">Use mean training alpha if no matches</li>
+<h2 class="section">2. 10° ≤ Dev < 20°: Minimum alpha strategy</h2>
+<li class="bullet-point">Find training samples within dev_tol</li>
+<li class="bullet-point">Use minimum alpha among matches</li>
+<li class="bullet-point">Use mean training alpha if no matches</li>
+<h2 class="section">3. Dev ≥ 20°: Full-feature matching</h2>
+<li class="bullet-point">Compute Euclidean distance to all training samples</li>
+<li class="bullet-point">Use closest sample's alpha if distance < feature_tol</li>
+<li class="bullet-point">Use mean training alpha otherwise</li>
+<p class="paragraph">_eq(self, params, X)</p>
+<p class="paragraph">Compute predicted values using the physics equation.</p>
+<p class="paragraph">Parameters:</p>
+<li class="bullet-point">params (np.ndarray): Model parameters (5 global + alpha values)</li>
+<li class="bullet-point">X (np.ndarray): Input features with shape (n_samples, 10)</li>
+<p class="paragraph">Returns:</p>
+<li class="bullet-point">np.ndarray: Predicted values with shape (n_samples,)</li>
+<p class="paragraph">Physics Equation:</p>
+<p class="paragraph">Qcr = p1 × √(|term1 × α + (1-α) × term2| × (1/z) × (P/T))</p>
+<p class="paragraph">Where:</p>
+<li class="bullet-point">term1 = (2 × g × Dia × (1 - 3×(Dia/h_cr) + 3×(Dia/h_cr)²) × (ρ_l - ρ_g) × cos(Dev) / (f × ρ_g)) × p4</li>
+<li class="bullet-point">term2 = |sin(p5 × Dev)|^p3 × ((ρ_l - ρ_g)^p2 / ρ_g²)</li>
+<p class="paragraph">_loss(self, params)</p>
+<p class="paragraph">Compute loss function for optimization.</p>
+<p class="paragraph">Parameters:</p>
+<li class="bullet-point">params (np.ndarray): Model parameters</li>
+<p class="paragraph">Returns:</p>
+<li class="bullet-point">float: Mean squared error loss</li>
+<p class="paragraph">ChiefBldr Class - Data Management</p>
+<p class="paragraph">The ChiefBldr class handles dataset loading, preprocessing, model training, and evaluation.</p>
+<p class="paragraph">Class Definition</p>
+<div class="code-snippet">class ChiefBldr:</div>
+<p class="paragraph">"""</p>
+<p class="paragraph">Data management and model training utility class.</p>
+<p class="paragraph">This class provides comprehensive functionality for loading datasets,</p>
+<p class="paragraph">splitting data, training models, and evaluating performance.</p>
+<p class="paragraph">"""</p>
+<p class="paragraph">Constructor</p>
+<p class="paragraph">__init__(self, path, seed=42, drop_cols=None, includ_cols=None, test_size=0.20, scale=False)</p>
+<p class="paragraph">Parameters:</p>
+<li class="bullet-point">path (str): Path to dataset file (CSV format)</li>
+<li class="bullet-point">seed (int): Random seed for reproducibility. Default: 42</li>
+<li class="bullet-point">drop_cols (List[str], optional): Columns to exclude from analysis</li>
+<li class="bullet-point">includ_cols (List[str], optional): Columns to include in analysis</li>
+<li class="bullet-point">test_size (float): Fraction of data for test set. Default: 0.20</li>
+<li class="bullet-point">scale (bool): Whether to scale features. Default: False</li>
+<p class="paragraph">Attributes (set after initialization):</p>
+<li class="bullet-point">X (np.ndarray): Full feature matrix with shape (n_samples, n_features)</li>
+<li class="bullet-point">y (np.ndarray): Target values with shape (n_samples,)</li>
+<li class="bullet-point">X_train (np.ndarray): Training features</li>
+<li class="bullet-point">X_test (np.ndarray): Test features</li>
+<li class="bullet-point">y_train (np.ndarray): Training targets</li>
+<li class="bullet-point">y_test (np.ndarray): Test targets</li>
+<li class="bullet-point">feature_names (List[str]): List of feature column names</li>
+<li class="bullet-point">scaler (StandardScaler): Fitted scaler (if scale=True)</li>
+<p class="paragraph">Methods</p>
+<p class="paragraph">evolv_model(self, build_model, hparam_grid, k_folds=5)</p>
+<p class="paragraph">Train model with hyperparameter optimization.</p>
+<p class="paragraph">Parameters:</p>
+<li class="bullet-point">build_model (Callable): Function that creates model from hyperparameters</li>
+<li class="bullet-point">hparam_grid (Dict): Dictionary of hyperparameter lists to try</li>
+<li class="bullet-point">k_folds (int): Number of cross-validation folds. Default: 5</li>
+<p class="paragraph">Returns:</p>
+<li class="bullet-point">Any: Best trained model</li>
+<p class="paragraph">Implementation Details:</p>
+<li class="bullet-point">Performs grid search over all hyperparameter combinations</li>
+<li class="bullet-point">Uses k-fold cross-validation for each combination</li>
+<li class="bullet-point">Selects best model based on validation performance</li>
+<li class="bullet-point">Stores training and test predictions</li>
+<li class="bullet-point">Computes performance metrics (MSE, R²)</li>
+<p class="paragraph">Performance Metrics (set after training):</p>
+<li class="bullet-point">loss (float): Mean squared error on training data</li>
+<li class="bullet-point">r2_score (float): R-squared correlation coefficient</li>
+<li class="bullet-point">y_train_pred (np.ndarray): Training predictions</li>
+<li class="bullet-point">y_test_pred (np.ndarray): Test predictions</li>
+<p class="paragraph">QLatticeWrapper Class - Symbolic Regression</p>
+<p class="paragraph">The QLatticeWrapper class provides interface to Feyn QLattice for automated symbolic regression.</p>
+<p class="paragraph">Class Definition</p>
+<div class="code-snippet">class QLatticeWrapper:</div>
+<p class="paragraph">"""</p>
+<p class="paragraph">Wrapper class for Feyn QLattice symbolic regression.</p>
+<p class="paragraph">This class provides a scikit-learn compatible interface to QLattice,</p>
+<p class="paragraph">enabling automated discovery of mathematical expressions from data.</p>
+<p class="paragraph">"""</p>
+<p class="paragraph">Constructor</p>
+<p class="paragraph">__init__(self, feature_tags, output_tag="Qcr", seed=42, max_complexity=10, n_epochs=10, criterion="bic")</p>
+<p class="paragraph">Parameters:</p>
+<li class="bullet-point">feature_tags (List[str]): List of feature names</li>
+<li class="bullet-point">output_tag (str): Target variable name. Default: "Qcr"</li>
+<li class="bullet-point">seed (int): Random seed for reproducibility. Default: 42</li>
+<li class="bullet-point">max_complexity (int): Maximum model complexity. Default: 10</li>
+<li class="bullet-point">n_epochs (int): Number of training epochs. Default: 10</li>
+<li class="bullet-point">criterion (str): Model selection criterion. Options: "bic", "aic", "r2". Default: "bic"</li>
+<p class="paragraph">Attributes:</p>
+<li class="bullet-point">seed: Random seed value</li>
+<li class="bullet-point">feature_tags: List of feature names</li>
+<li class="bullet-point">output_tag: Target variable name</li>
+<li class="bullet-point">max_complexity: Maximum model complexity</li>
+<li class="bullet-point">n_epochs: Number of training epochs</li>
+<li class="bullet-point">criterion: Model selection criterion</li>
+<li class="bullet-point">ql: QLattice connection object</li>
+<li class="bullet-point">opt_model: Optimized model (set after fitting)</li>
+<li class="bullet-point">y_pred: Predictions (set after fitting)</li>
+<p class="paragraph">Methods</p>
+<p class="paragraph">fit(self, X, y)</p>
+<p class="paragraph">Train the QLattice model.</p>
+<p class="paragraph">Parameters:</p>
+<li class="bullet-point">X (np.ndarray): Input features with shape (n_samples, n_features)</li>
+<li class="bullet-point">y (np.ndarray): Target values with shape (n_samples,)</li>
+<p class="paragraph">Returns:</p>
+<li class="bullet-point">self: Fitted model instance</li>
+<p class="paragraph">Implementation Details:</p>
+<li class="bullet-point">Converts NumPy arrays to pandas DataFrames</li>
+<li class="bullet-point">Connects to QLattice service</li>
+<li class="bullet-point">Trains model with specified parameters</li>
+<li class="bullet-point">Selects best model based on criterion</li>
+<p class="paragraph">predict(self, X)</p>
+<p class="paragraph">Make predictions on new data.</p>
+<p class="paragraph">Parameters:</p>
+<li class="bullet-point">X (np.ndarray): Input features with shape (n_samples, n_features)</li>
+<p class="paragraph">Returns:</p>
+<li class="bullet-point">np.ndarray: Predicted values with shape (n_samples,)</li>
+<p class="paragraph">express(self)</p>
+<p class="paragraph">Get symbolic expression of the trained model.</p>
+<p class="paragraph">Returns:</p>
+<li class="bullet-point">sympy.Expr: Symbolic expression in SymPy format</li>
+<p class="paragraph">Data Format Requirements</p>
+<p class="paragraph">Input CSV files must contain exactly these columns:</p>
+<h2 class="section">1. Dia (float): Well diameter in meters</h2>
+<h2 class="section">2. Dev(deg) (float): Well deviation angle in degrees</h2>
+<h2 class="section">3. Area (m2) (float): Cross-sectional area in square meters</h2>
+<h2 class="section">4. z (float): Elevation change in meters</h2>
+<h2 class="section">5. GasDens (float): Gas density in kg/m³</h2>
+<h2 class="section">6. LiquidDens (float): Liquid density in kg/m³</h2>
+<h2 class="section">7. g (m/s2) (float): Gravitational acceleration in m/s²</h2>
+<h2 class="section">8. P/T (float): Pressure/Temperature ratio in Pa/K</h2>
+<h2 class="section">9. friction_factor (float): Friction factor (dimensionless)</h2>
+<h2 class="section">10. critical_film_thickness (float): Critical film thickness in meters</h2>
+<p class="paragraph">Data Validation</p>
+<p class="paragraph">The ChiefBldr class automatically validates data format and handles common issues:</p>
+<li class="bullet-point">Missing value detection and handling</li>
+<li class="bullet-point">Data type validation</li>
+<li class="bullet-point">Column name verification</li>
+<li class="bullet-point">Range checking for physical parameters</li>
+<p class="paragraph">Error Handling</p>
+<p class="paragraph">The API includes comprehensive error handling for:</p>
+<li class="bullet-point">Invalid input data formats</li>
+<li class="bullet-point">Missing required columns</li>
+<li class="bullet-point">Optimization convergence failures</li>
+<li class="bullet-point">Memory allocation issues</li>
+<li class="bullet-point">Network connectivity problems (QLattice)</li>
+<p class="paragraph">Performance Considerations</p>
+<p class="paragraph">Memory Usage:</p>
+<li class="bullet-point">Scales linearly with dataset size</li>
+<li class="bullet-point">DFT model: O(n_samples × n_features)</li>
+<li class="bullet-point">ChiefBldr: O(n_samples × n_features)</li>
+<li class="bullet-point">QLattice: O(n_samples × n_features × complexity)</li>
+<p class="paragraph">Training Time:</p>
+<li class="bullet-point">DFT model: O(n_samples × n_iterations)</li>
+<li class="bullet-point">ChiefBldr: O(n_combinations × k_folds × n_samples)</li>
+<li class="bullet-point">QLattice: O(n_epochs × complexity × n_samples)</li>
+<p class="paragraph">Scalability:</p>
+<li class="bullet-point">Use data sampling for large datasets during development</li>
+<li class="bullet-point">Consider parallel processing for hyperparameter optimization</li>
+<li class="bullet-point">Monitor memory usage with large feature spaces</li>
+<p class="paragraph">Integration Capabilities</p>
+<p class="paragraph">The API is designed for seamless integration with:</p>
+<li class="bullet-point">Scikit-learn: Compatible fit/predict interface</li>
+<li class="bullet-point">Pandas: DataFrame input/output support</li>
+<li class="bullet-point">NumPy: Array-based operations</li>
+<li class="bullet-point">Matplotlib/Seaborn: Visualization integration</li>
+<li class="bullet-point">Jupyter: Interactive development support</li>
+<p class="paragraph">Type Hints</p>
+<p class="paragraph">All functions include comprehensive type hints for better IDE support and code documentation:</p>
+<pre><code>
+<span class="code-line">from typing import Optional, List, Callable, Dict, Any, Union</span>
+<span class="code-line">import numpy as np</span>
+<span class="code-line">import pandas as pd</span>
+</code></pre>
+<p class="paragraph">Development and Testing</p>
+<p class="paragraph">The codebase includes:</p>
+<li class="bullet-point">Comprehensive docstrings for all functions</li>
+<li class="bullet-point">Type hints for better code clarity</li>
+<li class="bullet-point">Unit test framework support</li>
+<li class="bullet-point">Error message localization</li>
+<li class="bullet-point">Logging capabilities for debugging</li>
+<p class="paragraph">Future API Extensions</p>
+<p class="paragraph">Planned additions include:</p>
+<li class="bullet-point">Additional physics models (drift-flux, mechanistic)</li>
+<li class="bullet-point">Ensemble methods for improved accuracy</li>
+<li class="bullet-point">Real-time prediction capabilities</li>
+<li class="bullet-point">REST API endpoints for web integration</li>
+<li class="bullet-point">Cloud deployment support</li>
+<li class="bullet-point">GPU acceleration for large datasets</li>
+<p class="paragraph">Migration Guide</p>
+<p class="paragraph">For users upgrading from previous versions:</p>
+<h2 class="section">1. Update import statements if module structure changed</h2>
+<h2 class="section">2. Check parameter names for any modifications</h2>
+<h2 class="section">3. Verify data format compatibility</h2>
+<h2 class="section">4. Test with sample data before full deployment</h2>
+<h2 class="section">5. Review performance metrics for any changes</h2>
+<p class="paragraph">Deprecation Notices</p>
+<li class="bullet-point">No deprecated features in current version</li>
+<li class="bullet-point">Future deprecations will be announced with 6-month notice</li>
+<li class="bullet-point">Migration guides will be provided for all breaking changes</li>
+<p class="paragraph">Support and Resources</p>
+<li class="bullet-point">GitHub repository: Primary source for code and issues</li>
+<li class="bullet-point">Documentation: Comprehensive guides and examples</li>
+<li class="bullet-point">Community forums: User discussions and support</li>
+<li class="bullet-point">Issue tracker: Bug reports and feature requests</li>
+<li class="bullet-point">Research papers: Scientific background and validation</li>
+<p class="paragraph">This API reference provides complete technical documentation for the DFT Development project. For additional examples and tutorials, refer to the Usage Examples guide and individual Jupyter notebooks.</p>
             </div>
         </main>
         
         <footer>
-            <p>Generated on 2025-10-14 18:09:55</p>
+            <p>Generated on 2025-10-15 20:28:33</p>
             <p>Droplet-Film Theory Development Project</p>
         </footer>
     </div>

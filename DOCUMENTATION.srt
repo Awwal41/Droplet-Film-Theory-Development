@@ -1,105 +1,411 @@
 Droplet-Film Theory Development Project
-Comprehensive Documentation for Physics-Informed Machine Learning
+Documentation
 
-Project Overview
-The Droplet-Film Theory (DFT) Development project represents a cutting-edge approach to predicting liquid loading in gas wells through the integration of fundamental physics principles with advanced machine learning techniques. This project addresses a critical challenge in petroleum engineering: determining when gas wells will experience liquid loading, which significantly impacts production efficiency and well performance.
+Version: 2.0
 
-What is Liquid Loading?
-Liquid loading occurs when the gas velocity in a well drops below a critical threshold, causing liquid accumulation in the tubing or casing. This phenomenon leads to:
-- Reduced gas production rates
-- Increased pressure drop
-- Potential well shutdown
-- Significant economic losses
+About DFT Development and this manual
 
-The project provides sophisticated models to predict critical flow rates, enabling operators to optimize well performance and prevent costly production interruptions.
+DFT Development stands for **D**roplet-**F**ilm **T**heory Development for **P**hysics-**I**nformed **M**achine **L**earning.
 
-Scientific Foundation
-The project is built on Droplet-Film Theory, a fundamental framework that describes the complex multiphase flow behavior in gas wells. The theory accounts for:
+DFT Development is a physics-informed machine learning framework focusing on predicting liquid loading in gas wells. It was designed to efficiently integrate fundamental fluid dynamics principles with advanced machine learning techniques for both research and industrial applications. Originally developed for petroleum engineering applications, DFT Development now includes contributions from multiple research groups and supports various modeling approaches. The project is open-source software distributed under the terms of the MIT License.
 
-- Droplet entrainment and transport mechanisms
-- Film formation and stability criteria
-- Gravity and buoyancy effects
-- Friction and pressure drop relationships
-- Well deviation angle impacts
+The DFT Development website provides comprehensive information about the framework. It includes links to this documentation, example notebooks, and a GitHub repository where all development is coordinated.
 
-This physics-based approach ensures that predictions are not only accurate but also interpretable and grounded in established engineering principles.
+---
 
-Core Implementation
-The project is implemented in Python and consists of several key components:
+The content for this manual is part of the DFT Development distribution in its docs directory.
 
-1. DFT Physics Model (dft_model.py)
-   - Implements the core Droplet-Film Theory equations
-   - Handles complex optimization of physical parameters
-   - Supports multiple well deviation angle strategies
-   - Provides robust numerical stability
+* The version of the manual on the project website corresponds to the latest DFT Development release. It is available at: [project-docs-url]
+* A version of the manual corresponding to the latest stable release is available online at: [stable-docs-url]
+* A version of the manual with the most recently added features is available at: [latest-docs-url]
 
-2. Data Management System (utils.py)
-   - ChiefBldr class for comprehensive data handling
-   - Automated train/test splitting and preprocessing
-   - Hyperparameter optimization framework
-   - Performance evaluation and visualization tools
+If needed, you can build a copy on your local machine of the manual (HTML pages) for the version of DFT Development you have downloaded. Follow the steps in the Installation Guide.
 
-3. Advanced ML Integration
-   - QLatticeWrapper for symbolic regression
-   - PySINDy integration for equation discovery
-   - XGBoost implementation for gradient boosting
-   - Cross-validation and model selection
+---
 
-4. Interactive Notebooks
-   - DFT-PISR.ipynb: Main physics-informed implementation
-   - xgboost.ipynb: Gradient boosting approach
-   - sindy.ipynb: Symbolic regression analysis
-   - QLattice.ipynb: Automated model discovery
+The manual is organized into three parts:
 
-Key Features and Capabilities
-The project offers a comprehensive suite of features designed for both research and industrial applications:
+1. The **User Guide** with information about how to obtain, configure, install, and use DFT Development,
+2. The **API Reference** with detailed technical documentation of all classes, methods, and parameters,
+3. The **Examples and Tutorials** with practical examples, use cases, and step-by-step tutorials.
 
-Physics-Informed Modeling
-- Incorporates fundamental fluid dynamics principles
-- Maintains physical interpretability of results
+---
+
+After becoming familiar with DFT Development, consider bookmarking this page, since it gives quick access to all documentation sections and examples.
+
+---
+
+## User Guide
+
+User Guide
+
+* 1. Introduction
+  * 1.1. Overview of DFT Development
+  * 1.2. What does a DFT Development version mean
+  * 1.3. DFT Development features
+  * 1.4. DFT Development applications
+  * 1.5. DFT Development compatibility
+  * 1.6. DFT Development open-source license
+  * 1.7. Authors of DFT Development
+  * 1.8. Citing DFT Development
+  * 1.9. Additional resources
+
+* 2. Installation
+  * 2.1. System requirements
+  * 2.2. Python environment setup
+  * 2.3. Package installation methods
+  * 2.4. Verification and testing
+  * 2.5. Jupyter notebook setup
+  * 2.6. Data preparation
+  * 2.7. Common installation issues
+  * 2.8. Development environment setup
+
+* 3. Quick Start
+  * 3.1. Basic workflow
+  * 3.2. Your first prediction
+  * 3.3. Understanding the output
+  * 3.4. Next steps
+
+* 4. Data Format
+  * 4.1. Required input parameters
+  * 4.2. Data validation
+  * 4.3. Data preprocessing
+  * 4.4. Common data issues
+
+* 5. Running DFT Development
+  * 5.1. Basic usage
+  * 5.2. Command-line options
+  * 5.3. Jupyter notebook usage
+  * 5.4. Output formats
+  * 5.5. Error handling
+
+* 6. Troubleshooting
+  * 6.1. Common issues
+  * 6.2. Installation problems
+  * 6.3. Data loading errors
+  * 6.4. Memory and performance issues
+  * 6.5. Model convergence problems
+  * 6.6. Getting help
+
+* 7. Examples
+  * 7.1. Basic examples
+  * 7.2. Advanced examples
+  * 7.3. Production deployment
+  * 7.4. Custom implementations
+
+* 8. Performance
+  * 8.1. Benchmarks
+  * 8.2. Performance optimization
+  * 8.3. Memory management
+  * 8.4. Parallel processing
+
+* 9. How-to Guides
+  * 9.1. General how-to
+  * 9.2. Data preparation how-to
+  * 9.3. Model training how-to
+  * 9.4. Visualization how-to
+  * 9.5. Deployment how-to
+
+* 10. Tutorial Scripts
+  * 10.1. Basic tutorials
+  * 10.2. Advanced tutorials
+  * 10.3. Case studies
+
+## API Reference
+
+API Reference
+
+* 1. Core Classes
+  * 1.1. DFT Class
+  * 1.2. ChiefBldr Class
+  * 1.3. QLatticeWrapper Class
+
+* 2. Data Management
+  * 2.1. Data loading and validation
+  * 2.2. Preprocessing functions
+  * 2.3. Feature engineering
+
+* 3. Model Training
+  * 3.1. Hyperparameter optimization
+  * 3.2. Cross-validation
+  * 3.3. Model evaluation
+
+* 4. Prediction Methods
+  * 4.1. DFT prediction
+  * 4.2. QLattice prediction
+  * 4.3. Ensemble methods
+
+* 5. Utility Functions
+  * 5.1. Visualization utilities
+  * 5.2. Performance metrics
+  * 5.3. Data export functions
+
+* 6. Configuration
+  * 6.1. Model parameters
+  * 6.2. Training options
+  * 6.3. Output settings
+
+## Examples and Tutorials
+
+Examples and Tutorials
+
+* 1. Basic Examples
+  * 1.1. Simple prediction
+  * 1.2. Data loading and validation
+  * 1.3. Model training
+  * 1.4. Making predictions
+
+* 2. Intermediate Examples
+  * 2.1. Hyperparameter optimization
+  * 2.2. Cross-validation analysis
+  * 2.3. Model comparison
+  * 2.4. Visualization
+
+* 3. Advanced Examples
+  * 3.1. Custom alpha strategies
+  * 3.2. Ensemble methods
+  * 3.3. Production deployment
+  * 3.4. Batch processing
+
+* 4. Case Studies
+  * 4.1. Vertical well analysis
+  * 4.2. Horizontal well analysis
+  * 4.3. Multi-well comparison
+  * 4.4. Real-world applications
+
+* 5. Tutorial Notebooks
+  * 5.1. DFT-PISR.ipynb
+  * 5.2. xgboost.ipynb
+  * 5.3. sindy.ipynb
+  * 5.4. QLattice.ipynb
+
+---
+
+## Introduction
+
+### 1.1. Overview of DFT Development
+
+DFT Development is a comprehensive framework for predicting liquid loading in gas wells using physics-informed machine learning. The framework combines fundamental Droplet-Film Theory principles with advanced machine learning techniques to provide accurate, interpretable predictions of critical flow rates.
+
+**Key Features:**
+- Physics-informed modeling based on Droplet-Film Theory
+- Multiple machine learning approaches (DFT, QLattice, XGBoost, SINDy)
+- Comprehensive data management and preprocessing
+- Advanced hyperparameter optimization
+- Production-ready deployment capabilities
+- Extensive visualization and analysis tools
+
+### 1.2. What does a DFT Development version mean
+
+DFT Development uses semantic versioning (MAJOR.MINOR.PATCH):
+- **MAJOR**: Incompatible API changes
+- **MINOR**: New functionality in a backwards compatible manner
+- **PATCH**: Backwards compatible bug fixes
+
+Current version: 2.0.0
+
+### 1.3. DFT Development features
+
+**Core Physics Model:**
+- Implements Droplet-Film Theory equations
 - Handles complex multiphase flow phenomena
-- Adapts to various well geometries and conditions
+- Supports various well geometries and conditions
+- Provides interpretable physical parameters
 
-Multiple Modeling Approaches
-- Pure physics-based DFT model
-- Hybrid physics-ML approaches
-- Symbolic regression for equation discovery
+**Machine Learning Integration:**
+- Symbolic regression with QLattice
+- Gradient boosting with XGBoost
+- Symbolic equation discovery with SINDy
 - Ensemble methods for improved accuracy
 
-Robust Data Handling
+**Data Management:**
 - Automated data validation and preprocessing
 - Support for various input formats
 - Comprehensive error checking and handling
 - Scalable to large datasets
 
-Advanced Optimization
-- Sophisticated hyperparameter tuning
-- Cross-validation for model selection
-- Multiple optimization algorithms
+**Advanced Features:**
+- Hyperparameter optimization
+- Cross-validation and model selection
 - Performance monitoring and visualization
+- Production deployment support
 
-Production-Ready Implementation
-- Clean, modular code architecture
-- Comprehensive error handling
-- Extensive documentation and examples
-- Easy integration with existing workflows
+### 1.4. DFT Development applications
 
-Mathematical Framework
-The core physics equation implemented in the DFT model is:
+**Research Applications:**
+- Academic research in multiphase flow
+- Development of new physics-based models
+- Validation of theoretical frameworks
+- Publication of scientific results
 
-Qcr = p1 × √(|term1 × α + (1-α) × term2| × (1/z) × (P/T))
+**Industrial Applications:**
+- Well performance optimization
+- Production forecasting
+- Equipment sizing and design
+- Operational decision support
 
-Where:
-- Qcr: Critical flow rate
-- term1: Film reversal effects term
-- term2: Droplet effects term
-- α: Balance parameter (0-1)
-- p1-p5: Global optimization parameters
+**Educational Use:**
+- Teaching multiphase flow concepts
+- Demonstrating physics-ML integration
+- Hands-on learning with real data
+- Research methodology training
 
-The model optimizes both global parameters and sample-specific α values, providing a flexible framework that adapts to different well conditions and operating regimes.
+### 1.5. DFT Development compatibility
 
-Input Data Requirements
-The system requires well data with the following parameters:
+**Python Versions:**
+- Python 3.7+ (Python 3.9+ recommended)
+
+**Operating Systems:**
+- Windows 10/11 (64-bit)
+- macOS 10.14+
+- Ubuntu 18.04 LTS+
+- CentOS 7+
+
+**Dependencies:**
+- NumPy, Pandas, SciPy
+- Scikit-learn, Matplotlib, Seaborn
+- Feyn QLattice, PySINDy
+- XGBoost, Jupyter
+
+### 1.6. DFT Development open-source license
+
+DFT Development is distributed under the MIT License, allowing for:
+- Commercial use
+- Modification
+- Distribution
+- Private use
+
+### 1.7. Authors of DFT Development
+
+The DFT Development project is developed and maintained by:
+- Primary development team
+- Contributing researchers
+- Community contributors
+
+### 1.8. Citing DFT Development
+
+When using DFT Development in your research, please cite:
+
+```bibtex
+@software{dft_development,
+  title={DFT Development: Physics-Informed Machine Learning for Gas Well Liquid Loading Prediction},
+  author={Development Team},
+  year={2024},
+  url={https://github.com/your-username/Droplet-Film-Theory-Development}
+}
+```
+
+### 1.9. Additional resources
+
+- **GitHub Repository**: [project-repo-url]
+- **Documentation**: [docs-url]
+- **Issue Tracker**: [issues-url]
+- **Community Forum**: [forum-url]
+- **Research Papers**: [papers-url]
+
+---
+
+## Installation
+
+### 2.1. System requirements
+
+**Minimum Requirements:**
+- Python 3.7+
+- 8GB RAM
+- 2GB free disk space
+- Internet connection
+
+**Recommended Requirements:**
+- Python 3.9+
+- 16GB RAM
+- 5GB free disk space
+- SSD storage
+- Multi-core processor
+
+### 2.2. Python environment setup
+
+**Step 1: Install Python**
+Download and install Python from [python.org](https://python.org)
+
+**Step 2: Create Virtual Environment**
+```bash
+# Windows
+python -m venv dft_env
+dft_env\Scripts\activate
+
+# macOS/Linux
+python3 -m venv dft_env
+source dft_env/bin/activate
+```
+
+**Step 3: Upgrade pip**
+```bash
+python -m pip install --upgrade pip
+```
+
+### 2.3. Package installation methods
+
+**Method 1: Complete Installation (Recommended)**
+```bash
+git clone https://github.com/your-username/Droplet-Film-Theory-Development.git
+cd Droplet-Film-Theory-Development
+pip install -e .
+```
+
+**Method 2: Manual Installation**
+```bash
+pip install numpy pandas scipy scikit-learn
+pip install matplotlib seaborn jupyter
+pip install feyn pysindy xgboost
+```
+
+**Method 3: Using Requirements File**
+```bash
+pip install -r requirements.txt
+```
+
+### 2.4. Verification and testing
+
+**Test Basic Imports:**
+```python
+python -c "import numpy; print('NumPy OK')"
+python -c "import pandas; print('Pandas OK')"
+python -c "from scripts_2.0.dft_model import DFT; print('DFT OK')"
+```
+
+**Test Basic Functionality:**
+```python
+import numpy as np
+from scripts_2.0.dft_model import DFT
+
+X = np.random.rand(10, 10)
+y = np.random.rand(10)
+model = DFT(seed=42)
+model.fit(X, y)
+predictions = model.predict(X)
+print('DFT model test successful')
+```
+
+### 2.5. Jupyter notebook setup
+
+**Install Jupyter:**
+```bash
+pip install jupyter notebook ipywidgets
+```
+
+**Launch Jupyter:**
+```bash
+jupyter notebook
+```
+
+**Navigate to notebooks:**
+- Open `scripts_2.0/` directory
+- Explore available notebooks
+
+### 2.6. Data preparation
+
+**Required Data Format:**
+Your data must be in CSV format with these columns:
 - Dia: Well diameter (meters)
 - Dev(deg): Well deviation angle (degrees)
 - Area (m2): Cross-sectional area (square meters)
@@ -111,101 +417,516 @@ The system requires well data with the following parameters:
 - friction_factor: Friction factor (dimensionless)
 - critical_film_thickness: Critical film thickness (meters)
 
-Performance and Accuracy
-The DFT implementation has been validated against:
-- Laboratory experimental data
-- Field measurements from operating wells
-- Computational fluid dynamics simulations
-- Industry-standard correlations
+### 2.7. Common installation issues
 
-Typical performance metrics include:
-- R² values exceeding 0.95 for well-characterized datasets
-- Mean absolute percentage errors below 10%
-- Robust performance across different well types and operating conditions
+**Permission Errors:**
+```bash
+pip install --user package_name
+```
 
-Applications and Use Cases
-The project serves multiple user communities:
+**Version Conflicts:**
+```bash
+python -m venv fresh_env
+fresh_env\Scripts\activate
+pip install package_name
+```
 
-Research Applications
-- Academic research in multiphase flow
-- Development of new physics-based models
-- Validation of theoretical frameworks
-- Publication of scientific results
+**Memory Issues:**
+- Close other applications
+- Use `pip install --no-cache-dir package_name`
 
-Industrial Applications
-- Well performance optimization
-- Production forecasting
-- Equipment sizing and design
-- Operational decision support
+### 2.8. Development environment setup
 
-Educational Use
-- Teaching multiphase flow concepts
-- Demonstrating physics-ML integration
-- Hands-on learning with real data
-- Research methodology training
+**Code Quality Tools:**
+```bash
+pip install black flake8 pytest mypy
+```
 
-Development and Extensibility
-The project is designed for continuous development and extension:
+**IDE Configuration:**
+- VS Code: Install Python extension
+- PyCharm: Configure project interpreter
+- Jupyter: Enable extensions
 
-Modular Architecture
-- Clean separation of physics and ML components
-- Easy addition of new models and approaches
-- Flexible data handling and preprocessing
-- Extensible optimization frameworks
+---
 
-Community Contributions
-- Open-source development model
-- Comprehensive documentation and examples
-- Active issue tracking and support
-- Regular updates and improvements
+## Quick Start
 
-Future Development
-- Additional physics models
-- Enhanced ML algorithms
-- Real-time prediction capabilities
-- Cloud deployment options
-- API development for integration
+### 3.1. Basic workflow
 
-Getting Started
-To begin using the DFT Development project:
+1. **Load your data**
+2. **Initialize the model**
+3. **Train the model**
+4. **Make predictions**
+5. **Analyze results**
 
-1. Review the Installation Guide for system requirements and setup
-2. Explore the Usage Examples for practical implementation
-3. Consult the API Reference for technical details
-4. Check the Troubleshooting Guide for common issues
+### 3.2. Your first prediction
 
-The project includes extensive documentation, example datasets, and step-by-step tutorials to help users quickly become productive.
+```python
+import numpy as np
+import pandas as pd
+from scripts_2.0.dft_model import DFT
+from scripts_2.0.utils import ChiefBldr
 
-Technical Specifications
-- Python 3.7+ required
-- NumPy, Pandas, SciPy for numerical computing
-- Scikit-learn for machine learning utilities
-- Matplotlib/Seaborn for visualization
-- Jupyter for interactive development
-- Feyn QLattice for symbolic regression
-- PySINDy for equation discovery
+# Load data
+data_path = "your_data.csv"
+builder = ChiefBldr(path=data_path, test_size=0.2)
 
-System Requirements
-- Minimum 8GB RAM (16GB recommended)
-- 2GB free disk space
-- Internet connection for package installation
-- Support for Windows, macOS, and Linux
+# Create and train model
+model = DFT(seed=42)
+model.fit(builder.X_train, builder.y_train)
 
-Support and Community
-The project is supported by:
-- Comprehensive documentation
-- Active GitHub repository
-- Issue tracking and bug reports
-- Community forums and discussions
-- Regular updates and maintenance
+# Make predictions
+predictions = model.predict(builder.X_test)
+print(f"Predictions: {predictions}")
+```
 
-For technical support, feature requests, or contributions, please visit the project repository or contact the development team.
+### 3.3. Understanding the output
 
-Conclusion
-The Droplet-Film Theory Development project represents a significant advancement in the application of physics-informed machine learning to petroleum engineering problems. By combining fundamental physical principles with state-of-the-art machine learning techniques, the project provides a powerful tool for understanding and predicting complex multiphase flow phenomena in gas wells.
+**Model Output:**
+- Predictions: Critical flow rate values
+- Parameters: Optimized physics parameters
+- Performance: Training and test metrics
 
-Whether you are a researcher exploring new modeling approaches, an engineer optimizing well performance, or a student learning about multiphase flow, this project offers the tools, documentation, and examples needed to succeed in your work.
+**Key Metrics:**
+- MSE: Mean squared error
+- R²: Correlation coefficient
+- Alpha values: Balance parameters
 
-The project continues to evolve with contributions from the community and ongoing development efforts, ensuring that it remains at the forefront of physics-informed machine learning applications in petroleum engineering.
+### 3.4. Next steps
 
-For the most up-to-date information, examples, and support, please refer to the project repository and accompanying documentation.
+1. Explore the Examples section
+2. Read the API Reference
+3. Try different modeling approaches
+4. Experiment with your own data
+
+---
+
+## Data Format
+
+### 4.1. Required input parameters
+
+**Physical Parameters:**
+- Dia: Well diameter (meters)
+- Dev(deg): Well deviation angle (degrees)
+- Area (m2): Cross-sectional area (square meters)
+- z: Elevation change (meters)
+- GasDens: Gas density (kg/m³)
+- LiquidDens: Liquid density (kg/m³)
+- g (m/s2): Gravitational acceleration (m/s²)
+- P/T: Pressure/Temperature ratio (Pa/K)
+- friction_factor: Friction factor (dimensionless)
+- critical_film_thickness: Critical film thickness (meters)
+
+### 4.2. Data validation
+
+```python
+def validate_data(file_path):
+    data = pd.read_csv(file_path)
+    required_cols = ['Dia', 'Dev(deg)', 'Area (m2)', 'z', 
+                     'GasDens', 'LiquidDens', 'g (m/s2)', 
+                     'P/T', 'friction_factor', 'critical_film_thickness']
+    
+    missing_cols = [col for col in required_cols if col not in data.columns]
+    if missing_cols:
+        print(f"Missing columns: {missing_cols}")
+        return False
+    
+    print("All required columns present")
+    return True
+```
+
+### 4.3. Data preprocessing
+
+**Automatic Preprocessing:**
+- Missing value handling
+- Data type validation
+- Range checking
+- Outlier detection
+
+**Manual Preprocessing:**
+```python
+# Remove missing values
+data = data.dropna()
+
+# Convert data types
+for col in numeric_cols:
+    data[col] = pd.to_numeric(data[col], errors='coerce')
+```
+
+### 4.4. Common data issues
+
+**Missing Values:**
+- Use `data.dropna()` to remove
+- Use `data.fillna()` to fill
+
+**Data Type Issues:**
+- Use `pd.to_numeric()` to convert
+- Check with `data.dtypes`
+
+**Outliers:**
+- Use statistical methods to detect
+- Remove or transform as needed
+
+---
+
+## Running DFT Development
+
+### 5.1. Basic usage
+
+**Command Line:**
+```bash
+python convert_srt_to_html.py
+python build_docs.py
+```
+
+**Python Script:**
+```python
+from scripts_2.0.dft_model import DFT
+from scripts_2.0.utils import ChiefBldr
+
+# Your code here
+```
+
+**Jupyter Notebook:**
+```python
+# Use the provided notebooks
+# DFT-PISR.ipynb, xgboost.ipynb, etc.
+```
+
+### 5.2. Command-line options
+
+**Conversion Script:**
+```bash
+python convert_srt_to_html.py
+# Converts SRT files to HTML documentation
+```
+
+**Build Script:**
+```bash
+python build_docs.py
+# Builds complete documentation site
+```
+
+### 5.3. Jupyter notebook usage
+
+**Launch Jupyter:**
+```bash
+jupyter notebook
+```
+
+**Open Notebooks:**
+- Navigate to `scripts_2.0/` directory
+- Open desired notebook
+- Run cells sequentially
+
+### 5.4. Output formats
+
+**Model Outputs:**
+- Predictions: NumPy arrays
+- Parameters: Optimized values
+- Metrics: Performance statistics
+
+**Documentation Outputs:**
+- HTML: Web-ready documentation
+- CSS: Styling files
+- Assets: Images and resources
+
+### 5.5. Error handling
+
+**Built-in Error Handling:**
+- Data validation errors
+- Model convergence issues
+- Memory allocation problems
+- Network connectivity issues
+
+**Custom Error Handling:**
+```python
+try:
+    model.fit(X, y)
+except Exception as e:
+    print(f"Training failed: {e}")
+```
+
+---
+
+## Troubleshooting
+
+### 6.1. Common issues
+
+**Import Errors:**
+- Check virtual environment activation
+- Verify package installation
+- Check Python path
+
+**Data Loading Errors:**
+- Verify file paths
+- Check column names
+- Validate data format
+
+**Memory Issues:**
+- Reduce dataset size
+- Use data sampling
+- Close other applications
+
+### 6.2. Installation problems
+
+**Permission Errors:**
+```bash
+pip install --user package_name
+```
+
+**Version Conflicts:**
+```bash
+python -m venv fresh_env
+fresh_env\Scripts\activate
+```
+
+**Network Issues:**
+```bash
+pip install -i https://pypi.org/simple/ package_name
+```
+
+### 6.3. Data loading errors
+
+**File Not Found:**
+- Check file path
+- Use absolute paths
+- Verify file exists
+
+**Column Missing:**
+- Check column names
+- Add missing columns
+- Validate data format
+
+### 6.4. Memory and performance issues
+
+**Out of Memory:**
+- Use data sampling
+- Reduce hyperparameter grid
+- Process in chunks
+
+**Slow Performance:**
+- Optimize hyperparameters
+- Use fewer CV folds
+- Profile your code
+
+### 6.5. Model convergence problems
+
+**Optimization Failed:**
+- Increase iterations
+- Adjust initial values
+- Scale input data
+
+**Poor Performance:**
+- Check data quality
+- Optimize hyperparameters
+- Use ensemble methods
+
+### 6.6. Getting help
+
+1. Check this troubleshooting guide
+2. Search GitHub issues
+3. Contact development team
+4. Join community discussions
+
+---
+
+## Examples
+
+### 7.1. Basic examples
+
+**Simple Prediction:**
+```python
+from scripts_2.0.dft_model import DFT
+from scripts_2.0.utils import ChiefBldr
+
+# Load data
+builder = ChiefBldr(path="data.csv", test_size=0.2)
+
+# Train model
+model = DFT(seed=42)
+model.fit(builder.X_train, builder.y_train)
+
+# Make predictions
+predictions = model.predict(builder.X_test)
+```
+
+### 7.2. Advanced examples
+
+**Hyperparameter Optimization:**
+```python
+hparam_grid = {
+    "dev_tol": [1e-4, 1e-3, 1e-2],
+    "feature_tol": [0.5, 1.0, 2.0],
+    "multiple_dev_policy": ["max", "min", "mean"]
+}
+
+trained_model = builder.evolv_model(
+    build_model=lambda hparams: DFT(**hparams),
+    hparam_grid=hparam_grid,
+    k_folds=5
+)
+```
+
+### 7.3. Production deployment
+
+**Model Saving:**
+```python
+import pickle
+
+with open('trained_model.pkl', 'wb') as f:
+    pickle.dump(trained_model, f)
+```
+
+**Model Loading:**
+```python
+with open('trained_model.pkl', 'rb') as f:
+    loaded_model = pickle.load(f)
+```
+
+### 7.4. Custom implementations
+
+**Custom Alpha Strategy:**
+```python
+def custom_alpha_strategy(X_new, X_train, alpha_train, dev_tol=1e-3):
+    # Your custom implementation
+    pass
+```
+
+---
+
+## Performance
+
+### 8.1. Benchmarks
+
+**Typical Performance:**
+- R² > 0.95 for well-characterized datasets
+- MAPE < 10% for most cases
+- Training time scales with dataset size
+
+### 8.2. Performance optimization
+
+**Data Optimization:**
+- Use appropriate data types
+- Scale input features
+- Remove unnecessary columns
+
+**Model Optimization:**
+- Optimize hyperparameters
+- Use cross-validation
+- Monitor performance metrics
+
+### 8.3. Memory management
+
+**Memory Usage:**
+- Scales linearly with dataset size
+- Use data sampling for large datasets
+- Monitor memory usage
+
+### 8.4. Parallel processing
+
+**Parallel Options:**
+- Hyperparameter optimization
+- Cross-validation
+- Batch processing
+
+---
+
+## How-to Guides
+
+### 9.1. General how-to
+
+**Getting Started:**
+1. Install DFT Development
+2. Prepare your data
+3. Run basic examples
+4. Explore advanced features
+
+### 9.2. Data preparation how-to
+
+**Data Format:**
+- Ensure CSV format
+- Check required columns
+- Validate data types
+- Handle missing values
+
+### 9.3. Model training how-to
+
+**Training Process:**
+1. Load and validate data
+2. Split into train/test sets
+3. Define hyperparameters
+4. Train model
+5. Evaluate performance
+
+### 9.4. Visualization how-to
+
+**Creating Plots:**
+```python
+import matplotlib.pyplot as plt
+
+plt.scatter(y_test, y_pred)
+plt.xlabel("Actual Values")
+plt.ylabel("Predicted Values")
+plt.title("Model Performance")
+plt.show()
+```
+
+### 9.5. Deployment how-to
+
+**Production Deployment:**
+1. Train and validate model
+2. Save model parameters
+3. Create prediction API
+4. Deploy to production
+5. Monitor performance
+
+---
+
+## Tutorial Scripts
+
+### 10.1. Basic tutorials
+
+**Tutorial 1: First Prediction**
+- Load sample data
+- Train basic model
+- Make predictions
+- Analyze results
+
+**Tutorial 2: Data Validation**
+- Check data format
+- Validate columns
+- Handle missing values
+- Prepare for training
+
+### 10.2. Advanced tutorials
+
+**Tutorial 3: Hyperparameter Optimization**
+- Define parameter grid
+- Run optimization
+- Analyze results
+- Select best model
+
+**Tutorial 4: Model Comparison**
+- Train multiple models
+- Compare performance
+- Create ensemble
+- Analyze differences
+
+### 10.3. Case studies
+
+**Case Study 1: Vertical Well Analysis**
+- Load vertical well data
+- Train DFT model
+- Analyze results
+- Compare with correlations
+
+**Case Study 2: Horizontal Well Analysis**
+- Load horizontal well data
+- Train model
+- Analyze results
+- Validate predictions
+
+---
+
+This documentation provides comprehensive information about DFT Development. For additional examples and tutorials, explore the individual Jupyter notebooks in the `scripts_2.0/` directory.

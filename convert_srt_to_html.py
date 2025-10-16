@@ -60,6 +60,7 @@ def convert_srt_to_html(srt_file, output_dir):
     <div class="container">
         <header>
             <h1>{title}</h1>
+            <p>Droplet-Film Theory Development Project</p>
             <nav>
                 <a href="../index.html">Home</a>
                 <a href="documentation.html">Documentation</a>
@@ -71,6 +72,22 @@ def convert_srt_to_html(srt_file, output_dir):
         </header>
         
         <main>
+            <div class="sidebar">
+                <h3>Contents</h3>
+                <ul>
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#quick-start">Quick Start</a></li>
+                    <li><a href="#data-format">Data Format</a></li>
+                    <li><a href="#running">Running DFT Development</a></li>
+                    <li><a href="#troubleshooting">Troubleshooting</a></li>
+                    <li><a href="#examples">Examples</a></li>
+                    <li><a href="#performance">Performance</a></li>
+                    <li><a href="#how-to">How-to Guides</a></li>
+                    <li><a href="#tutorials">Tutorial Scripts</a></li>
+                </ul>
+            </div>
+            
             <div class="content">
 {format_content_for_html(cleaned_content)}
             </div>
@@ -93,25 +110,74 @@ def convert_srt_to_html(srt_file, output_dir):
     return output_file
 
 def format_content_for_html(content):
-    """Format content for HTML display"""
+    """Format content for HTML display with LAMMPS-style structure"""
     lines = content.split('\n')
     formatted_lines = []
+    in_code_block = False
     
-    for line in lines:
+    for i, line in enumerate(lines):
         line = line.strip()
         if not line:
             formatted_lines.append('<br>')
             continue
-            
-        # Check for headers (lines that are short and don't end with punctuation)
-        if len(line) < 50 and not line.endswith(('.', ':', ';', ',')):
-            if line.isupper() or line.startswith(('Project', 'Core', 'Key', 'Quick', 'File', 'Documentation')):
-                formatted_lines.append(f'<h2>{line}</h2>')
+        
+        # Handle code blocks
+        if line.startswith('```'):
+            if not in_code_block:
+                formatted_lines.append('<pre><code>')
+                in_code_block = True
             else:
-                formatted_lines.append(f'<h3>{line}</h3>')
+                formatted_lines.append('</code></pre>')
+                in_code_block = False
+            continue
+        
+        if in_code_block:
+            formatted_lines.append(f'<span class="code-line">{line}</span>')
+            continue
+        
+        # Handle numbered sections (e.g., "1. Introduction", "2.1. Overview")
+        if re.match(r'^\d+\.', line) or re.match(r'^\d+\.\d+\.', line):
+            if re.match(r'^\d+\.\d+\.', line):
+                formatted_lines.append(f'<h3 class="subsection">{line}</h3>')
+            else:
+                formatted_lines.append(f'<h2 class="section">{line}</h2>')
+        
+        # Handle main headers (User Guide, API Reference, etc.)
+        elif line in ['User Guide', 'API Reference', 'Examples and Tutorials', 'Introduction', 'Installation', 'Quick Start', 'Data Format', 'Running DFT Development', 'Troubleshooting', 'Examples', 'Performance', 'How-to Guides', 'Tutorial Scripts']:
+            formatted_lines.append(f'<h1 class="main-header">{line}</h1>')
+        
+        # Handle subheaders with asterisks
+        elif line.startswith('* ') and len(line) < 100:
+            clean_line = line[2:].strip()
+            formatted_lines.append(f'<h4 class="subheader">{clean_line}</h4>')
+        
+        # Handle code snippets (lines starting with specific patterns)
+        elif line.startswith(('python', 'bash', 'pip install', 'git clone', 'cd ', 'python -c', 'import ', 'from ', 'def ', 'class ', 'if ', 'for ', 'while ', 'try:', 'except:', 'with ')):
+            formatted_lines.append(f'<div class="code-snippet">{line}</div>')
+        
+        # Handle bullet points
+        elif line.startswith('- ') or line.startswith('* '):
+            clean_line = line[2:].strip()
+            formatted_lines.append(f'<li class="bullet-point">{clean_line}</li>')
+        
+        # Handle numbered lists
+        elif re.match(r'^\d+\. ', line):
+            clean_line = re.sub(r'^\d+\. ', '', line)
+            formatted_lines.append(f'<li class="numbered-point">{clean_line}</li>')
+        
+        # Handle bold text (text between **)
+        elif '**' in line:
+            formatted_line = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', line)
+            formatted_lines.append(f'<p class="paragraph">{formatted_line}</p>')
+        
+        # Handle links (text in brackets followed by URL in parentheses)
+        elif '[' in line and '](' in line:
+            formatted_line = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', line)
+            formatted_lines.append(f'<p class="paragraph">{formatted_line}</p>')
+        
+        # Regular paragraphs
         else:
-            # Regular paragraph
-            formatted_lines.append(f'<p>{line}</p>')
+            formatted_lines.append(f'<p class="paragraph">{line}</p>')
     
     return '\n'.join(formatted_lines)
 
@@ -189,8 +255,8 @@ def create_main_index(output_dir):
     print(f"✅ Created {index_file}")
 
 def create_css_file(output_dir):
-    """Create the CSS stylesheet"""
-    css_content = """/* DFT Documentation Styles */
+    """Create the CSS stylesheet with LAMMPS-style design"""
+    css_content = """/* DFT Documentation Styles - LAMMPS Inspired */
 * {
     margin: 0;
     padding: 0;
@@ -201,7 +267,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: #333;
-    background-color: #f5f5f5;
+    background-color: #ffffff;
 }
 
 .container {
@@ -209,72 +275,216 @@ body {
     margin: 0 auto;
     background: white;
     min-height: 100vh;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
 }
 
 header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #2c3e50;
     color: white;
-    padding: 2rem;
-    text-align: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 3px solid #3498db;
 }
 
 header h1 {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     margin-bottom: 0.5rem;
+    font-weight: 300;
 }
 
 header p {
-    font-size: 1.2rem;
+    font-size: 1rem;
     opacity: 0.9;
+    margin-bottom: 0;
 }
 
 nav {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.5rem;
 }
 
 nav a {
     color: white;
     text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
+    padding: 0.4rem 0.8rem;
+    border-radius: 3px;
     transition: background-color 0.3s;
+    font-size: 0.9rem;
 }
 
 nav a:hover {
-    background-color: rgba(255,255,255,0.2);
+    background-color: #3498db;
 }
 
 main {
     padding: 2rem;
+    display: flex;
+    gap: 2rem;
 }
 
-.content {
-    max-width: 800px;
-    margin: 0 auto;
+.sidebar {
+    width: 250px;
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 5px;
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
 }
 
-h2 {
-    color: #667eea;
-    margin: 2rem 0 1rem 0;
-    border-bottom: 2px solid #667eea;
+.sidebar h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    border-bottom: 2px solid #3498db;
     padding-bottom: 0.5rem;
 }
 
-h3 {
-    color: #764ba2;
-    margin: 1.5rem 0 0.5rem 0;
+.sidebar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-p {
+.sidebar li {
+    margin-bottom: 0.3rem;
+}
+
+.sidebar a {
+    color: #555;
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 0.2rem 0;
+    display: block;
+    transition: color 0.3s;
+}
+
+.sidebar a:hover {
+    color: #3498db;
+}
+
+.content {
+    flex: 1;
+    max-width: 800px;
+}
+
+/* LAMMPS-style headers */
+.main-header {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    margin: 2rem 0 1.5rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #3498db;
+    font-weight: 400;
+}
+
+.section {
+    color: #2c3e50;
+    font-size: 1.4rem;
+    margin: 2rem 0 1rem 0;
+    padding-left: 0.5rem;
+    border-left: 4px solid #3498db;
+    font-weight: 400;
+}
+
+.subsection {
+    color: #34495e;
+    font-size: 1.2rem;
+    margin: 1.5rem 0 0.8rem 0;
+    padding-left: 1rem;
+    font-weight: 400;
+}
+
+.subheader {
+    color: #34495e;
+    font-size: 1rem;
+    margin: 1rem 0 0.5rem 0;
+    font-weight: 500;
+}
+
+.paragraph {
     margin-bottom: 1rem;
-    text-align: justify;
+    text-align: left;
+    line-height: 1.7;
 }
 
+/* Code styling */
+.code-snippet {
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+    border-left: 4px solid #3498db;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    overflow-x: auto;
+    border-radius: 3px;
+}
+
+pre {
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+    border-left: 4px solid #3498db;
+    padding: 1rem;
+    margin: 1rem 0;
+    overflow-x: auto;
+    border-radius: 3px;
+}
+
+code {
+    background: #f4f4f4;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+/* Lists */
+.bullet-point, .numbered-point {
+    margin-bottom: 0.5rem;
+    padding-left: 0.5rem;
+}
+
+.bullet-point {
+    list-style-type: disc;
+    margin-left: 1.5rem;
+}
+
+.numbered-point {
+    list-style-type: decimal;
+    margin-left: 1.5rem;
+}
+
+/* Links */
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 0.8rem;
+    text-align: left;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+/* Cards for examples */
 .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -285,8 +495,8 @@ p {
 .card {
     background: #f8f9fa;
     padding: 1.5rem;
-    border-radius: 8px;
-    border-left: 4px solid #667eea;
+    border-radius: 5px;
+    border-left: 4px solid #3498db;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
@@ -297,70 +507,81 @@ p {
 
 .card h3 {
     margin-top: 0;
+    color: #2c3e50;
 }
 
 .card h3 a {
-    color: #667eea;
+    color: #2c3e50;
     text-decoration: none;
 }
 
 .card h3 a:hover {
+    color: #3498db;
     text-decoration: underline;
 }
 
-code {
-    background: #e9ecef;
-    padding: 0.2rem 0.4rem;
-    border-radius: 3px;
-    font-family: 'Courier New', monospace;
-}
-
-ol, ul {
-    margin-left: 2rem;
-    margin-bottom: 1rem;
-}
-
-li {
-    margin-bottom: 0.5rem;
-}
-
+/* Footer */
 footer {
-    background: #343a40;
+    background: #2c3e50;
     color: white;
     text-align: center;
     padding: 1.5rem;
     margin-top: 3rem;
+    border-top: 3px solid #3498db;
 }
 
 footer p {
     margin-bottom: 0.5rem;
+    font-size: 0.9rem;
 }
 
+/* Responsive design */
 @media (max-width: 768px) {
-    .container {
-        margin: 0;
-        box-shadow: none;
-    }
-    
-    header {
-        padding: 1rem;
-    }
-    
-    header h1 {
-        font-size: 2rem;
-    }
-    
     main {
+        flex-direction: column;
         padding: 1rem;
+    }
+    
+    .sidebar {
+        width: 100%;
+        position: static;
+        margin-bottom: 2rem;
+    }
+    
+    .main-header {
+        font-size: 1.5rem;
+    }
+    
+    .section {
+        font-size: 1.2rem;
+    }
+    
+    .subsection {
+        font-size: 1.1rem;
     }
     
     nav {
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
     }
     
     .card-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* Print styles */
+@media print {
+    .sidebar {
+        display: none;
+    }
+    
+    .container {
+        max-width: none;
+    }
+    
+    .main-header, .section, .subsection {
+        page-break-after: avoid;
     }
 }"""
     
