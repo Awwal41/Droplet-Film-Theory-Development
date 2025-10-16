@@ -109,46 +109,63 @@ main {
 .content {
     flex: 1;
     max-width: 800px;
+    padding: 1rem 0;
+}
+
+/* Add spacing between sections */
+.content > * + * {
+    margin-top: 1rem;
+}
+
+/* Smooth scrolling for anchor links */
+html {
+    scroll-behavior: smooth;
 }
 
 /* LAMMPS-style headers */
 .main-header {
     color: #2c3e50;
     font-size: 1.8rem;
-    margin: 2rem 0 1.5rem 0;
-    padding-bottom: 0.5rem;
+    margin: 3rem 0 2rem 0;
+    padding: 1rem 0 0.5rem 0;
     border-bottom: 2px solid #3498db;
     font-weight: 400;
+    scroll-margin-top: 2rem;
 }
 
 .section {
     color: #2c3e50;
     font-size: 1.4rem;
-    margin: 2rem 0 1rem 0;
-    padding-left: 0.5rem;
+    margin: 2.5rem 0 1.5rem 0;
+    padding: 0.5rem 0 0.5rem 0.5rem;
     border-left: 4px solid #3498db;
     font-weight: 400;
+    scroll-margin-top: 2rem;
 }
 
 .subsection {
     color: #34495e;
     font-size: 1.2rem;
-    margin: 1.5rem 0 0.8rem 0;
-    padding-left: 1rem;
+    margin: 2rem 0 1rem 0;
+    padding: 0.5rem 0 0.5rem 1rem;
     font-weight: 400;
+    scroll-margin-top: 2rem;
 }
 
 .subheader {
     color: #34495e;
     font-size: 1rem;
-    margin: 1rem 0 0.5rem 0;
+    margin: 1.5rem 0 1rem 0;
     font-weight: 500;
+    scroll-margin-top: 2rem;
 }
 
 .paragraph {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     text-align: left;
-    line-height: 1.7;
+    line-height: 1.8;
+    text-indent: 0;
+    padding: 0.5rem 0;
 }
 
 /* Code styling */

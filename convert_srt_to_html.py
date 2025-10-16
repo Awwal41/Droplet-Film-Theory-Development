@@ -79,12 +79,12 @@ def convert_srt_to_html(srt_file, output_dir):
                     <li><a href="#installation">Installation</a></li>
                     <li><a href="#quick-start">Quick Start</a></li>
                     <li><a href="#data-format">Data Format</a></li>
-                    <li><a href="#running">Running DFT Development</a></li>
+                    <li><a href="#running-dft-development">Running DFT Development</a></li>
                     <li><a href="#troubleshooting">Troubleshooting</a></li>
                     <li><a href="#examples">Examples</a></li>
                     <li><a href="#performance">Performance</a></li>
-                    <li><a href="#how-to">How-to Guides</a></li>
-                    <li><a href="#tutorials">Tutorial Scripts</a></li>
+                    <li><a href="#how-to-guides">How-to Guides</a></li>
+                    <li><a href="#tutorial-scripts">Tutorial Scripts</a></li>
                 </ul>
             </div>
             
@@ -128,6 +128,14 @@ def format_content_for_html(content):
             formatted_lines.append(f'<p class="paragraph">{paragraph_text}</p>')
             current_paragraph = []
     
+    def create_anchor_id(text):
+        """Create a URL-friendly anchor ID from text"""
+        # Remove special characters and convert to lowercase
+        anchor = re.sub(r'[^\w\s-]', '', text.lower())
+        # Replace spaces and multiple hyphens with single hyphen
+        anchor = re.sub(r'[-\s]+', '-', anchor)
+        return anchor.strip('-')
+    
     for i, line in enumerate(lines):
         line = line.strip()
         if not line:
@@ -135,6 +143,8 @@ def format_content_for_html(content):
             if in_list:
                 formatted_lines.append('</ul>')
                 in_list = False
+            # Add spacing between sections
+            formatted_lines.append('<br>')
             continue
         
         # Handle code blocks
@@ -158,10 +168,14 @@ def format_content_for_html(content):
             if in_list:
                 formatted_lines.append('</ul>')
                 in_list = False
+            
+            # Create anchor ID for the section
+            anchor_id = create_anchor_id(line)
+            
             if re.match(r'^\d+\.\d+\.', line):
-                formatted_lines.append(f'<h3 class="subsection">{line}</h3>')
+                formatted_lines.append(f'<h3 id="{anchor_id}" class="subsection">{line}</h3>')
             else:
-                formatted_lines.append(f'<h2 class="section">{line}</h2>')
+                formatted_lines.append(f'<h2 id="{anchor_id}" class="section">{line}</h2>')
         
         # Handle main headers (User Guide, API Reference, etc.)
         elif line in ['User Guide', 'API Reference', 'Examples and Tutorials', 'Introduction', 'Installation', 'Quick Start', 'Data Format', 'Running DFT Development', 'Troubleshooting', 'Examples', 'Performance', 'How-to Guides', 'Tutorial Scripts']:
@@ -169,7 +183,10 @@ def format_content_for_html(content):
             if in_list:
                 formatted_lines.append('</ul>')
                 in_list = False
-            formatted_lines.append(f'<h1 class="main-header">{line}</h1>')
+            
+            # Create anchor ID for the main header
+            anchor_id = create_anchor_id(line)
+            formatted_lines.append(f'<h1 id="{anchor_id}" class="main-header">{line}</h1>')
         
         # Handle subheaders with asterisks
         elif line.startswith('* ') and len(line) < 100:
@@ -178,7 +195,8 @@ def format_content_for_html(content):
                 formatted_lines.append('</ul>')
                 in_list = False
             clean_line = line[2:].strip()
-            formatted_lines.append(f'<h4 class="subheader">{clean_line}</h4>')
+            anchor_id = create_anchor_id(clean_line)
+            formatted_lines.append(f'<h4 id="{anchor_id}" class="subheader">{clean_line}</h4>')
         
         # Handle code snippets (lines starting with specific patterns)
         elif line.startswith(('python', 'bash', 'pip install', 'git clone', 'cd ', 'python -c', 'import ', 'from ', 'def ', 'class ', 'if ', 'for ', 'while ', 'try:', 'except:', 'with ')):
@@ -404,46 +422,63 @@ main {
 .content {
     flex: 1;
     max-width: 800px;
+    padding: 1rem 0;
+}
+
+/* Add spacing between sections */
+.content > * + * {
+    margin-top: 1rem;
+}
+
+/* Smooth scrolling for anchor links */
+html {
+    scroll-behavior: smooth;
 }
 
 /* LAMMPS-style headers */
 .main-header {
     color: #2c3e50;
     font-size: 1.8rem;
-    margin: 2rem 0 1.5rem 0;
-    padding-bottom: 0.5rem;
+    margin: 3rem 0 2rem 0;
+    padding: 1rem 0 0.5rem 0;
     border-bottom: 2px solid #3498db;
     font-weight: 400;
+    scroll-margin-top: 2rem;
 }
 
 .section {
     color: #2c3e50;
     font-size: 1.4rem;
-    margin: 2rem 0 1rem 0;
-    padding-left: 0.5rem;
+    margin: 2.5rem 0 1.5rem 0;
+    padding: 0.5rem 0 0.5rem 0.5rem;
     border-left: 4px solid #3498db;
     font-weight: 400;
+    scroll-margin-top: 2rem;
 }
 
 .subsection {
     color: #34495e;
     font-size: 1.2rem;
-    margin: 1.5rem 0 0.8rem 0;
-    padding-left: 1rem;
+    margin: 2rem 0 1rem 0;
+    padding: 0.5rem 0 0.5rem 1rem;
     font-weight: 400;
+    scroll-margin-top: 2rem;
 }
 
 .subheader {
     color: #34495e;
     font-size: 1rem;
-    margin: 1rem 0 0.5rem 0;
+    margin: 1.5rem 0 1rem 0;
     font-weight: 500;
+    scroll-margin-top: 2rem;
 }
 
 .paragraph {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     text-align: left;
-    line-height: 1.7;
+    line-height: 1.8;
+    text-indent: 0;
+    padding: 0.5rem 0;
 }
 
 /* Code styling */

@@ -29,12 +29,12 @@
                     <li><a href="#installation">Installation</a></li>
                     <li><a href="#quick-start">Quick Start</a></li>
                     <li><a href="#data-format">Data Format</a></li>
-                    <li><a href="#running">Running DFT Development</a></li>
+                    <li><a href="#running-dft-development">Running DFT Development</a></li>
                     <li><a href="#troubleshooting">Troubleshooting</a></li>
                     <li><a href="#examples">Examples</a></li>
                     <li><a href="#performance">Performance</a></li>
-                    <li><a href="#how-to">How-to Guides</a></li>
-                    <li><a href="#tutorials">Tutorial Scripts</a></li>
+                    <li><a href="#how-to-guides">How-to Guides</a></li>
+                    <li><a href="#tutorial-scripts">Tutorial Scripts</a></li>
                 </ul>
             </div>
             
@@ -65,10 +65,10 @@
 <p class="paragraph">source dft_env/bin/activate Step 3: Upgrade pip Ensure you have the latest version of pip:</p>
 <div class="code-snippet">python -m pip install --upgrade pip</div>
 <p class="paragraph">Package Installation Methods The project can be installed using several methods. Choose the one that best fits your needs: Method 1: Complete Installation (Recommended) This method installs all dependencies and the project in development mode:</p>
-<h2 class="section">1. Clone the repository:</h2>
+<h2 id="1-clone-the-repository" class="section">1. Clone the repository:</h2>
 <div class="code-snippet">git clone https://github.com/your-username/Droplet-Film-Theory-Development.git</div>
 <div class="code-snippet">cd Droplet-Film-Theory-Development</div>
-<h2 class="section">2. Install the project and dependencies:</h2>
+<h2 id="2-install-the-project-and-dependencies" class="section">2. Install the project and dependencies:</h2>
 <div class="code-snippet">pip install -e .</div>
 <p class="paragraph">Method 2: Manual Installation Install packages individually for more control: Core Dependencies:</p>
 <div class="code-snippet">pip install numpy>=1.21.0</div>
@@ -156,14 +156,14 @@
 <p class="paragraph">Issue 5: Compilation Errors Problem: C/C++ compilation errors on Windows Solution: Install Microsoft Visual C++ Build Tools Issue 6: QLattice Connection Issues Problem: Cannot connect to Feyn QLattice Solution: Check network and credentials Development Environment Setup For contributors and advanced users: Code Quality Tools</p>
 <div class="code-snippet">pip install black flake8 pytest mypy</div>
 <p class="paragraph">Code Formatting black scripts_2.0/*.py Linting flake8 scripts_2.0/*.py Type Checking mypy scripts_2.0/*.py Testing pytest tests/ IDE Configuration For popular IDEs: Visual Studio Code</p>
-<h2 class="section">1. Install Python extension</h2>
-<h2 class="section">2. Select Python interpreter (virtual environment)</h2>
-<h2 class="section">3. Configure settings.json:</h2>
+<h2 id="1-install-python-extension" class="section">1. Install Python extension</h2>
+<h2 id="2-select-python-interpreter-virtual-environment" class="section">2. Select Python interpreter (virtual environment)</h2>
+<h2 id="3-configure-settingsjson" class="section">3. Configure settings.json:</h2>
 <p class="paragraph">{ "python.defaultInterpreterPath": "./dft_env/Scripts/python.exe", "python.linting.enabled": true, "python.linting.flake8Enabled": true, "python.formatting.provider": "black" } PyCharm</p>
-<h2 class="section">1. Open project in PyCharm</h2>
-<h2 class="section">2. Configure project interpreter (virtual environment)</h2>
-<h2 class="section">3. Enable code inspection</h2>
-<h2 class="section">4. Set up code style (PEP 8)</h2>
+<h2 id="1-open-project-in-pycharm" class="section">1. Open project in PyCharm</h2>
+<h2 id="2-configure-project-interpreter-virtual-environment" class="section">2. Configure project interpreter (virtual environment)</h2>
+<h2 id="3-enable-code-inspection" class="section">3. Enable code inspection</h2>
+<h2 id="4-set-up-code-style-pep-8" class="section">4. Set up code style (PEP 8)</h2>
 <p class="paragraph">Performance Optimization For better performance with large datasets: Install Optimized Packages</p>
 <div class="code-snippet">pip install numpy --upgrade</div>
 <div class="code-snippet">pip install pandas --upgrade</div>
@@ -180,24 +180,24 @@
 <p class="paragraph">Security Considerations Maintenance and Updates Regular maintenance ensures optimal performance: Update Packages</p>
 <div class="code-snippet">pip install --upgrade package_name</div>
 <p class="paragraph">pip list --outdated Check for Security Updates pip audit Backup Environment pip freeze > requirements_backup.txt Clean Up pip cache purge Uninstallation To remove the project and dependencies: Remove Virtual Environment # Windows rmdir /s dft_env # macOS/Linux rm -rf dft_env Remove Packages pip uninstall package_name Clean Pip Cache pip cache purge Installation Checklist Use this checklist to verify your installation: □ Python 3.7+ installed and accessible □ Virtual environment created and activated □ Core packages installed (numpy, pandas, scipy, sklearn) □ Visualization packages installed (matplotlib, seaborn) □ Jupyter notebook working □ Project modules importing successfully □ Basic functionality test passing □ Sample data prepared and validated □ Jupyter notebooks opening correctly Next Steps After successful installation:</p>
-<h2 class="section">1. Read the main documentation for project overview</h2>
-<h2 class="section">2. Explore the usage examples for practical implementation</h2>
-<h2 class="section">3. Review the API reference for technical details</h2>
-<h2 class="section">4. Check the troubleshooting guide for common issues</h2>
-<h2 class="section">5. Start with the DFT-PISR.ipynb notebook</h2>
-<h2 class="section">6. Prepare your own dataset for analysis</h2>
+<h2 id="1-read-the-main-documentation-for-project-overview" class="section">1. Read the main documentation for project overview</h2>
+<h2 id="2-explore-the-usage-examples-for-practical-implementation" class="section">2. Explore the usage examples for practical implementation</h2>
+<h2 id="3-review-the-api-reference-for-technical-details" class="section">3. Review the API reference for technical details</h2>
+<h2 id="4-check-the-troubleshooting-guide-for-common-issues" class="section">4. Check the troubleshooting guide for common issues</h2>
+<h2 id="5-start-with-the-dft-pisripynb-notebook" class="section">5. Start with the DFT-PISR.ipynb notebook</h2>
+<h2 id="6-prepare-your-own-dataset-for-analysis" class="section">6. Prepare your own dataset for analysis</h2>
 <p class="paragraph">Support and Resources If you encounter issues:</p>
-<h2 class="section">1. Check this installation guide first</h2>
-<h2 class="section">2. Review the troubleshooting section</h2>
-<h2 class="section">3. Search the GitHub issues</h2>
-<h2 class="section">4. Contact the development team</h2>
-<h2 class="section">5. Join the community discussions</h2>
+<h2 id="1-check-this-installation-guide-first" class="section">1. Check this installation guide first</h2>
+<h2 id="2-review-the-troubleshooting-section" class="section">2. Review the troubleshooting section</h2>
+<h2 id="3-search-the-github-issues" class="section">3. Search the GitHub issues</h2>
+<h2 id="4-contact-the-development-team" class="section">4. Contact the development team</h2>
+<h2 id="5-join-the-community-discussions" class="section">5. Join the community discussions</h2>
 <p class="paragraph">The project is actively maintained and supported by the development team and community contributors.</p>
             </div>
         </main>
         
         <footer>
-            <p>Generated on 2025-10-15 21:06:45</p>
+            <p>Generated on 2025-10-15 21:23:10</p>
             <p>Droplet-Film Theory Development Project</p>
         </footer>
     </div>

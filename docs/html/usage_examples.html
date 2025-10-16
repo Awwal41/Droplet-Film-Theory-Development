@@ -29,12 +29,12 @@
                     <li><a href="#installation">Installation</a></li>
                     <li><a href="#quick-start">Quick Start</a></li>
                     <li><a href="#data-format">Data Format</a></li>
-                    <li><a href="#running">Running DFT Development</a></li>
+                    <li><a href="#running-dft-development">Running DFT Development</a></li>
                     <li><a href="#troubleshooting">Troubleshooting</a></li>
                     <li><a href="#examples">Examples</a></li>
                     <li><a href="#performance">Performance</a></li>
-                    <li><a href="#how-to">How-to Guides</a></li>
-                    <li><a href="#tutorials">Tutorial Scripts</a></li>
+                    <li><a href="#how-to-guides">How-to Guides</a></li>
+                    <li><a href="#tutorial-scripts">Tutorial Scripts</a></li>
                 </ul>
             </div>
             
@@ -89,13 +89,13 @@
 <div class="code-snippet">for key in required_keys:</div>
 <div class="code-snippet">if key not in well_data:</div>
 <p class="paragraph">raise ValueError(f"Missing required parameter: {key}") # Make prediction result = predict_critical_flow_rate(well_data, model_path) return {"success": True, "prediction": result, "error": None} except Exception as e: return {"success": False, "prediction": None, "error": str(e)} Example 12: Error Handling Usage # Test error handling # Valid data result_valid = robust_prediction(well_params, 'trained_dft_model.pkl') print(f"Valid prediction: {result_valid}") # Invalid data invalid_params = {'Dia': 0.1}  # Missing parameters result_invalid = robust_prediction(invalid_params, 'trained_dft_model.pkl') print(f"Invalid prediction: {result_invalid}") Complete Workflow Summary</p>
-<h2 class="section">1. Data Preparation: Ensure CSV format with required columns</h2>
-<h2 class="section">2. Environment Setup: Install dependencies and import modules</h2>
-<h2 class="section">3. Data Loading: Use ChiefBldr for data preprocessing</h2>
-<h2 class="section">4. Model Definition: Create DFT model with desired parameters</h2>
-<h2 class="section">5. Training: Use evolv_model for hyperparameter optimization</h2>
-<h2 class="section">6. Evaluation: Analyze performance metrics and visualize results</h2>
-<h2 class="section">7. Deployment: Save model and create production functions</h2>
+<h2 id="1-data-preparation-ensure-csv-format-with-required-columns" class="section">1. Data Preparation: Ensure CSV format with required columns</h2>
+<h2 id="2-environment-setup-install-dependencies-and-import-modules" class="section">2. Environment Setup: Install dependencies and import modules</h2>
+<h2 id="3-data-loading-use-chiefbldr-for-data-preprocessing" class="section">3. Data Loading: Use ChiefBldr for data preprocessing</h2>
+<h2 id="4-model-definition-create-dft-model-with-desired-parameters" class="section">4. Model Definition: Create DFT model with desired parameters</h2>
+<h2 id="5-training-use-evolv_model-for-hyperparameter-optimization" class="section">5. Training: Use evolv_model for hyperparameter optimization</h2>
+<h2 id="6-evaluation-analyze-performance-metrics-and-visualize-results" class="section">6. Evaluation: Analyze performance metrics and visualize results</h2>
+<h2 id="7-deployment-save-model-and-create-production-functions" class="section">7. Deployment: Save model and create production functions</h2>
 <ul class="flowing-list">
 <li class="flowing-item">Always use virtual environments</li>
 <li class="flowing-item">Validate input data before processing</li>
@@ -107,19 +107,19 @@
 <li class="flowing-item">Use version control</li>
 </ul>
 <p class="paragraph">Best Practices Next Steps</p>
-<h2 class="section">1. Review API_REFERENCE.srt for technical details</h2>
-<h2 class="section">2. Check TROUBLESHOOTING.srt for common issues</h2>
-<h2 class="section">3. Experiment with different parameters</h2>
-<h2 class="section">4. Try different modeling approaches</h2>
-<h2 class="section">5. Contribute to the project</h2>
-<h2 class="section">6. Share your results</h2>
+<h2 id="1-review-api_referencesrt-for-technical-details" class="section">1. Review API_REFERENCE.srt for technical details</h2>
+<h2 id="2-check-troubleshootingsrt-for-common-issues" class="section">2. Check TROUBLESHOOTING.srt for common issues</h2>
+<h2 id="3-experiment-with-different-parameters" class="section">3. Experiment with different parameters</h2>
+<h2 id="4-try-different-modeling-approaches" class="section">4. Try different modeling approaches</h2>
+<h2 id="5-contribute-to-the-project" class="section">5. Contribute to the project</h2>
+<h2 id="6-share-your-results" class="section">6. Share your results</h2>
 <p class="paragraph">End of Usage Examples Return to MAIN_DOCUMENTATION.srt</p>
 <div class="code-snippet">for overview and other documentation sections</div>
             </div>
         </main>
         
         <footer>
-            <p>Generated on 2025-10-15 21:06:45</p>
+            <p>Generated on 2025-10-15 21:23:11</p>
             <p>Droplet-Film Theory Development Project</p>
         </footer>
     </div>
