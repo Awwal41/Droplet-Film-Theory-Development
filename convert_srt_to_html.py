@@ -110,19 +110,36 @@ def convert_srt_to_html(srt_file, output_dir):
     return output_file
 
 def format_content_for_html(content):
-    """Format content for HTML display with LAMMPS-style structure"""
+    """Format content for HTML display with essay-like structure"""
     lines = content.split('\n')
     formatted_lines = []
     in_code_block = False
+    in_list = False
+    current_paragraph = []
+    
+    def flush_paragraph():
+        nonlocal current_paragraph
+        if current_paragraph:
+            paragraph_text = ' '.join(current_paragraph)
+            # Handle bold text
+            paragraph_text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', paragraph_text)
+            # Handle links
+            paragraph_text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', paragraph_text)
+            formatted_lines.append(f'<p class="paragraph">{paragraph_text}</p>')
+            current_paragraph = []
     
     for i, line in enumerate(lines):
         line = line.strip()
         if not line:
-            formatted_lines.append('<br>')
+            flush_paragraph()
+            if in_list:
+                formatted_lines.append('</ul>')
+                in_list = False
             continue
         
         # Handle code blocks
         if line.startswith('```'):
+            flush_paragraph()
             if not in_code_block:
                 formatted_lines.append('<pre><code>')
                 in_code_block = True
@@ -137,6 +154,10 @@ def format_content_for_html(content):
         
         # Handle numbered sections (e.g., "1. Introduction", "2.1. Overview")
         if re.match(r'^\d+\.', line) or re.match(r'^\d+\.\d+\.', line):
+            flush_paragraph()
+            if in_list:
+                formatted_lines.append('</ul>')
+                in_list = False
             if re.match(r'^\d+\.\d+\.', line):
                 formatted_lines.append(f'<h3 class="subsection">{line}</h3>')
             else:
@@ -144,40 +165,56 @@ def format_content_for_html(content):
         
         # Handle main headers (User Guide, API Reference, etc.)
         elif line in ['User Guide', 'API Reference', 'Examples and Tutorials', 'Introduction', 'Installation', 'Quick Start', 'Data Format', 'Running DFT Development', 'Troubleshooting', 'Examples', 'Performance', 'How-to Guides', 'Tutorial Scripts']:
+            flush_paragraph()
+            if in_list:
+                formatted_lines.append('</ul>')
+                in_list = False
             formatted_lines.append(f'<h1 class="main-header">{line}</h1>')
         
         # Handle subheaders with asterisks
         elif line.startswith('* ') and len(line) < 100:
+            flush_paragraph()
+            if in_list:
+                formatted_lines.append('</ul>')
+                in_list = False
             clean_line = line[2:].strip()
             formatted_lines.append(f'<h4 class="subheader">{clean_line}</h4>')
         
         # Handle code snippets (lines starting with specific patterns)
         elif line.startswith(('python', 'bash', 'pip install', 'git clone', 'cd ', 'python -c', 'import ', 'from ', 'def ', 'class ', 'if ', 'for ', 'while ', 'try:', 'except:', 'with ')):
+            flush_paragraph()
+            if in_list:
+                formatted_lines.append('</ul>')
+                in_list = False
             formatted_lines.append(f'<div class="code-snippet">{line}</div>')
         
-        # Handle bullet points
+        # Handle bullet points - convert to flowing text
         elif line.startswith('- ') or line.startswith('* '):
+            if not in_list:
+                in_list = True
+                formatted_lines.append('<ul class="flowing-list">')
             clean_line = line[2:].strip()
-            formatted_lines.append(f'<li class="bullet-point">{clean_line}</li>')
+            formatted_lines.append(f'<li class="flowing-item">{clean_line}</li>')
         
-        # Handle numbered lists
+        # Handle numbered lists - convert to flowing text
         elif re.match(r'^\d+\. ', line):
+            if not in_list:
+                in_list = True
+                formatted_lines.append('<ul class="flowing-list">')
             clean_line = re.sub(r'^\d+\. ', '', line)
-            formatted_lines.append(f'<li class="numbered-point">{clean_line}</li>')
+            formatted_lines.append(f'<li class="flowing-item">{clean_line}</li>')
         
-        # Handle bold text (text between **)
-        elif '**' in line:
-            formatted_line = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', line)
-            formatted_lines.append(f'<p class="paragraph">{formatted_line}</p>')
-        
-        # Handle links (text in brackets followed by URL in parentheses)
-        elif '[' in line and '](' in line:
-            formatted_line = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', line)
-            formatted_lines.append(f'<p class="paragraph">{formatted_line}</p>')
-        
-        # Regular paragraphs
+        # Regular paragraphs - accumulate text for better flow
         else:
-            formatted_lines.append(f'<p class="paragraph">{line}</p>')
+            if in_list:
+                formatted_lines.append('</ul>')
+                in_list = False
+            current_paragraph.append(line)
+    
+    # Flush any remaining paragraph
+    flush_paragraph()
+    if in_list:
+        formatted_lines.append('</ul>')
     
     return '\n'.join(formatted_lines)
 
@@ -441,19 +478,30 @@ code {
 }
 
 /* Lists */
-.bullet-point, .numbered-point {
-    margin-bottom: 0.5rem;
-    padding-left: 0.5rem;
+.flowing-list {
+    margin: 1rem 0;
+    padding-left: 0;
+    list-style: none;
 }
 
-.bullet-point {
-    list-style-type: disc;
-    margin-left: 1.5rem;
+.flowing-item {
+    margin-bottom: 0.8rem;
+    padding-left: 1.5rem;
+    position: relative;
+    line-height: 1.6;
 }
 
-.numbered-point {
-    list-style-type: decimal;
-    margin-left: 1.5rem;
+.flowing-item:before {
+    content: "•";
+    color: #3498db;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.flowing-item:last-child {
+    margin-bottom: 0;
 }
 
 /* Links */

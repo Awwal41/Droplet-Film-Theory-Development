@@ -183,19 +183,30 @@ code {
 }
 
 /* Lists */
-.bullet-point, .numbered-point {
-    margin-bottom: 0.5rem;
-    padding-left: 0.5rem;
+.flowing-list {
+    margin: 1rem 0;
+    padding-left: 0;
+    list-style: none;
 }
 
-.bullet-point {
-    list-style-type: disc;
-    margin-left: 1.5rem;
+.flowing-item {
+    margin-bottom: 0.8rem;
+    padding-left: 1.5rem;
+    position: relative;
+    line-height: 1.6;
 }
 
-.numbered-point {
-    list-style-type: decimal;
-    margin-left: 1.5rem;
+.flowing-item:before {
+    content: "•";
+    color: #3498db;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.flowing-item:last-child {
+    margin-bottom: 0;
 }
 
 /* Links */
