@@ -1,0 +1,383 @@
+/* DFT Documentation Styles - LAMMPS Inspired */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #ffffff;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    min-height: 100vh;
+}
+
+header {
+    background: #2c3e50;
+    color: white;
+    padding: 1.5rem 2rem;
+    border-bottom: 3px solid #3498db;
+}
+
+header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 300;
+}
+
+header p {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin-bottom: 0;
+}
+
+nav {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+    font-size: 0.9rem;
+}
+
+nav a:hover {
+    background-color: #3498db;
+}
+
+main {
+    padding: 2rem;
+    display: flex;
+    gap: 2rem;
+}
+
+.sidebar {
+    width: 250px;
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 5px;
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+}
+
+.sidebar h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
+}
+
+.sidebar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar li {
+    margin-bottom: 0.3rem;
+}
+
+.sidebar a {
+    color: #555;
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 0.2rem 0;
+    display: block;
+    transition: color 0.3s;
+}
+
+.sidebar a:hover {
+    color: #3498db;
+}
+
+.content {
+    flex: 1;
+    max-width: 800px;
+    padding: 1rem 0;
+}
+
+/* Smooth scrolling for anchor links */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Ensure proper spacing for all content elements */
+.content h1,
+.content h2,
+.content h3,
+.content h4 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.content p {
+    margin-bottom: 1.5rem;
+}
+
+/* Add spacing between different elements */
+.content > * + h1,
+.content > * + h2,
+.content > * + h3,
+.content > * + h4 {
+    margin-top: 2.5rem;
+}
+
+.content > * + p {
+    margin-top: 1rem;
+}
+
+/* Horizontal rule styling */
+.content hr {
+    border: none;
+    border-top: 2px solid #e0e0e0;
+    margin: 2rem 0;
+}
+
+/* LAMMPS-style headers */
+.main-header {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    margin: 3rem 0 2rem 0;
+    padding: 1rem 0 0.5rem 0;
+    border-bottom: 2px solid #3498db;
+    font-weight: 400;
+    scroll-margin-top: 2rem;
+}
+
+.section {
+    color: #2c3e50;
+    font-size: 1.4rem;
+    margin: 2.5rem 0 1.5rem 0;
+    padding: 0.5rem 0 0.5rem 0.5rem;
+    border-left: 4px solid #3498db;
+    font-weight: 400;
+    scroll-margin-top: 2rem;
+}
+
+.subsection {
+    color: #34495e;
+    font-size: 1.2rem;
+    margin: 2rem 0 1rem 0;
+    padding: 0.5rem 0 0.5rem 1rem;
+    font-weight: 400;
+    scroll-margin-top: 2rem;
+}
+
+.subheader {
+    color: #34495e;
+    font-size: 1rem;
+    margin: 1.5rem 0 1rem 0;
+    font-weight: 500;
+    scroll-margin-top: 2rem;
+}
+
+.paragraph {
+    margin-bottom: 1.5rem;
+    text-align: left;
+    line-height: 1.8;
+    text-indent: 0;
+    padding: 0.5rem 0;
+}
+
+/* Code styling */
+.code-snippet {
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+    border-left: 4px solid #3498db;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    overflow-x: auto;
+    border-radius: 3px;
+}
+
+pre {
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+    border-left: 4px solid #3498db;
+    padding: 1rem;
+    margin: 1rem 0;
+    overflow-x: auto;
+    border-radius: 3px;
+}
+
+code {
+    background: #f4f4f4;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+/* Lists */
+.flowing-list {
+    margin: 1rem 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.flowing-item {
+    margin-bottom: 0.8rem;
+    padding-left: 1.5rem;
+    position: relative;
+    line-height: 1.6;
+}
+
+.flowing-item:before {
+    content: "•";
+    color: #3498db;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.flowing-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Links */
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 0.8rem;
+    text-align: left;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+/* Cards for examples */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.card {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 5px;
+    border-left: 4px solid #3498db;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+    margin-top: 0;
+    color: #2c3e50;
+}
+
+.card h3 a {
+    color: #2c3e50;
+    text-decoration: none;
+}
+
+.card h3 a:hover {
+    color: #3498db;
+    text-decoration: underline;
+}
+
+/* Footer */
+footer {
+    background: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 3rem;
+    border-top: 3px solid #3498db;
+}
+
+footer p {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .sidebar {
+        width: 100%;
+        position: static;
+        margin-bottom: 2rem;
+    }
+    
+    .main-header {
+        font-size: 1.5rem;
+    }
+    
+    .section {
+        font-size: 1.2rem;
+    }
+    
+    .subsection {
+        font-size: 1.1rem;
+    }
+    
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Print styles */
+@media print {
+    .sidebar {
+        display: none;
+    }
+    
+    .container {
+        max-width: none;
+    }
+    
+    .main-header, .section, .subsection {
+        page-break-after: avoid;
+    }
+}

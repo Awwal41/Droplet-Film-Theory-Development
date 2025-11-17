@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troubleshooting Guide - DFT Documentation</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Troubleshooting Guide</h1>
+            <p>Droplet-Film Theory Development Project</p>
+            <nav>
+                <a href="../index.html">Home</a>
+                <a href="documentation.html">Documentation</a>
+                <a href="installation_guide.html">Installation</a>
+                <a href="usage_examples.html">Usage</a>
+                <a href="api_reference.html">API Reference</a>
+                <a href="troubleshooting.html">Troubleshooting</a>
+            </nav>
+        </header>
+        
+        <main>
+            <div class="sidebar">
+                <h3>Contents</h3>
+                <ul>
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#quick-start">Quick Start</a></li>
+                    <li><a href="#data-format">Data Format</a></li>
+                    <li><a href="#running-dft-development">Running DFT Development</a></li>
+                    <li><a href="#troubleshooting">Troubleshooting</a></li>
+                    <li><a href="#examples">Examples</a></li>
+                    <li><a href="#performance">Performance</a></li>
+                    <li><a href="#how-to-guides">How-to Guides</a></li>
+                    <li><a href="#tutorial-scripts">Tutorial Scripts</a></li>
+                </ul>
+            </div>
+            
+            <div class="content">
+<p class="paragraph">Troubleshooting Guide Droplet-Film Theory Development Project Common Issues and Solutions</p>
+<h1 id="introduction" class="main-header">Introduction</h1>
+<ul class="flowing-list">
+<li class="flowing-item">"ModuleNotFoundError: No module named 'scripts_2.0'"</li>
+<li class="flowing-item">"ImportError: cannot import name 'DFT'"</li>
+<li class="flowing-item">"ModuleNotFoundError: No module named 'feyn'"</li>
+</ul>
+<ul class="flowing-list">
+<li class="flowing-item">Virtual environment not activated</li>
+<li class="flowing-item">Missing dependencies</li>
+<li class="flowing-item">Incorrect Python path</li>
+<li class="flowing-item">Package installation failures</li>
+</ul>
+<p class="paragraph">This guide addresses the most frequently encountered problems when using the DFT Development project. Each issue includes detailed diagnostic steps, multiple solution approaches, and prevention strategies. The guide is organized by problem category, with solutions ranging from quick fixes to comprehensive debugging approaches. Installation and Environment Issues Issue 1: Python Import Errors Problem: ModuleNotFoundError when importing project modules Symptoms: Root Causes: Diagnostic Steps:</p>
+<h2 id="1-check-python-environment" class="section">1. Check Python environment:</h2>
+<div class="code-snippet">python --version</div>
+<p class="paragraph">which python</p>
+<h2 id="2-verify-virtual-environment-activation" class="section">2. Verify virtual environment activation:</h2>
+<p class="paragraph">echo $VIRTUAL_ENV  # Linux/Mac echo %VIRTUAL_ENV%  # Windows</p>
+<h2 id="3-test-basic-imports" class="section">3. Test basic imports:</h2>
+<div class="code-snippet">python -c "import numpy; print('NumPy OK')"</div>
+<div class="code-snippet">python -c "import pandas; print('Pandas OK')"</div>
+<p class="paragraph">Solutions: Solution 1: Activate Virtual Environment # Windows dft_env\Scripts\activate # macOS/Linux source dft_env/bin/activate Solution 2: Install Missing Dependencies</p>
+<div class="code-snippet">pip install numpy pandas scipy scikit-learn matplotlib seaborn feyn pysindy</div>
+<p class="paragraph">Solution 3: Install Project in Development Mode</p>
+<div class="code-snippet">cd /path/to/Droplet-Film-Theory-Development</div>
+<div class="code-snippet">pip install -e .</div>
+<p class="paragraph">Solution 4: Fix Python Path</p>
+<div class="code-snippet">import sys</div>
+<ul class="flowing-list">
+<li class="flowing-item">Always use virtual environments</li>
+<li class="flowing-item">Document exact package versions</li>
+<li class="flowing-item">Use requirements.txt for reproducibility</li>
+</ul>
+<ul class="flowing-list">
+<li class="flowing-item">"FileNotFoundError: [Errno 2] No such file or directory"</li>
+<li class="flowing-item">"KeyError: 'Dia'"</li>
+<li class="flowing-item">"ValueError: could not convert string to float"</li>
+<li class="flowing-item">"pandas.errors.EmptyDataError"</li>
+</ul>
+<ul class="flowing-list">
+<li class="flowing-item">Incorrect file paths</li>
+<li class="flowing-item">Missing required columns</li>
+<li class="flowing-item">Data format inconsistencies</li>
+<li class="flowing-item">File permission issues</li>
+</ul>
+<p class="paragraph">sys.path.append('/path/to/Droplet-Film-Theory-Development') Prevention: Issue 2: Data Loading and Format Errors Problem: Errors when loading or processing datasets Symptoms: Root Causes: Diagnostic Steps:</p>
+<h2 id="1-verify-file-existence" class="section">1. Verify file existence:</h2>
+<div class="code-snippet">import os</div>
+<p class="paragraph">print(os.path.exists("your_data.csv")) print(os.path.abspath("your_data.csv"))</p>
+<h2 id="2-check-file-format" class="section">2. Check file format:</h2>
+<div class="code-snippet">import pandas as pd</div>
+<p class="paragraph">data = pd.read_csv("your_data.csv", nrows=5) print(data.columns.tolist()) print(data.dtypes)</p>
+<h2 id="3-validate-data-content" class="section">3. Validate data content:</h2>
+<p class="paragraph">print(data.head()) print(data.describe()) Solutions: Solution 1: Fix File Paths # Use absolute paths data_path = os.path.abspath("datasets/well_data.csv") # Check current working directory print(os.getcwd()) Solution 2: Validate Required Columns required_cols = ['Dia', 'Dev(deg)', 'Area (m2)', 'z', 'GasDens', 'LiquidDens', 'g (m/s2)', 'P/T', 'friction_factor', 'critical_film_thickness'] missing_cols = [col for col in required_cols if col not in data.columns]</p>
+<div class="code-snippet">if missing_cols:</div>
+<p class="paragraph">print(f"Missing columns: {missing_cols}") # Add missing columns with default values</p>
+<div class="code-snippet">for col in missing_cols:</div>
+<p class="paragraph">data[col] = 0.0 Solution 3: Handle Data Format Issues # Clean data before processing data = data.dropna()  # Remove rows with missing values data = data.replace([np.inf, -np.inf], np.nan).dropna()  # Remove infinite values # Convert data types numeric_cols = ['Dia', 'Dev(deg)', 'Area (m2)', 'z', 'GasDens', 'LiquidDens', 'g (m/s2)', 'P/T', 'friction_factor', 'critical_film_thickness']</p>
+<div class="code-snippet">for col in numeric_cols:</div>
+<p class="paragraph">data[col] = pd.to_numeric(data[col], errors='coerce') Solution 4: Fix File Permissions # Check file permissions</p>
+<div class="code-snippet">import stat</div>
+<ul class="flowing-list">
+<li class="flowing-item">Use consistent file naming conventions</li>
+<li class="flowing-item">Validate data before processing</li>
+<li class="flowing-item">Implement data quality checks</li>
+<li class="flowing-item">Use version control for datasets</li>
+</ul>
+<ul class="flowing-list">
+<li class="flowing-item">"MemoryError: Unable to allocate array"</li>
+<li class="flowing-item">"Killed: 9" (Linux/Mac)</li>
+<li class="flowing-item">Extremely slow training times</li>
+<li class="flowing-item">System becomes unresponsive</li>
+</ul>
+<ul class="flowing-list">
+<li class="flowing-item">Dataset too large for available memory</li>
+<li class="flowing-item">Inefficient data structures</li>
+<li class="flowing-item">Large hyperparameter grids</li>
+<li class="flowing-item">Memory leaks in optimization</li>
+</ul>
+<p class="paragraph">file_stat = os.stat("your_data.csv") print(f"Readable: {bool(file_stat.st_mode & stat.S_IRUSR)}") print(f"Writable: {bool(file_stat.st_mode & stat.S_IWUSR)}") Prevention: Issue 3: Memory and Performance Issues Problem: Out of memory or slow performance Symptoms: Root Causes: Diagnostic Steps:</p>
+<h2 id="1-check-system-memory" class="section">1. Check system memory:</h2>
+<div class="code-snippet">import psutil</div>
+<p class="paragraph">print(f"Available memory: {psutil.virtual_memory().available / 1e9:.1f} GB")</p>
+<h2 id="2-monitor-memory-usage" class="section">2. Monitor memory usage:</h2>
+<div class="code-snippet">import tracemalloc</div>
+<p class="paragraph">tracemalloc.start() # Your code here current, peak = tracemalloc.get_traced_memory() print(f"Current memory usage: {current / 1e6:.1f} MB") print(f"Peak memory usage: {peak / 1e6:.1f} MB")</p>
+<h2 id="3-profile-data-size" class="section">3. Profile data size:</h2>
+<p class="paragraph">print(f"Dataset shape: {data.shape}") print(f"Memory usage: {data.memory_usage(deep=True).sum() / 1e6:.1f} MB") Solutions: Solution 1: Reduce Dataset Size # Use data sampling for development data_sample = data.sample(n=1000, random_state=42) # Use stratified sampling for balanced representation</p>
+<div class="code-snippet">from sklearn.model_selection import train_test_split</div>
+<p class="paragraph">X_sample, _, y_sample, _ = train_test_split( X, y, train_size=1000, random_state=42, stratify=y ) Solution 2: Optimize Hyperparameter Grid # Use smaller, focused grid hparam_grid = { "dev_tol": [1e-3],  # Single value instead of list "feature_tol": [1.0], "multiple_dev_policy": ["max"] } # Use fewer cross-validation folds k_folds = 3  # Instead of 5 or 10 Solution 3: Process Data in Chunks # For very large datasets chunk_size = 1000 results = []</p>
+<div class="code-snippet">for i in range(0, len(data), chunk_size):</div>
+<ul class="flowing-list">
+<li class="flowing-item">Start with small datasets during development</li>
+<li class="flowing-item">Monitor memory usage regularly</li>
+<li class="flowing-item">Use appropriate data types</li>
+<li class="flowing-item">Implement data streaming for large files</li>
+</ul>
+<ul class="flowing-list">
+<li class="flowing-item">"RuntimeError: Optimization failed"</li>
+<li class="flowing-item">"ConvergenceWarning: Optimization terminated early"</li>
+<li class="flowing-item">Very poor model performance</li>
+<li class="flowing-item">Unrealistic parameter values</li>
+</ul>
+<ul class="flowing-list">
+<li class="flowing-item">Poor initial parameter values</li>
+<li class="flowing-item">Inappropriate optimization bounds</li>
+<li class="flowing-item">Insufficient iterations</li>
+<li class="flowing-item">Numerical instability</li>
+<li class="flowing-item">Poor data quality</li>
+</ul>
+<p class="paragraph">chunk = data[i:i+chunk_size] # Process chunk chunk_result = process_chunk(chunk) results.append(chunk_result) Solution 4: Use Memory-Efficient Data Types # Use smaller data types where possible data = data.astype({ 'Dia': 'float32', 'Dev(deg)': 'float32', 'Area (m2)': 'float32' }) Prevention: Issue 4: Optimization Convergence Problems Problem: Model training fails to converge Symptoms: Root Causes: Diagnostic Steps:</p>
+<h2 id="1-check-optimization-status" class="section">1. Check optimization status:</h2>
+<p class="paragraph">result = minimize(...) print(f"Success: {result.success}") print(f"Message: {result.message}") print(f"Function evaluations: {result.nfev}")</p>
+<h2 id="2-analyze-parameter-values" class="section">2. Analyze parameter values:</h2>
+<p class="paragraph">print(f"Parameter range: {params.min():.6f} to {params.max():.6f}") print(f"Parameter mean: {params.mean():.6f}")</p>
+<h2 id="3-check-data-quality" class="section">3. Check data quality:</h2>
+<p class="paragraph">print(f"Data range: {X.min():.6f} to {X.max():.6f}") print(f"Data mean: {X.mean():.6f}") print(f"NaN values: {np.isnan(X).sum()}") Solutions: Solution 1: Adjust Optimization Parameters # Increase iterations and function calls result = minimize( self._loss, x0=x0, bounds=bounds, method="Powell", options={'maxiter': 10000, 'maxfun': 20000} ) # Try different optimization methods</p>
+<div class="code-snippet">from scipy.optimize import differential_evolution</div>
+<p class="paragraph">result = differential_evolution(self._loss, bounds, maxiter=1000) Solution 2: Improve Initial Parameters # Use better initial values x0 = np.concatenate(( [0.1, 0.1, 0.1, 0.1, 0.1],  # Global parameters np.full(n_train, 0.5)  # Alpha values )) # Use parameter estimation from data p1_init = np.sqrt(np.mean(y) / np.mean(X[:, 0])) x0[0] = p1_init Solution 3: Scale Input Data # Normalize features to prevent overflow</p>
+<div class="code-snippet">from sklearn.preprocessing import StandardScaler</div>
+<p class="paragraph">scaler = StandardScaler() X_scaled = scaler.fit_transform(X) # Use scaled data for training model.fit(X_scaled, y) Solution 4: Add Numerical Stability # Add small epsilon to prevent division by zero epsilon = 1e-8 z = np.maximum(z, epsilon) GasDens = np.maximum(GasDens, epsilon) # Use log-space optimization for positive parameters</p>
+<div class="code-snippet">def log_loss(log_params):</div>
+<ul class="flowing-list">
+<li class="flowing-item">Always scale input data</li>
+<li class="flowing-item">Use appropriate initial values</li>
+<li class="flowing-item">Monitor optimization progress</li>
+<li class="flowing-item">Validate data quality before training</li>
+</ul>
+<ul class="flowing-list">
+<li class="flowing-item">"ConnectionError: Failed to connect to QLattice"</li>
+<li class="flowing-item">"TimeoutError: Connection timed out"</li>
+<li class="flowing-item">"AuthenticationError: Invalid credentials"</li>
+</ul>
+<ul class="flowing-list">
+<li class="flowing-item">Network connectivity issues</li>
+<li class="flowing-item">Invalid API credentials</li>
+<li class="flowing-item">Service unavailability</li>
+<li class="flowing-item">Firewall restrictions</li>
+</ul>
+<p class="paragraph">params = np.exp(log_params) return self._loss(params) Prevention: Issue 5: QLattice Connection Problems Problem: Cannot connect to Feyn QLattice service Symptoms: Root Causes: Diagnostic Steps:</p>
+<h2 id="1-test-network-connectivity" class="section">1. Test network connectivity:</h2>
+<div class="code-snippet">import requests</div>
+<div class="code-snippet">try:</div>
+<p class="paragraph">response = requests.get("https://api.feynlab.com", timeout=10) print(f"Connection status: {response.status_code}") except Exception as e: print(f"Connection failed: {e}")</p>
+<h2 id="2-check-feyn-configuration" class="section">2. Check Feyn configuration:</h2>
+<div class="code-snippet">import feyn</div>
+<p class="paragraph">print(f"Feyn version: {feyn.__version__}")</p>
+<h2 id="3-test-qlattice-connection" class="section">3. Test QLattice connection:</h2>
+<div class="code-snippet">try:</div>
+<p class="paragraph">ql = feyn.connect_qlattice() print("QLattice connection successful") except Exception as e: print(f"QLattice connection failed: {e}") Solutions: Solution 1: Check Network Settings # Test basic connectivity</p>
+<div class="code-snippet">import socket</div>
+<div class="code-snippet">try:</div>
+<p class="paragraph">socket.create_connection(("api.feynlab.com", 443), timeout=10) print("Network connection OK") except OSError: print("Network connection failed") # Check proxy settings</p>
+<div class="code-snippet">import os</div>
+<p class="paragraph">print(f"HTTP_PROXY: {os.environ.get('HTTP_PROXY', 'Not set')}") print(f"HTTPS_PROXY: {os.environ.get('HTTPS_PROXY', 'Not set')}") Solution 2: Verify API Credentials # Check if Feyn is properly configured</p>
+<div class="code-snippet">import feyn</div>
+<div class="code-snippet">try:</div>
+<p class="paragraph">ql = feyn.connect_qlattice() print("Authentication successful") except Exception as e: print(f"Authentication failed: {e}") print("Please check your Feyn account and API key") Solution 3: Use Alternative Symbolic Regression # Fall back to PySINDy if QLattice fails</p>
+<div class="code-snippet">from pysindy import SINDy</div>
+<p class="paragraph">sindy_model = SINDy( optimizer='STLSQ', feature_library='polynomial', feature_names=builder.feature_names ) sindy_model.fit(X_train, y_train) print(f"SINDy equation: {sindy_model.equations()}") Solution 4: Implement Offline Mode # Create a mock QLattice wrapper for offline use</p>
+<div class="code-snippet">class OfflineQLatticeWrapper:</div>
+<div class="code-snippet">def __init__(self, feature_tags, output_tag="Qcr"):</div>
+<p class="paragraph">self.feature_tags = feature_tags self.output_tag = output_tag self.model = None</p>
+<div class="code-snippet">def fit(self, X, y):</div>
+<p class="paragraph"># Use simple linear regression as fallback</p>
+<div class="code-snippet">from sklearn.linear_model import LinearRegression</div>
+<p class="paragraph">self.model = LinearRegression() self.model.fit(X, y)</p>
+<div class="code-snippet">def predict(self, X):</div>
+<p class="paragraph">return self.model.predict(X)</p>
+<div class="code-snippet">def express(self):</div>
+<ul class="flowing-list">
+<li class="flowing-item">Test QLattice connection during installation</li>
+<li class="flowing-item">Implement fallback methods</li>
+<li class="flowing-item">Monitor service status</li>
+<li class="flowing-item">Keep credentials secure</li>
+</ul>
+<ul class="flowing-list">
+<li class="flowing-item">Very low R² scores (< 0.5)</li>
+<li class="flowing-item">High prediction errors</li>
+<li class="flowing-item">Overfitting (good training, poor test performance)</li>
+<li class="flowing-item">Unrealistic predictions</li>
+</ul>
+<ul class="flowing-list">
+<li class="flowing-item">Insufficient or poor quality data</li>
+<li class="flowing-item">Inappropriate hyperparameters</li>
+<li class="flowing-item">Data leakage</li>
+<li class="flowing-item">Model complexity mismatch</li>
+</ul>
+<p class="paragraph">return "Linear regression (offline mode)" Prevention: Issue 6: Model Performance Issues Problem: Poor model performance or unexpected results Symptoms: Root Causes: Diagnostic Steps:</p>
+<h2 id="1-analyze-performance-metrics" class="section">1. Analyze performance metrics:</h2>
+<p class="paragraph">print(f"Training MSE: {train_mse:.6f}") print(f"Test MSE: {test_mse:.6f}") print(f"Training R²: {train_r2:.4f}") print(f"Test R²: {test_r2:.4f}")</p>
+<h2 id="2-check-for-overfitting" class="section">2. Check for overfitting:</h2>
+<div class="code-snippet">if train_r2 - test_r2 > 0.2:</div>
+<p class="paragraph">print("Warning: Potential overfitting detected")</p>
+<h2 id="3-analyze-prediction-errors" class="section">3. Analyze prediction errors:</h2>
+<p class="paragraph">residuals = y_test - y_pred print(f"Residual statistics:") print(f"  Mean: {residuals.mean():.6f}") print(f"  Std: {residuals.std():.6f}") print(f"  Max: {residuals.max():.6f}") print(f"  Min: {residuals.min():.6f}") Solutions: Solution 1: Improve Data Quality # Remove outliers</p>
+<div class="code-snippet">from scipy import stats</div>
+<p class="paragraph">z_scores = np.abs(stats.zscore(data)) data_clean = data[(z_scores < 3).all(axis=1)] # Check for data leakage print("Checking for data leakage...")</p>
+<div class="code-snippet">if np.array_equal(X_train, X_test):</div>
+<p class="paragraph">print("Warning: Training and test sets are identical!") Solution 2: Optimize Hyperparameters # Use more comprehensive hyperparameter search hparam_grid = { "dev_tol": [1e-5, 1e-4, 1e-3, 1e-2], "feature_tol": [0.1, 0.5, 1.0, 2.0, 5.0], "multiple_dev_policy": ["max", "min", "mean", "median"] } # Use more cross-validation folds k_folds = 10 Solution 3: Regularize the Model # Add regularization to prevent overfitting</p>
+<div class="code-snippet">def regularized_loss(self, params):</div>
+<p class="paragraph">mse = self._loss(params) # Add L2 regularization l2_penalty = 0.01 * np.sum(params[5:]**2) return mse + l2_penalty Solution 4: Use Ensemble Methods # Combine multiple models</p>
+<div class="code-snippet">from sklearn.ensemble import VotingRegressor</div>
+<ul class="flowing-list">
+<li class="flowing-item">Always use cross-validation</li>
+<li class="flowing-item">Monitor train/test performance gap</li>
+<li class="flowing-item">Validate data quality before training</li>
+<li class="flowing-item">Use appropriate model complexity</li>
+</ul>
+<ul class="flowing-list">
+<li class="flowing-item">"RuntimeError: Invalid DISPLAY variable"</li>
+<li class="flowing-item">"UserWarning: Matplotlib is currently using agg"</li>
+<li class="flowing-item">"ValueError: x and y must have same first dimension"</li>
+<li class="flowing-item">Blank or empty plots</li>
+</ul>
+<ul class="flowing-list">
+<li class="flowing-item">Backend configuration issues</li>
+<li class="flowing-item">Data type mismatches</li>
+<li class="flowing-item">Missing display (headless environments)</li>
+<li class="flowing-item">Memory issues with large datasets</li>
+</ul>
+<p class="paragraph">ensemble = VotingRegressor([ ('dft', dft_model), ('linear', LinearRegression()), ('ridge', Ridge(alpha=1.0)) ]) ensemble.fit(X_train, y_train) Prevention: Issue 7: Visualization and Plotting Errors Problem: Errors when creating plots or visualizations Symptoms: Root Causes: Diagnostic Steps:</p>
+<h2 id="1-check-matplotlib-backend" class="section">1. Check matplotlib backend:</h2>
+<div class="code-snippet">import matplotlib</div>
+<p class="paragraph">print(f"Backend: {matplotlib.get_backend()}")</p>
+<h2 id="2-test-basic-plotting" class="section">2. Test basic plotting:</h2>
+<div class="code-snippet">import matplotlib.pyplot as plt</div>
+<p class="paragraph">plt.figure() plt.plot([1, 2, 3], [1, 4, 2]) plt.show()</p>
+<h2 id="3-check-data-compatibility" class="section">3. Check data compatibility:</h2>
+<p class="paragraph">print(f"X shape: {X.shape}") print(f"y shape: {y.shape}") print(f"X dtype: {X.dtype}") print(f"y dtype: {y.dtype}") Solutions: Solution 1: Configure Matplotlib Backend # For headless environments</p>
+<div class="code-snippet">import matplotlib</div>
+<p class="paragraph">matplotlib.use('Agg')  # Non-interactive backend # For Jupyter notebooks %matplotlib inline # For interactive environments matplotlib.use('TkAgg')  # or 'Qt5Agg' Solution 2: Fix Data Type Issues # Ensure data is numeric X = X.astype(np.float64) y = y.astype(np.float64) # Remove NaN values mask = ~(np.isnan(X).any(axis=1) | np.isnan(y)) X = X[mask] y = y[mask] Solution 3: Handle Large Datasets # Sample data for visualization n_samples = min(1000, len(X)) indices = np.random.choice(len(X), n_samples, replace=False) X_plot = X[indices] y_plot = y[indices] # Use efficient plotting methods plt.scatter(y_plot, y_pred[indices], alpha=0.5, s=1) Solution 4: Alternative Visualization # Use plotly for interactive plots</p>
+<div class="code-snippet">import plotly.graph_objects as go</div>
+<div class="code-snippet">import plotly.express as px</div>
+<p class="paragraph">fig = px.scatter(x=y_test, y=y_pred, title="Model Performance") fig.show() # Use seaborn for better error handling</p>
+<div class="code-snippet">import seaborn as sns</div>
+<ul class="flowing-list">
+<li class="flowing-item">Test plotting functionality during setup</li>
+<li class="flowing-item">Use appropriate backends for your environment</li>
+<li class="flowing-item">Validate data before plotting</li>
+<li class="flowing-item">Consider data size for visualization</li>
+</ul>
+<ul class="flowing-list">
+<li class="flowing-item">"ValueError: n_splits=5 cannot be greater than the number of samples"</li>
+<li class="flowing-item">"TypeError: 'NoneType' object is not iterable"</li>
+<li class="flowing-item">"MemoryError during cross-validation"</li>
+</ul>
+<ul class="flowing-list">
+<li class="flowing-item">Insufficient data for requested folds</li>
+<li class="flowing-item">Data splitting issues</li>
+<li class="flowing-item">Memory constraints</li>
+<li class="flowing-item">Invalid fold configuration</li>
+</ul>
+<p class="paragraph">sns.scatterplot(x=y_test, y=y_pred) Prevention: Issue 8: Cross-Validation Errors Problem: Errors during k-fold cross-validation Symptoms: Root Causes: Diagnostic Steps:</p>
+<h2 id="1-check-data-size" class="section">1. Check data size:</h2>
+<p class="paragraph">print(f"Data size: {len(X)}") print(f"Requested folds: {k_folds}")</p>
+<div class="code-snippet">if len(X) < k_folds:</div>
+<p class="paragraph">print("Error: Not enough data for requested folds")</p>
+<h2 id="2-test-basic-splitting" class="section">2. Test basic splitting:</h2>
+<div class="code-snippet">from sklearn.model_selection import KFold</div>
+<p class="paragraph">kf = KFold(n_splits=min(k_folds, len(X)//2))</p>
+<div class="code-snippet">for train_idx, val_idx in kf.split(X):</div>
+<p class="paragraph">print(f"Train: {len(train_idx)}, Val: {len(val_idx)}") Solutions: Solution 1: Adjust Fold Count # Use appropriate number of folds k_folds = min(k_folds, len(X) // 2)</p>
+<div class="code-snippet">if k_folds < 2:</div>
+<p class="paragraph">k_folds = 2 # Use leave-one-out for very small datasets</p>
+<div class="code-snippet">if len(X) < 10:</div>
+<div class="code-snippet">from sklearn.model_selection import LeaveOneOut</div>
+<p class="paragraph">cv = LeaveOneOut() else: cv = KFold(n_splits=k_folds) Solution 2: Fix Data Splitting # Ensure proper data splitting</p>
+<div class="code-snippet">from sklearn.model_selection import train_test_split</div>
+<p class="paragraph">X_train, X_test, y_train, y_test = train_test_split( X, y, test_size=0.2, random_state=42 ) # Use stratified splitting for classification</p>
+<div class="code-snippet">from sklearn.model_selection import StratifiedKFold</div>
+<p class="paragraph">skf = StratifiedKFold(n_splits=k_folds, shuffle=True, random_state=42) Solution 3: Reduce Memory Usage # Use smaller datasets for cross-validation X_cv = X[:1000]  # Limit to 1000 samples y_cv = y[:1000] # Process folds sequentially instead of in parallel</p>
+<div class="code-snippet">for train_idx, val_idx in kf.split(X_cv):</div>
+<ul class="flowing-list">
+<li class="flowing-item">Check data size before cross-validation</li>
+<li class="flowing-item">Use appropriate fold counts</li>
+<li class="flowing-item">Monitor memory usage</li>
+<li class="flowing-item">Test with small datasets first</li>
+</ul>
+<p class="paragraph"># Process one fold at a time pass Prevention: General Debugging Strategies</p>
+<h2 id="1-enable-verbose-logging" class="section">1. Enable Verbose Logging</h2>
+<div class="code-snippet">import logging</div>
+<p class="paragraph">logging.basicConfig(level=logging.DEBUG)</p>
+<h2 id="2-use-debugging-tools" class="section">2. Use Debugging Tools</h2>
+<div class="code-snippet">import pdb</div>
+<p class="paragraph">pdb.set_trace()  # Set breakpoint</p>
+<h2 id="3-profile-performance" class="section">3. Profile Performance</h2>
+<div class="code-snippet">import cProfile</div>
+<p class="paragraph">profiler = cProfile.Profile() profiler.enable() # Your code here profiler.disable() profiler.print_stats(sort='cumulative')</p>
+<h2 id="4-check-system-resources" class="section">4. Check System Resources</h2>
+<div class="code-snippet">import psutil</div>
+<p class="paragraph">print(f"CPU usage: {psutil.cpu_percent()}%") print(f"Memory usage: {psutil.virtual_memory().percent}%") print(f"Disk usage: {psutil.disk_usage('/').percent}%")</p>
+<h2 id="5-validate-inputs" class="section">5. Validate Inputs</h2>
+<div class="code-snippet">def validate_inputs(X, y):</div>
+<p class="paragraph">assert X.shape[0] == y.shape[0], "X and y must have same number of samples" assert not np.isnan(X).any(), "X contains NaN values" assert not np.isnan(y).any(), "y contains NaN values" assert not np.isinf(X).any(), "X contains infinite values" assert not np.isinf(y).any(), "y contains infinite values" Getting Help If problems persist:</p>
+<h2 id="1-check-the-github-issues-page" class="section">1. Check the GitHub issues page</h2>
+<h2 id="2-review-the-api-reference-for-detailed-information" class="section">2. Review the API reference for detailed information</h2>
+<h2 id="3-consult-the-usage-examples-for-similar-cases" class="section">3. Consult the usage examples for similar cases</h2>
+<h2 id="4-search-online-for-similar-error-messages" class="section">4. Search online for similar error messages</h2>
+<h2 id="5-contact-the-development-team-with" class="section">5. Contact the development team with:</h2>
+<ul class="flowing-list">
+<li class="flowing-item">Complete error message</li>
+<li class="flowing-item">System information</li>
+<li class="flowing-item">Code snippet that reproduces the issue</li>
+<li class="flowing-item">Expected vs actual behavior</li>
+</ul>
+<p class="paragraph">Prevention Strategies</p>
+<h2 id="1-use-version-control-for-code-and-data" class="section">1. Use version control for code and data</h2>
+<h2 id="2-test-with-sample-data-before-full-datasets" class="section">2. Test with sample data before full datasets</h2>
+<h2 id="3-document-your-workflow-and-parameters" class="section">3. Document your workflow and parameters</h2>
+<h2 id="4-keep-dependencies-updated" class="section">4. Keep dependencies updated</h2>
+<h2 id="5-use-consistent-environments" class="section">5. Use consistent environments</h2>
+<h2 id="6-monitor-performance-metrics" class="section">6. Monitor performance metrics</h2>
+<h2 id="7-implement-proper-error-handling" class="section">7. Implement proper error handling</h2>
+<h2 id="8-regular-backups-of-important-work" class="section">8. Regular backups of important work</h2>
+<p class="paragraph">This troubleshooting guide covers the most common issues encountered when using the DFT Development project. For additional support, please refer to the project repository or contact the development team.</p>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Generated on 2025-10-16 01:23:27</p>
+            <p>Droplet-Film Theory Development Project</p>
+        </footer>
+    </div>
+</body>
+</html>

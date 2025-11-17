@@ -1,193 +1,62 @@
 API Reference
-Droplet-Film Theory Development
-Scripts 2.0
-
+Droplet-Film Theory Development Project
 Technical Documentation
-This file contains detailed technical specifications
-for all classes, methods, and parameters in the DFT implementation.
-Use this for development and advanced usage.
+
+Overview
+This document provides comprehensive technical documentation for all classes, methods, and parameters in the DFT Development project. The API is designed to be both powerful and user-friendly, supporting both research and industrial applications.
+
+The project follows object-oriented design principles with clear separation of concerns between physics modeling, data management, and machine learning components.
+
+Core Classes and Modules
+The project consists of several key modules:
+
+- dft_model.py: Core physics model implementation
+- utils.py: Data management and utility functions
+- Individual Jupyter notebooks for different approaches
 
 DFT Class - Core Physics Model
-Class: dft_model.DFT
-Purpose: Implements the Droplet-Film Theory physics model
-for predicting critical flow rates in gas wells.
+The DFT class implements the Droplet-Film Theory physics model for predicting critical flow rates in gas wells.
 
-DFT Class Constructor
+Class Definition
+class DFT:
+    """
+    Droplet-Film Theory model for predicting critical flow rates in gas wells.
+    
+    This class implements a physics-informed machine learning approach that combines
+    fundamental fluid dynamics principles with data-driven optimization to predict
+    when gas wells will experience liquid loading.
+    """
+
+Constructor
 __init__(self, seed=42, feature_tol=1.0, dev_tol=1e-3, multiple_dev_policy="max")
 
 Parameters:
-- seed: Random seed for reproducibility (int)
-- feature_tol: Feature distance threshold (float)
-- dev_tol: Deviation tolerance for matching (float)
-- multiple_dev_policy: Policy for multiple matches (str)
+- seed (int): Random seed for reproducibility. Default: 42
+- feature_tol (float): Feature distance threshold for matching. Default: 1.0
+- dev_tol (float): Deviation tolerance for angle matching. Default: 1e-3
+- multiple_dev_policy (str): Policy for handling multiple matches. Options: "max", "min", "mean", "median". Default: "max"
 
-DFT Class Methods
-Methods:
-- fit(X, y): Train the model on data
-- predict(X, dev_train=None, alpha_strategy='enhanced_dev_based'): Make predictions
-- _eq(params, X): Compute predicted values using physics equation
-- _loss(params): Compute loss function for optimization
+Attributes:
+- seed: Random seed value
+- feature_tol: Feature tolerance threshold
+- dev_tol: Deviation tolerance threshold
+- multiple_dev_policy: Multiple match handling policy
+- opt_params: Optimized parameters (set after fitting)
+- n_train: Number of training samples (set after fitting)
 
-DFT.fit() Method
-fit(self, X: np.ndarray, y: np.ndarray) -> self
+Methods
 
-Parameters:
-- X: Input features array (n_samples, 10)
-- y: Target values array (n_samples,)
-
-Returns: self (fitted model)
-
-DFT.fit() Implementation Details
-- Uses Powell optimization method
-- Optimizes 5 global parameters (p1-p5)
-- Optimizes alpha parameters for each training sample
-- Sets bounds: p1-p5 unbounded, alpha in [0, 1]
-- Maximum iterations: 5000, maximum function calls: 10000
-
-DFT.predict() Method
-predict(self, X, dev_train=None, alpha_strategy='enhanced_dev_based') -> np.ndarray
+fit(self, X, y)
+Train the DFT model on provided data.
 
 Parameters:
-- X: New input data (n_samples, 10)
-- dev_train: Training deviation angles (optional)
-- alpha_strategy: Alpha assignment strategy (must be 'enhanced_dev_based')
+- X (np.ndarray): Input features array with shape (n_samples, 10)
+- y (np.ndarray): Target values array with shape (n_samples,)
 
-Returns: Predicted values array (n_samples,)
+Returns:
+- self: Fitted model instance
 
-DFT.predict() Alpha Assignment Strategy
-Three strategies based on well deviation angle:
-
-1. Dev < 10°: Regular deviation-based matching
-   - Find samples within dev_tol
-   - Apply multiple_dev_policy if multiple matches
-
-2. 10° ≤ Dev < 20°: Minimum alpha strategy
-   - Find samples within dev_tol
-   - Use minimum alpha among matches
-
-3. Dev ≥ 20°: Full-feature matching
-   - Compute Euclidean distance to all training samples
-   - Use closest sample's alpha if distance < feature_tol
-   - Otherwise use mean training alpha
-
-DFT._eq() Method - Physics Equation
-_eq(self, params, X) -> np.ndarray
-
-Implements the core physics equation:
-Qcr = p1 * sqrt(|term1 * alpha + (1-alpha) * term2| * (1/z) * (P/T))
-
-Where:
-- term1: Film reversal effects
-- term2: Droplet effects
-- alpha: Balance parameter (0-1)
-
-Physics Equation Components
-term1 = (2 * g * Dia * (1 - 3*(Dia/h_cr) + 3*(Dia/h_cr)²) * 
-         (ρ_l - ρ_g) * cos(Dev) / (f * ρ_g)) * p4
-
-term2 = |sin(p5 * Dev)|^p3 * ((ρ_l - ρ_g)^p2 / ρ_g²)
-
-Parameters p1-p5 are global optimization parameters.
-
-ChiefBldr Class - Data Management
-Class: utils.ChiefBldr
-Purpose: Handles dataset splitting, preprocessing, 
-model training, and evaluation.
-
-ChiefBldr Constructor
-__init__(self, path: str, seed: int=42, drop_cols=None, 
-         includ_cols=None, test_size: float=0.20, scale: bool=False)
-
-Parameters:
-- path: Path to dataset file (str)
-- seed: Random seed (int)
-- drop_cols: Columns to exclude (List[str] or None)
-- includ_cols: Columns to include (List[str] or None)
-- test_size: Fraction for test set (float)
-- scale: Whether to scale features (bool)
-
-ChiefBldr Attributes
-After initialization, the following attributes are available:
-- X: Full feature matrix (n_samples, n_features)
-- y: Target values (n_samples,)
-- X_train, X_test: Split training and test features
-- y_train, y_test: Split training and test targets
-- feature_names: List of feature column names
-
-ChiefBldr.evolv_model() Method
-evolv_model(self, build_model: Callable, hparam_grid: Dict, 
-            k_folds: int=5) -> Any
-
-Parameters:
-- build_model: Function that creates model from hyperparameters
-- hparam_grid: Dictionary of hyperparameter lists to try
-- k_folds: Number of cross-validation folds (int)
-
-Returns: Best trained model
-
-ChiefBldr.evolv_model() Implementation
-- Performs grid search over hyperparameter combinations
-- Uses k-fold cross-validation for each combination
-- Selects best model based on validation performance
-- Stores training and test predictions
-- Computes performance metrics (MSE, R²)
-
-ChiefBldr Performance Metrics
-After training, the following metrics are available:
-- loss: Mean squared error on training data
-- r2_score: R-squared correlation coefficient
-- y_train_pred: Training predictions
-- y_test_pred: Test predictions
-
-QLatticeWrapper Class - Symbolic Regression
-Class: utils.QLatticeWrapper
-Purpose: Provides interface to Feyn QLattice
-for automated symbolic regression.
-
-QLatticeWrapper Constructor
-__init__(self, feature_tags: List, output_tag: int="Qcr", 
-         seed: int=42, max_complexity: int=10, 
-         n_epochs: int=10, criterion: str="bic")
-
-Parameters:
-- feature_tags: List of feature names (List[str])
-- output_tag: Target variable name (str)
-- seed: Random seed (int)
-- max_complexity: Maximum model complexity (int)
-- n_epochs: Number of training epochs (int)
-- criterion: Model selection criterion (str)
-
-QLatticeWrapper Methods
-Methods:
-- fit(X, y): Train the QLattice model
-- predict(X): Make predictions
-- express(): Get symbolic expression
-
-QLatticeWrapper.fit() Method
-fit(self, X: np.ndarray, y: np.ndarray) -> self
-
-Parameters:
-- X: Input features array (n_samples, n_features)
-- y: Target values array (n_samples,)
-
-Returns: self (fitted model)
-
-QLatticeWrapper.predict() Method
-predict(self, X: np.ndarray) -> np.ndarray
-
-Parameters:
-- X: Input features array (n_samples, n_features)
-
-Returns: Predicted values array (n_samples,)
-
-QLatticeWrapper.express() Method
-express(self) -> sympy.Expr
-
-Returns: Symbolic expression of the trained model
-in SymPy format for mathematical analysis.
-
-Data Format Requirements
-Input CSV must contain exactly these columns:
+Features (in order):
 1. Dia: Well diameter (meters)
 2. Dev(deg): Well deviation angle (degrees)
 3. Area (m2): Cross-sectional area (square meters)
@@ -199,84 +68,297 @@ Input CSV must contain exactly these columns:
 9. friction_factor: Friction factor (dimensionless)
 10. critical_film_thickness: Critical film thickness (meters)
 
-Data Preprocessing
-ChiefBldr automatically:
-- Loads CSV data using pandas
-- Splits into training and test sets
-- Optionally scales features (if scale=True)
-- Validates column names
-- Handles missing values
+Implementation Details:
+- Uses Powell optimization method from scipy.optimize
+- Optimizes 5 global parameters (p1-p5) plus alpha values for each training sample
+- Bounds: p1-p5 unbounded, alpha in [0, 1]
+- Maximum iterations: 5000, maximum function calls: 10000
 
-Model Training Workflow
-1. Data Loading: ChiefBldr loads and preprocesses data
-2. Model Definition: Define DFT model with parameters
-3. Hyperparameter Grid: Define search space
-4. Cross-Validation: k-fold CV for each combination
-5. Model Selection: Best model based on validation performance
-6. Final Training: Train best model on full training set
+predict(self, X, dev_train=None, alpha_strategy='enhanced_dev_based')
+Make predictions on new data.
 
-Hyperparameter Optimization
-Supported hyperparameters:
-- dev_tol: [1e-5, 1e-4, 1e-3, 1e-2, 1e-1]
-- feature_tol: [0.1, 0.5, 1.0, 2.0, 5.0, 10.0]
-- multiple_dev_policy: ["max", "min", "mean", "median"]
+Parameters:
+- X (np.ndarray): New input data with shape (n_samples, 10)
+- dev_train (np.ndarray, optional): Training deviation angles for alpha assignment
+- alpha_strategy (str): Alpha assignment strategy. Must be 'enhanced_dev_based'
 
-Performance Metrics
-Available metrics:
-- Mean Squared Error (MSE): Average squared prediction error
-- R-squared (R²): Proportion of variance explained
-- Cross-validation scores: Performance across folds
-- Training vs Test performance: Overfitting detection
+Returns:
+- np.ndarray: Predicted values with shape (n_samples,)
 
-Model Persistence
-Models can be saved and loaded using:
-- pickle: Standard Python serialization
-- joblib: Alternative for large models
-- JSON: For model parameters only
-- HDF5: For large datasets and models
+Alpha Assignment Strategy:
+The method uses a sophisticated three-tier strategy based on well deviation angle:
+
+1. Dev < 10°: Regular deviation-based matching
+   - Find training samples within dev_tol
+   - Apply multiple_dev_policy if multiple matches found
+   - Use mean training alpha if no matches
+
+2. 10° ≤ Dev < 20°: Minimum alpha strategy
+   - Find training samples within dev_tol
+   - Use minimum alpha among matches
+   - Use mean training alpha if no matches
+
+3. Dev ≥ 20°: Full-feature matching
+   - Compute Euclidean distance to all training samples
+   - Use closest sample's alpha if distance < feature_tol
+   - Use mean training alpha otherwise
+
+_eq(self, params, X)
+Compute predicted values using the physics equation.
+
+Parameters:
+- params (np.ndarray): Model parameters (5 global + alpha values)
+- X (np.ndarray): Input features with shape (n_samples, 10)
+
+Returns:
+- np.ndarray: Predicted values with shape (n_samples,)
+
+Physics Equation:
+Qcr = p1 × √(|term1 × α + (1-α) × term2| × (1/z) × (P/T))
+
+Where:
+- term1 = (2 × g × Dia × (1 - 3×(Dia/h_cr) + 3×(Dia/h_cr)²) × (ρ_l - ρ_g) × cos(Dev) / (f × ρ_g)) × p4
+- term2 = |sin(p5 × Dev)|^p3 × ((ρ_l - ρ_g)^p2 / ρ_g²)
+
+_loss(self, params)
+Compute loss function for optimization.
+
+Parameters:
+- params (np.ndarray): Model parameters
+
+Returns:
+- float: Mean squared error loss
+
+ChiefBldr Class - Data Management
+The ChiefBldr class handles dataset loading, preprocessing, model training, and evaluation.
+
+Class Definition
+class ChiefBldr:
+    """
+    Data management and model training utility class.
+    
+    This class provides comprehensive functionality for loading datasets,
+    splitting data, training models, and evaluating performance.
+    """
+
+Constructor
+__init__(self, path, seed=42, drop_cols=None, includ_cols=None, test_size=0.20, scale=False)
+
+Parameters:
+- path (str): Path to dataset file (CSV format)
+- seed (int): Random seed for reproducibility. Default: 42
+- drop_cols (List[str], optional): Columns to exclude from analysis
+- includ_cols (List[str], optional): Columns to include in analysis
+- test_size (float): Fraction of data for test set. Default: 0.20
+- scale (bool): Whether to scale features. Default: False
+
+Attributes (set after initialization):
+- X (np.ndarray): Full feature matrix with shape (n_samples, n_features)
+- y (np.ndarray): Target values with shape (n_samples,)
+- X_train (np.ndarray): Training features
+- X_test (np.ndarray): Test features
+- y_train (np.ndarray): Training targets
+- y_test (np.ndarray): Test targets
+- feature_names (List[str]): List of feature column names
+- scaler (StandardScaler): Fitted scaler (if scale=True)
+
+Methods
+
+evolv_model(self, build_model, hparam_grid, k_folds=5)
+Train model with hyperparameter optimization.
+
+Parameters:
+- build_model (Callable): Function that creates model from hyperparameters
+- hparam_grid (Dict): Dictionary of hyperparameter lists to try
+- k_folds (int): Number of cross-validation folds. Default: 5
+
+Returns:
+- Any: Best trained model
+
+Implementation Details:
+- Performs grid search over all hyperparameter combinations
+- Uses k-fold cross-validation for each combination
+- Selects best model based on validation performance
+- Stores training and test predictions
+- Computes performance metrics (MSE, R²)
+
+Performance Metrics (set after training):
+- loss (float): Mean squared error on training data
+- r2_score (float): R-squared correlation coefficient
+- y_train_pred (np.ndarray): Training predictions
+- y_test_pred (np.ndarray): Test predictions
+
+QLatticeWrapper Class - Symbolic Regression
+The QLatticeWrapper class provides interface to Feyn QLattice for automated symbolic regression.
+
+Class Definition
+class QLatticeWrapper:
+    """
+    Wrapper class for Feyn QLattice symbolic regression.
+    
+    This class provides a scikit-learn compatible interface to QLattice,
+    enabling automated discovery of mathematical expressions from data.
+    """
+
+Constructor
+__init__(self, feature_tags, output_tag="Qcr", seed=42, max_complexity=10, n_epochs=10, criterion="bic")
+
+Parameters:
+- feature_tags (List[str]): List of feature names
+- output_tag (str): Target variable name. Default: "Qcr"
+- seed (int): Random seed for reproducibility. Default: 42
+- max_complexity (int): Maximum model complexity. Default: 10
+- n_epochs (int): Number of training epochs. Default: 10
+- criterion (str): Model selection criterion. Options: "bic", "aic", "r2". Default: "bic"
+
+Attributes:
+- seed: Random seed value
+- feature_tags: List of feature names
+- output_tag: Target variable name
+- max_complexity: Maximum model complexity
+- n_epochs: Number of training epochs
+- criterion: Model selection criterion
+- ql: QLattice connection object
+- opt_model: Optimized model (set after fitting)
+- y_pred: Predictions (set after fitting)
+
+Methods
+
+fit(self, X, y)
+Train the QLattice model.
+
+Parameters:
+- X (np.ndarray): Input features with shape (n_samples, n_features)
+- y (np.ndarray): Target values with shape (n_samples,)
+
+Returns:
+- self: Fitted model instance
+
+Implementation Details:
+- Converts NumPy arrays to pandas DataFrames
+- Connects to QLattice service
+- Trains model with specified parameters
+- Selects best model based on criterion
+
+predict(self, X)
+Make predictions on new data.
+
+Parameters:
+- X (np.ndarray): Input features with shape (n_samples, n_features)
+
+Returns:
+- np.ndarray: Predicted values with shape (n_samples,)
+
+express(self)
+Get symbolic expression of the trained model.
+
+Returns:
+- sympy.Expr: Symbolic expression in SymPy format
+
+Data Format Requirements
+Input CSV files must contain exactly these columns:
+
+1. Dia (float): Well diameter in meters
+2. Dev(deg) (float): Well deviation angle in degrees
+3. Area (m2) (float): Cross-sectional area in square meters
+4. z (float): Elevation change in meters
+5. GasDens (float): Gas density in kg/m³
+6. LiquidDens (float): Liquid density in kg/m³
+7. g (m/s2) (float): Gravitational acceleration in m/s²
+8. P/T (float): Pressure/Temperature ratio in Pa/K
+9. friction_factor (float): Friction factor (dimensionless)
+10. critical_film_thickness (float): Critical film thickness in meters
+
+Data Validation
+The ChiefBldr class automatically validates data format and handles common issues:
+
+- Missing value detection and handling
+- Data type validation
+- Column name verification
+- Range checking for physical parameters
 
 Error Handling
-Built-in error handling for:
-- Invalid input data
+The API includes comprehensive error handling for:
+
+- Invalid input data formats
 - Missing required columns
-- Optimization failures
-- Memory issues
-- Import errors
+- Optimization convergence failures
+- Memory allocation issues
+- Network connectivity problems (QLattice)
 
-Memory and Performance
-- Memory usage scales with dataset size
-- Training time scales with hyperparameter grid size
+Performance Considerations
+Memory Usage:
+- Scales linearly with dataset size
+- DFT model: O(n_samples × n_features)
+- ChiefBldr: O(n_samples × n_features)
+- QLattice: O(n_samples × n_features × complexity)
+
+Training Time:
+- DFT model: O(n_samples × n_iterations)
+- ChiefBldr: O(n_combinations × k_folds × n_samples)
+- QLattice: O(n_epochs × complexity × n_samples)
+
+Scalability:
 - Use data sampling for large datasets during development
-- Consider parallel processing for large hyperparameter searches
-
-Scalability Considerations
-- DFT model: Scales linearly with number of samples
-- ChiefBldr: Memory scales with dataset size
-- QLattice: Training time scales with complexity and epochs
-- Cross-validation: Time scales with k_folds
+- Consider parallel processing for hyperparameter optimization
+- Monitor memory usage with large feature spaces
 
 Integration Capabilities
-- Scikit-learn compatible interface
-- Pandas DataFrame support
-- NumPy array compatibility
-- Matplotlib/Seaborn visualization
-- Jupyter notebook integration
+The API is designed for seamless integration with:
+
+- Scikit-learn: Compatible fit/predict interface
+- Pandas: DataFrame input/output support
+- NumPy: Array-based operations
+- Matplotlib/Seaborn: Visualization integration
+- Jupyter: Interactive development support
+
+Type Hints
+All functions include comprehensive type hints for better IDE support and code documentation:
+
+```python
+from typing import Optional, List, Callable, Dict, Any, Union
+import numpy as np
+import pandas as pd
+```
 
 Development and Testing
-- Type hints for all functions
-- Comprehensive docstrings
+The codebase includes:
+
+- Comprehensive docstrings for all functions
+- Type hints for better code clarity
 - Unit test framework support
 - Error message localization
-- Logging capabilities
+- Logging capabilities for debugging
 
 Future API Extensions
-Planned additions:
-- Additional physics models
-- Ensemble methods
-- Real-time prediction
-- API endpoints
-- Cloud deployment support
+Planned additions include:
 
-End of API Reference
-Return to MAIN_DOCUMENTATION.srt
-for overview and other documentation sections
+- Additional physics models (drift-flux, mechanistic)
+- Ensemble methods for improved accuracy
+- Real-time prediction capabilities
+- REST API endpoints for web integration
+- Cloud deployment support
+- GPU acceleration for large datasets
+
+Migration Guide
+For users upgrading from previous versions:
+
+1. Update import statements if module structure changed
+2. Check parameter names for any modifications
+3. Verify data format compatibility
+4. Test with sample data before full deployment
+5. Review performance metrics for any changes
+
+Deprecation Notices
+- No deprecated features in current version
+- Future deprecations will be announced with 6-month notice
+- Migration guides will be provided for all breaking changes
+
+Support and Resources
+- GitHub repository: Primary source for code and issues
+- Documentation: Comprehensive guides and examples
+- Community forums: User discussions and support
+- Issue tracker: Bug reports and feature requests
+- Research papers: Scientific background and validation
+
+This API reference provides complete technical documentation for the DFT Development project. For additional examples and tutorials, refer to the Usage Examples guide and individual Jupyter notebooks.

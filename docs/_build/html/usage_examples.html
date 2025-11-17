@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usage Examples and Tutorials - DFT Documentation</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Usage Examples and Tutorials</h1>
+            <p>Droplet-Film Theory Development Project</p>
+            <nav>
+                <a href="../index.html">Home</a>
+                <a href="documentation.html">Documentation</a>
+                <a href="installation_guide.html">Installation</a>
+                <a href="usage_examples.html">Usage</a>
+                <a href="api_reference.html">API Reference</a>
+                <a href="troubleshooting.html">Troubleshooting</a>
+            </nav>
+        </header>
+        
+        <main>
+            <div class="sidebar">
+                <h3>Contents</h3>
+                <ul>
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#quick-start">Quick Start</a></li>
+                    <li><a href="#data-format">Data Format</a></li>
+                    <li><a href="#running-dft-development">Running DFT Development</a></li>
+                    <li><a href="#troubleshooting">Troubleshooting</a></li>
+                    <li><a href="#examples">Examples</a></li>
+                    <li><a href="#performance">Performance</a></li>
+                    <li><a href="#how-to-guides">How-to Guides</a></li>
+                    <li><a href="#tutorial-scripts">Tutorial Scripts</a></li>
+                </ul>
+            </div>
+            
+            <div class="content">
+<p class="paragraph">Usage Examples and Tutorials Droplet-Film Theory Development Project This comprehensive guide provides practical examples and tutorials for using all machine learning methods available in the DFT Development framework. Each method is demonstrated with complete code examples, function calls, and best practices.</p>
+<h1 id="xgboost-tutorial" class="main-header">XGBoost Tutorial</h1>
+<h3 id="xgboost-implementation-overview" class="subsection">XGBoost Implementation Overview</h3>
+<p class="paragraph">XGBoost (Extreme Gradient Boosting) is a powerful gradient boosting framework that provides excellent performance for regression tasks. In the DFT Development framework, XGBoost is used to predict critical flow rates in gas wells with high accuracy and interpretability.</p>
+<h3 id="basic-xgboost-setup" class="subsection">Basic XGBoost Setup</h3>
+<pre><code>
+<span class="code-line"># Import required modules</span>
+<span class="code-line">import pandas as pd</span>
+<span class="code-line">import numpy as np</span>
+<span class="code-line">from sklearn.model_selection import train_test_split</span>
+<span class="code-line">from sklearn.metrics import mean_squared_error, r2_score</span>
+<span class="code-line">import xgboost as xgb</span>
+<span class="code-line">import matplotlib.pyplot as plt</span>
+<span class="code-line"># Import DFT framework components</span>
+<span class="code-line">from scripts_2.0.utils import ChiefBldr</span>
+<span class="code-line">from scripts_2.0.dft_model import DFT</span>
+</code></pre>
+<h3 id="xgboost-data-preparation" class="subsection">XGBoost Data Preparation</h3>
+<pre><code>
+<span class="code-line"># Load and prepare data using ChiefBldr</span>
+<span class="code-line">data_path = "path/to/your/well_data.csv"</span>
+<span class="code-line">builder = ChiefBldr(</span>
+<span class="code-line">path=data_path,</span>
+<span class="code-line">includ_cols=['Dia', 'Dev(deg)', 'Area (m2)', 'z', 'GasDens',</span>
+<span class="code-line">'LiquidDens', 'g (m/s2)', 'P/T', 'friction_factor',</span>
+<span class="code-line">'critical_film_thickness'],</span>
+<span class="code-line">test_size=0.2,</span>
+<span class="code-line">scale=True  # XGBoost benefits from scaled features</span>
+<span class="code-line">)</span>
+<span class="code-line"># Get training and test data</span>
+<span class="code-line">X_train, X_test, y_train, y_test = builder.get_data()</span>
+</code></pre>
+<h3 id="xgboost-model-training" class="subsection">XGBoost Model Training</h3>
+<pre><code>
+<span class="code-line"># Create and configure XGBoost model</span>
+<span class="code-line">xgb_model = xgb.XGBRegressor(</span>
+<span class="code-line">n_estimators=1000,</span>
+<span class="code-line">max_depth=6,</span>
+<span class="code-line">learning_rate=0.1,</span>
+<span class="code-line">subsample=0.8,</span>
+<span class="code-line">colsample_bytree=0.8,</span>
+<span class="code-line">random_state=42,</span>
+<span class="code-line">early_stopping_rounds=50,</span>
+<span class="code-line">eval_metric='rmse'</span>
+<span class="code-line">)</span>
+<span class="code-line"># Train the model</span>
+<span class="code-line">xgb_model.fit(</span>
+<span class="code-line">X_train, y_train,</span>
+<span class="code-line">eval_set=[(X_test, y_test)],</span>
+<span class="code-line">verbose=False</span>
+<span class="code-line">)</span>
+<span class="code-line"># Make predictions</span>
+<span class="code-line">y_pred = xgb_model.predict(X_test)</span>
+<span class="code-line"># Evaluate performance</span>
+<span class="code-line">mse = mean_squared_error(y_test, y_pred)</span>
+<span class="code-line">r2 = r2_score(y_test, y_pred)</span>
+<span class="code-line">print(f"XGBoost MSE: {mse:.4f}")</span>
+<span class="code-line">print(f"XGBoost R²: {r2:.4f}")</span>
+</code></pre>
+<h3 id="xgboost-hyperparameter-tuning" class="subsection">XGBoost Hyperparameter Tuning</h3>
+<pre><code>
+<span class="code-line">from sklearn.model_selection import GridSearchCV</span>
+<span class="code-line"># Define parameter grid for hyperparameter tuning</span>
+<span class="code-line">param_grid = {</span>
+<span class="code-line">'n_estimators': [500, 1000, 1500],</span>
+<span class="code-line">'max_depth': [4, 6, 8],</span>
+<span class="code-line">'learning_rate': [0.01, 0.1, 0.2],</span>
+<span class="code-line">'subsample': [0.8, 0.9, 1.0]</span>
+<span class="code-line">}</span>
+<span class="code-line"># Perform grid search</span>
+<span class="code-line">grid_search = GridSearchCV(</span>
+<span class="code-line">xgb.XGBRegressor(random_state=42),</span>
+<span class="code-line">param_grid,</span>
+<span class="code-line">cv=5,</span>
+<span class="code-line">scoring='neg_mean_squared_error',</span>
+<span class="code-line">n_jobs=-1</span>
+<span class="code-line">)</span>
+<span class="code-line">grid_search.fit(X_train, y_train)</span>
+<span class="code-line"># Get best parameters</span>
+<span class="code-line">best_params = grid_search.best_params_</span>
+<span class="code-line">print(f"Best XGBoost parameters: {best_params}")</span>
+<span class="code-line"># Train final model with best parameters</span>
+<span class="code-line">best_xgb_model = grid_search.best_estimator_</span>
+<span class="code-line">y_pred_best = best_xgb_model.predict(X_test)</span>
+</code></pre>
+<h3 id="xgboost-feature-importance-analysis" class="subsection">XGBoost Feature Importance Analysis</h3>
+<pre><code>
+<span class="code-line"># Get feature importance</span>
+<span class="code-line">feature_importance = best_xgb_model.feature_importance_</span>
+<span class="code-line">feature_names = builder.get_feature_names()</span>
+<span class="code-line"># Create feature importance plot</span>
+<span class="code-line">plt.figure(figsize=(10, 6))</span>
+<span class="code-line">plt.barh(feature_names, feature_importance)</span>
+<span class="code-line">plt.xlabel('Feature Importance')</span>
+<span class="code-line">plt.title('XGBoost Feature Importance')</span>
+<span class="code-line">plt.tight_layout()</span>
+<span class="code-line">plt.show()</span>
+<span class="code-line"># Print feature importance</span>
+<span class="code-line">for name, importance in zip(feature_names, feature_importance):</span>
+<span class="code-line">print(f"{name}: {importance:.4f}")</span>
+</code></pre>
+<h1 id="pysindy-tutorial" class="main-header">PySINDy Tutorial</h1>
+<h3 id="pysindy-implementation-overview" class="subsection">PySINDy Implementation Overview</h3>
+<p class="paragraph">PySINDy (Python Sparse Identification of Nonlinear Dynamics) discovers governing equations from data using sparse regression. In the DFT context, PySINDy can identify the underlying physics equations that govern liquid loading in gas wells.</p>
+<h3 id="pysindy-setup-and-installation" class="subsection">PySINDy Setup and Installation</h3>
+<pre><code>
+<span class="code-line"># Install PySINDy if not already installed</span>
+<span class="code-line"># pip install pysindy</span>
+<span class="code-line">import numpy as np</span>
+<span class="code-line">import matplotlib.pyplot as plt</span>
+<span class="code-line">from sklearn.preprocessing import StandardScaler</span>
+<span class="code-line">from pysindy import SINDy</span>
+<span class="code-line">from pysindy.optimizers import STLSQ</span>
+<span class="code-line">from pysindy.feature_library import PolynomialFeatures</span>
+</code></pre>
+<h3 id="pysindy-data-preparation" class="subsection">PySINDy Data Preparation</h3>
+<pre><code>
+<span class="code-line"># Prepare data for PySINDy (requires time series or derivative data)</span>
+<span class="code-line"># For DFT, we'll create synthetic time series based on well parameters</span>
+<span class="code-line">def create_synthetic_time_series(data, n_timesteps=100):</span>
+<span class="code-line">"""Create synthetic time series for PySINDy analysis"""</span>
+<span class="code-line">time_series = []</span>
+<span class="code-line">for _, row in data.iterrows():</span>
+<span class="code-line"># Create time series based on well parameters</span>
+<span class="code-line">t = np.linspace(0, 10, n_timesteps)</span>
+<span class="code-line"># Simulate critical flow rate evolution</span>
+<span class="code-line">q_crit = (row['Dia'] * row['GasDens'] * np.sqrt(row['g (m/s2)'] * row['z']) /</span>
+<span class="code-line">(row['friction_factor'] * row['critical_film_thickness']))</span>
+<span class="code-line"># Add some dynamics</span>
+<span class="code-line">q_t = q_crit * (1 + 0.1 * np.sin(t) + 0.05 * np.random.normal(0, 1, n_timesteps))</span>
+<span class="code-line"># Calculate derivatives</span>
+<span class="code-line">dq_dt = np.gradient(q_t, t)</span>
+<span class="code-line">time_series.append({</span>
+<span class="code-line">'time': t,</span>
+<span class="code-line">'q_crit': q_t,</span>
+<span class="code-line">'dq_dt': dq_dt,</span>
+<span class="code-line">'well_params': row</span>
+<span class="code-line">})</span>
+<span class="code-line">return time_series</span>
+<span class="code-line"># Create synthetic time series</span>
+<span class="code-line">time_series_data = create_synthetic_time_series(X_train.head(10))</span>
+</code></pre>
+<h3 id="pysindy-model-training" class="subsection">PySINDy Model Training</h3>
+<pre><code>
+<span class="code-line"># Prepare data for PySINDy</span>
+<span class="code-line">X_sindy = []</span>
+<span class="code-line">X_dot_sindy = []</span>
+<span class="code-line">for ts in time_series_data:</span>
+<span class="code-line"># Use well parameters as features</span>
+<span class="code-line">features = np.array([ts['well_params'][col] for col in X_train.columns])</span>
+<span class="code-line">X_sindy.append(features)</span>
+<span class="code-line"># Use derivative as target</span>
+<span class="code-line">X_dot_sindy.append(ts['dq_dt'].mean())</span>
+<span class="code-line">X_sindy = np.array(X_sindy)</span>
+<span class="code-line">X_dot_sindy = np.array(X_dot_sindy)</span>
+<span class="code-line"># Scale the data</span>
+<span class="code-line">scaler = StandardScaler()</span>
+<span class="code-line">X_sindy_scaled = scaler.fit_transform(X_sindy)</span>
+<span class="code-line"># Create PySINDy model</span>
+<span class="code-line">optimizer = STLSQ(threshold=0.1)</span>
+<span class="code-line">feature_library = PolynomialFeatures(degree=2)</span>
+<span class="code-line">sindy_model = SINDy(</span>
+<span class="code-line">optimizer=optimizer,</span>
+<span class="code-line">feature_library=feature_library,</span>
+<span class="code-line">feature_names=X_train.columns.tolist()</span>
+<span class="code-line">)</span>
+<span class="code-line"># Fit the model</span>
+<span class="code-line">sindy_model.fit(X_sindy_scaled, X_dot_sindy.reshape(-1, 1))</span>
+<span class="code-line"># Print discovered equations</span>
+<span class="code-line">print("PySINDy discovered equations:")</span>
+<span class="code-line">sindy_model.print()</span>
+</code></pre>
+<h3 id="pysindy-model-evaluation" class="subsection">PySINDy Model Evaluation</h3>
+<pre><code>
+<span class="code-line"># Make predictions</span>
+<span class="code-line">X_test_scaled = scaler.transform(X_test)</span>
+<span class="code-line">predictions = sindy_model.predict(X_test_scaled)</span>
+<span class="code-line"># Evaluate performance</span>
+<span class="code-line">mse_sindy = mean_squared_error(y_test, predictions.flatten())</span>
+<span class="code-line">r2_sindy = r2_score(y_test, predictions.flatten())</span>
+<span class="code-line">print(f"PySINDy MSE: {mse_sindy:.4f}")</span>
+<span class="code-line">print(f"PySINDy R²: {r2_sindy:.4f}")</span>
+<span class="code-line"># Plot results</span>
+<span class="code-line">plt.figure(figsize=(12, 5))</span>
+<span class="code-line">plt.subplot(1, 2, 1)</span>
+<span class="code-line">plt.scatter(y_test, predictions.flatten(), alpha=0.6)</span>
+<span class="code-line">plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--')</span>
+<span class="code-line">plt.xlabel('Actual Critical Flow Rate')</span>
+<span class="code-line">plt.ylabel('Predicted Critical Flow Rate')</span>
+<span class="code-line">plt.title('PySINDy Predictions vs Actual')</span>
+<span class="code-line">plt.subplot(1, 2, 2)</span>
+<span class="code-line">plt.plot(y_test.values[:50], label='Actual', alpha=0.7)</span>
+<span class="code-line">plt.plot(predictions.flatten()[:50], label='PySINDy', alpha=0.7)</span>
+<span class="code-line">plt.xlabel('Sample Index')</span>
+<span class="code-line">plt.ylabel('Critical Flow Rate')</span>
+<span class="code-line">plt.title('PySINDy Time Series Prediction')</span>
+<span class="code-line">plt.legend()</span>
+<span class="code-line">plt.tight_layout()</span>
+<span class="code-line">plt.show()</span>
+</code></pre>
+<h1 id="pysr-tutorial" class="main-header">PySR Tutorial</h1>
+<h3 id="pysr-implementation-overview" class="subsection">PySR Implementation Overview</h3>
+<p class="paragraph">PySR (Python Symbolic Regression) uses genetic programming to find symbolic expressions that fit data. It's particularly useful for discovering interpretable mathematical relationships in the DFT domain.</p>
+<h3 id="pysr-setup-and-installation" class="subsection">PySR Setup and Installation</h3>
+<pre><code>
+<span class="code-line"># Install PySR if not already installed</span>
+<span class="code-line"># pip install pysr</span>
+<span class="code-line">import pysr</span>
+<span class="code-line">import numpy as np</span>
+<span class="code-line">from sklearn.preprocessing import StandardScaler</span>
+</code></pre>
+<h3 id="pysr-data-preparation" class="subsection">PySR Data Preparation</h3>
+<pre><code>
+<span class="code-line"># Prepare data for PySR</span>
+<span class="code-line"># PySR works best with normalized data</span>
+<span class="code-line">scaler_pysr = StandardScaler()</span>
+<span class="code-line">X_train_scaled = scaler_pysr.fit_transform(X_train)</span>
+<span class="code-line">X_test_scaled = scaler_pysr.transform(X_test)</span>
+<span class="code-line"># Create feature names for PySR</span>
+<span class="code-line">feature_names = [f"x{i}" for i in range(X_train.shape[1])]</span>
+</code></pre>
+<h3 id="pysr-model-training" class="subsection">PySR Model Training</h3>
+<pre><code>
+<span class="code-line"># Configure PySR</span>
+<span class="code-line">pysr_model = pysr.PySRRegressor(</span>
+<span class="code-line">niterations=100,  # Number of iterations</span>
+<span class="code-line">binary_operators=["+", "-", "*", "/"],</span>
+<span class="code-line">unary_operators=["exp", "log", "abs", "sqrt"],</span>
+<span class="code-line">populations=30,  # Number of populations</span>
+<span class="code-line">ncyclesperiteration=550,  # Number of cycles per iteration</span>
+<span class="code-line">maxsize=20,  # Maximum size of expressions</span>
+<span class="code-line">maxdepth=10,  # Maximum depth of expressions</span>
+<span class="code-line">early_stop_condition=1e-6,  # Early stopping condition</span>
+<span class="code-line">timeout_in_seconds=300,  # Timeout in seconds</span>
+<span class="code-line">random_state=42</span>
+<span class="code-line">)</span>
+<span class="code-line"># Train PySR model</span>
+<span class="code-line">print("Training PySR model...")</span>
+<span class="code-line">pysr_model.fit(X_train_scaled, y_train)</span>
+<span class="code-line"># Print the best equation</span>
+<span class="code-line">print(f"PySR best equation: {pysr_model.get_best()}")</span>
+</code></pre>
+<h3 id="pysr-model-evaluation" class="subsection">PySR Model Evaluation</h3>
+<pre><code>
+<span class="code-line"># Make predictions</span>
+<span class="code-line">y_pred_pysr = pysr_model.predict(X_test_scaled)</span>
+<span class="code-line"># Evaluate performance</span>
+<span class="code-line">mse_pysr = mean_squared_error(y_test, y_pred_pysr)</span>
+<span class="code-line">r2_pysr = r2_score(y_test, y_pred_pysr)</span>
+<span class="code-line">print(f"PySR MSE: {mse_pysr:.4f}")</span>
+<span class="code-line">print(f"PySR R²: {r2_pysr:.4f}")</span>
+<span class="code-line"># Plot results</span>
+<span class="code-line">plt.figure(figsize=(12, 5))</span>
+<span class="code-line">plt.subplot(1, 2, 1)</span>
+<span class="code-line">plt.scatter(y_test, y_pred_pysr, alpha=0.6)</span>
+<span class="code-line">plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--')</span>
+<span class="code-line">plt.xlabel('Actual Critical Flow Rate')</span>
+<span class="code-line">plt.ylabel('Predicted Critical Flow Rate')</span>
+<span class="code-line">plt.title('PySR Predictions vs Actual')</span>
+<span class="code-line">plt.subplot(1, 2, 2)</span>
+<span class="code-line">plt.plot(y_test.values[:50], label='Actual', alpha=0.7)</span>
+<span class="code-line">plt.plot(y_pred_pysr[:50], label='PySR', alpha=0.7)</span>
+<span class="code-line">plt.xlabel('Sample Index')</span>
+<span class="code-line">plt.ylabel('Critical Flow Rate')</span>
+<span class="code-line">plt.title('PySR Time Series Prediction')</span>
+<span class="code-line">plt.legend()</span>
+<span class="code-line">plt.tight_layout()</span>
+<span class="code-line">plt.show()</span>
+</code></pre>
+<h1 id="qlattice-tutorial" class="main-header">QLattice Tutorial</h1>
+<h3 id="qlattice-implementation-overview" class="subsection">QLattice Implementation Overview</h3>
+<p class="paragraph">QLattice is a symbolic regression tool that discovers mathematical expressions using quantum-inspired algorithms. It's particularly effective for finding interpretable models in scientific applications.</p>
+<h3 id="qlattice-setup-and-installation" class="subsection">QLattice Setup and Installation</h3>
+<pre><code>
+<span class="code-line"># Install QLattice if not already installed</span>
+<span class="code-line"># pip install feyn</span>
+<span class="code-line">import feyn</span>
+<span class="code-line">import pandas as pd</span>
+<span class="code-line">import numpy as np</span>
+<span class="code-line">from sklearn.model_selection import train_test_split</span>
+</code></pre>
+<h3 id="qlattice-data-preparation" class="subsection">QLattice Data Preparation</h3>
+<pre><code>
+<span class="code-line"># Prepare data for QLattice</span>
+<span class="code-line"># QLattice works with pandas DataFrames</span>
+<span class="code-line">qlattice_data = pd.DataFrame(X_train, columns=X_train.columns)</span>
+<span class="code-line">qlattice_data['critical_flow_rate'] = y_train</span>
+<span class="code-line"># Split data</span>
+<span class="code-line">train_data, val_data = train_test_split(qlattice_data, test_size=0.2, random_state=42)</span>
+</code></pre>
+<h3 id="qlattice-model-training" class="subsection">QLattice Model Training</h3>
+<pre><code>
+<span class="code-line"># Configure QLattice</span>
+<span class="code-line">qlattice_model = feyn.QLattice(</span>
+<span class="code-line">random_seed=42,</span>
+<span class="code-line">workers=4  # Number of parallel workers</span>
+<span class="code-line">)</span>
+<span class="code-line"># Define the problem</span>
+<span class="code-line">problem = feyn.Problem(</span>
+<span class="code-line">task_type=feyn.TaskType.REGRESSION,</span>
+<span class="code-line">target_column='critical_flow_rate'</span>
+<span class="code-line">)</span>
+<span class="code-line"># Train the model</span>
+<span class="code-line">print("Training QLattice model...")</span>
+<span class="code-line">qlattice_model.fit(</span>
+<span class="code-line">train_data,</span>
+<span class="code-line">problem,</span>
+<span class="code-line">n_epochs=10,</span>
+<span class="code-line">max_complexity=10</span>
+<span class="code-line">)</span>
+<span class="code-line"># Get the best model</span>
+<span class="code-line">best_model = qlattice_model.get_best()</span>
+<span class="code-line">print(f"QLattice best model: {best_model}")</span>
+</code></pre>
+<h3 id="qlattice-model-evaluation" class="subsection">QLattice Model Evaluation</h3>
+<pre><code>
+<span class="code-line"># Make predictions</span>
+<span class="code-line">y_pred_qlattice = best_model.predict(X_test)</span>
+<span class="code-line"># Evaluate performance</span>
+<span class="code-line">mse_qlattice = mean_squared_error(y_test, y_pred_qlattice)</span>
+<span class="code-line">r2_qlattice = r2_score(y_test, y_pred_qlattice)</span>
+<span class="code-line">print(f"QLattice MSE: {mse_qlattice:.4f}")</span>
+<span class="code-line">print(f"QLattice R²: {r2_qlattice:.4f}")</span>
+<span class="code-line"># Plot results</span>
+<span class="code-line">plt.figure(figsize=(12, 5))</span>
+<span class="code-line">plt.subplot(1, 2, 1)</span>
+<span class="code-line">plt.scatter(y_test, y_pred_qlattice, alpha=0.6)</span>
+<span class="code-line">plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--')</span>
+<span class="code-line">plt.xlabel('Actual Critical Flow Rate')</span>
+<span class="code-line">plt.ylabel('Predicted Critical Flow Rate')</span>
+<span class="code-line">plt.title('QLattice Predictions vs Actual')</span>
+<span class="code-line">plt.subplot(1, 2, 2)</span>
+<span class="code-line">plt.plot(y_test.values[:50], label='Actual', alpha=0.7)</span>
+<span class="code-line">plt.plot(y_pred_qlattice[:50], label='QLattice', alpha=0.7)</span>
+<span class="code-line">plt.xlabel('Sample Index')</span>
+<span class="code-line">plt.ylabel('Critical Flow Rate')</span>
+<span class="code-line">plt.title('QLattice Time Series Prediction')</span>
+<span class="code-line">plt.legend()</span>
+<span class="code-line">plt.tight_layout()</span>
+<span class="code-line">plt.show()</span>
+</code></pre>
+<h1 id="ensemble-methods-tutorial" class="main-header">Ensemble Methods Tutorial</h1>
+<h3 id="ensemble-implementation-overview" class="subsection">Ensemble Implementation Overview</h3>
+<p class="paragraph">Ensemble methods combine multiple models to improve prediction accuracy and robustness. In the DFT framework, we can combine physics-based models with machine learning approaches.</p>
+<h3 id="ensemble-model-creation" class="subsection">Ensemble Model Creation</h3>
+<pre><code>
+<span class="code-line">from sklearn.ensemble import VotingRegressor</span>
+<span class="code-line">from sklearn.linear_model import LinearRegression</span>
+<span class="code-line">import numpy as np</span>
+<span class="code-line"># Create ensemble of different models</span>
+<span class="code-line">ensemble_model = VotingRegressor([</span>
+<span class="code-line">('xgb', best_xgb_model),</span>
+<span class="code-line">('linear', LinearRegression()),</span>
+<span class="code-line">('dft', DFT(seed=42, feature_tol=1.0, dev_tol=1e-3))</span>
+<span class="code-line">])</span>
+<span class="code-line"># Train ensemble</span>
+<span class="code-line">ensemble_model.fit(X_train, y_train)</span>
+<span class="code-line"># Make predictions</span>
+<span class="code-line">y_pred_ensemble = ensemble_model.predict(X_test)</span>
+<span class="code-line"># Evaluate performance</span>
+<span class="code-line">mse_ensemble = mean_squared_error(y_test, y_pred_ensemble)</span>
+<span class="code-line">r2_ensemble = r2_score(y_test, y_pred_ensemble)</span>
+<span class="code-line">print(f"Ensemble MSE: {mse_ensemble:.4f}")</span>
+<span class="code-line">print(f"Ensemble R²: {r2_ensemble:.4f}")</span>
+</code></pre>
+<h3 id="model-comparison" class="subsection">Model Comparison</h3>
+<pre><code>
+<span class="code-line"># Compare all models</span>
+<span class="code-line">models = {</span>
+<span class="code-line">'XGBoost': y_pred_best,</span>
+<span class="code-line">'PySINDy': predictions.flatten(),</span>
+<span class="code-line">'PySR': y_pred_pysr,</span>
+<span class="code-line">'QLattice': y_pred_qlattice,</span>
+<span class="code-line">'Ensemble': y_pred_ensemble</span>
+<span class="code-line">}</span>
+<span class="code-line"># Create comparison plot</span>
+<span class="code-line">plt.figure(figsize=(15, 10))</span>
+<span class="code-line">for i, (name, predictions) in enumerate(models.items(), 1):</span>
+<span class="code-line">plt.subplot(2, 3, i)</span>
+<span class="code-line">plt.scatter(y_test, predictions, alpha=0.6)</span>
+<span class="code-line">plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--')</span>
+<span class="code-line">plt.xlabel('Actual Critical Flow Rate')</span>
+<span class="code-line">plt.ylabel('Predicted Critical Flow Rate')</span>
+<span class="code-line">plt.title(f'{name} Predictions vs Actual')</span>
+<span class="code-line"># Calculate and display metrics</span>
+<span class="code-line">mse = mean_squared_error(y_test, predictions)</span>
+<span class="code-line">r2 = r2_score(y_test, predictions)</span>
+<span class="code-line">plt.text(0.05, 0.95, f'MSE: {mse:.4f}\nR²: {r2:.4f}',</span>
+<span class="code-line">transform=plt.gca().transAxes, verticalalignment='top',</span>
+<span class="code-line">bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))</span>
+<span class="code-line">plt.tight_layout()</span>
+<span class="code-line">plt.show()</span>
+</code></pre>
+<h1 id="advanced-usage-examples" class="main-header">Advanced Usage Examples</h1>
+<h3 id="custom-alpha-strategy-implementation" class="subsection">Custom Alpha Strategy Implementation</h3>
+<pre><code>
+<span class="code-line">def custom_alpha_strategy(well_data):</span>
+<span class="code-line">"""Custom alpha strategy based on well deviation angle"""</span>
+<span class="code-line">alpha_values = []</span>
+<span class="code-line">for _, row in well_data.iterrows():</span>
+<span class="code-line">dev_angle = row['Dev(deg)']</span>
+<span class="code-line">if dev_angle < 30:  # Vertical wells</span>
+<span class="code-line">alpha = 0.3</span>
+<span class="code-line">elif dev_angle < 60:  # Inclined wells</span>
+<span class="code-line">alpha = 0.5</span>
+<span class="code-line">else:  # Horizontal wells</span>
+<span class="code-line">alpha = 0.7</span>
+<span class="code-line">alpha_values.append(alpha)</span>
+<span class="code-line">return np.array(alpha_values)</span>
+<span class="code-line"># Use custom alpha strategy</span>
+<span class="code-line">custom_alpha = custom_alpha_strategy(X_train)</span>
+</code></pre>
+<h3 id="production-deployment-example" class="subsection">Production Deployment Example</h3>
+<pre><code>
+<span class="code-line">import joblib</span>
+<span class="code-line">from datetime import datetime</span>
+<span class="code-line"># Save trained models for production use</span>
+<span class="code-line">model_artifacts = {</span>
+<span class="code-line">'xgb_model': best_xgb_model,</span>
+<span class="code-line">'sindy_model': sindy_model,</span>
+<span class="code-line">'pysr_model': pysr_model,</span>
+<span class="code-line">'qlattice_model': best_model,</span>
+<span class="code-line">'ensemble_model': ensemble_model,</span>
+<span class="code-line">'scaler': scaler,</span>
+<span class="code-line">'feature_names': X_train.columns.tolist(),</span>
+<span class="code-line">'training_date': datetime.now().isoformat()</span>
+<span class="code-line">}</span>
+<span class="code-line"># Save to disk</span>
+<span class="code-line">joblib.dump(model_artifacts, 'dft_models.pkl')</span>
+<span class="code-line"># Load models for prediction</span>
+<span class="code-line">loaded_models = joblib.load('dft_models.pkl')</span>
+<span class="code-line"># Make predictions with loaded models</span>
+<span class="code-line">def predict_critical_flow_rate(well_data, model_name='ensemble'):</span>
+<span class="code-line">"""Predict critical flow rate for new well data"""</span>
+<span class="code-line">model = loaded_models[f'{model_name}_model']</span>
+<span class="code-line">scaler = loaded_models['scaler']</span>
+<span class="code-line"># Scale the data</span>
+<span class="code-line">well_data_scaled = scaler.transform(well_data)</span>
+<span class="code-line"># Make prediction</span>
+<span class="code-line">prediction = model.predict(well_data_scaled)</span>
+<span class="code-line">return prediction</span>
+<span class="code-line"># Example usage</span>
+<span class="code-line">new_well_data = X_test.iloc[:1]  # Single well</span>
+<span class="code-line">prediction = predict_critical_flow_rate(new_well_data, 'xgb')</span>
+<span class="code-line">print(f"Predicted critical flow rate: {prediction[0]:.4f}")</span>
+</code></pre>
+<h3 id="batch-processing-example" class="subsection">Batch Processing Example</h3>
+<pre><code>
+<span class="code-line">def batch_predict_critical_flow_rates(well_data_batch, model_name='ensemble'):</span>
+<span class="code-line">"""Process multiple wells in batch"""</span>
+<span class="code-line">predictions = []</span>
+<span class="code-line">for well_data in well_data_batch:</span>
+<span class="code-line">prediction = predict_critical_flow_rate(well_data, model_name)</span>
+<span class="code-line">predictions.append(prediction[0])</span>
+<span class="code-line">return np.array(predictions)</span>
+<span class="code-line"># Process multiple wells</span>
+<span class="code-line">batch_wells = [X_test.iloc[i:i+1] for i in range(10)]</span>
+<span class="code-line">batch_predictions = batch_predict_critical_flow_rates(batch_wells, 'xgb')</span>
+<span class="code-line">print(f"Batch predictions: {batch_predictions}")</span>
+</code></pre>
+<h1 id="performance-optimization" class="main-header">Performance Optimization</h1>
+<h3 id="memory-efficient-processing" class="subsection">Memory-Efficient Processing</h3>
+<pre><code>
+<span class="code-line">def process_large_dataset(data_path, chunk_size=1000):</span>
+<span class="code-line">"""Process large datasets in chunks to manage memory"""</span>
+<span class="code-line">results = []</span>
+<span class="code-line">for chunk in pd.read_csv(data_path, chunksize=chunk_size):</span>
+<span class="code-line"># Process chunk</span>
+<span class="code-line">chunk_predictions = predict_critical_flow_rate(chunk, 'xgb')</span>
+<span class="code-line">results.extend(chunk_predictions)</span>
+<span class="code-line">return np.array(results)</span>
+</code></pre>
+<h3 id="parallel-processing" class="subsection">Parallel Processing</h3>
+<pre><code>
+<span class="code-line">from joblib import Parallel, delayed</span>
+<span class="code-line">def parallel_predict(well_data_list, model_name='xgb', n_jobs=4):</span>
+<span class="code-line">"""Parallel prediction for multiple wells"""</span>
+<span class="code-line">predictions = Parallel(n_jobs=n_jobs)(</span>
+<span class="code-line">delayed(predict_critical_flow_rate)(well_data, model_name)</span>
+<span class="code-line">for well_data in well_data_list</span>
+<span class="code-line">)</span>
+<span class="code-line">return np.array(predictions)</span>
+</code></pre>
+<p class="paragraph">This comprehensive tutorial provides complete examples for using all machine learning methods in the DFT Development framework, including XGBoost, PySINDy, PySR, and QLattice, with practical function calls and real-world usage scenarios.</p>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Generated on 2025-10-16 01:23:27</p>
+            <p>Droplet-Film Theory Development Project</p>
+        </footer>
+    </div>
+</body>
+</html>

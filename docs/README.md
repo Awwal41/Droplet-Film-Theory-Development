@@ -34,10 +34,10 @@ To build the documentation locally:
 pip install -r docs_requirements.txt
 
 # Convert SRT to HTML
-python scripts/convert_srt_to_html.py
+python convert_srt_to_html.py
 
 # Build complete site
-python scripts/build_docs.py
+python build_docs.py
 ```
 
 ## GitHub Pages Setup
@@ -49,15 +49,15 @@ python scripts/build_docs.py
 
 ## Customization
 
-- **Styling**: Edit `scripts/build_docs.py` to modify the CSS
+- **Styling**: Edit `build_docs.py` to modify the CSS
 - **Layout**: Modify the HTML templates in the conversion scripts
 - **Navigation**: Update the navigation structure in the build scripts
 
 ## Adding New Documentation
 
 1. Create a new `.srt` file in the root directory
-2. Add it to the conversion mapping in `scripts/convert_srt_to_html.py`
-3. Update the navigation in `scripts/build_docs.py`
+2. Add it to the conversion mapping in `convert_srt_to_html.py`
+3. Update the navigation in `build_docs.py`
 4. Push your changes - GitHub Actions will handle the rest!
 
 ## Accessing Your Documentation
