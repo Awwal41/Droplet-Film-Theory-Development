@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import sys
 
-from sklearn.metrics import accuracy_score, confusion_matrix, r2_score
+from sklearn.metrics import accuracy_score, confusion_matrix, r2_score, mean_squared_error, mean_absolute_error
 from sklearn.model_selection import train_test_split, StratifiedKFold 
 from sklearn.preprocessing import StandardScaler
 from typing import Optional, List, Callable, Dict, Any, List
@@ -13,6 +13,7 @@ import matplotlib.patches as mpatches
 from pysindy import SINDy
 import feyn
 import pandas as pd
+
         
 class QLatticeWrapper():
     def __init__(
@@ -78,263 +79,287 @@ class QLatticeWrapper():
     
 
 
+
 class Helm:
     """
-    This module handles dataset splititng, k-fold cross validation, hyperparmater tuning, and model testing. 
-
-    Args
-    ____
-    path: str
-        File path for well dataset
-    seed: int
-        Random seed for model trianing 
-    drop_cols: List[str] 
-        List of strings specifying which data columns should be dropped, the rest included 
-    incl_cols: List[str]
-        If len(drop_cols)==0, list of strings specifiying which data columns should be included, the rest dropped 
-    test_size: float 
-        Test set size => Default: 0.20 (20% of dataset) 
+    Handles dataset splitting, scaling, k-fold CV,
+    hyperparameter tuning, regression modeling,
+    and physics-based well-status classification.
     """
+
     def __init__(
-            self, 
-            path: str,
-            seed: int=42,
-            drop_cols: Optional[List[str]]=None,
-            includ_cols: Optional[List[str]]=None,
-            test_size: float=0.20,
-            scale: bool = True
+        self,
+        path: str,
+        seed: int = 42,
+        drop_cols: Optional[List[str]] = None,
+        includ_cols: Optional[List[str]] = None,
+        test_size: float = 0.20,
+        scale: bool = True,
     ):
-        super().__init__()
         self.path = path
         self.seed = seed
         self.scale = scale
 
-        # build pandas data object from the file path 
+        # =========================
+        # LOAD DATA
+        # =========================
         df = pd.read_csv(self.path)
-        
-        if drop_cols is None: 
-            drop_cols=[] 
-            self.X = df[includ_cols] # include only these columns 
-        else: 
-            includ_cols=[]
-            self.X = df.drop(columns=drop_cols) # exclude these colums
-        
-        self.feature_names = self.X.columns.tolist() # store feature namaes
-        self.y = df['Qcr']
-        self.gsflow = df['Gasflowrate']  # additional target for classification metrics
-        self.status_col = df['Test status']
+
+        if drop_cols is None:
+            drop_cols = []
+            self.X = df[includ_cols]
+        else:
+            self.X = df.drop(columns=drop_cols)
+
+        self.feature_names = self.X.columns.tolist()
+
+        self.y = df["Qcr"]
+        self.gsflow = df["Gasflowrate"]
         self.df = df
 
-        # lone hot encode loaded/unloaded/near loaded class labels
-        self.loading = df['Test status'].apply(
-            lambda x: -1 if x == 'Unloaded' else (0 if x == 'Near L.U' else 1)).to_numpy()
-        
-        # perform the train-test split 
+        # Encode loading state
+        self.loading = df["Test status"].apply(
+            lambda x: -1 if x == "Unloaded" else (0 if x == "Near L.U" else 1)
+        ).to_numpy()
+
+        # =========================
+        # TRAIN / TEST SPLIT
+        # =========================
         (
-            self.X_train, 
+            self.X_train,
             self.X_test,
-            self.y_train, 
-            self.y_test, 
-            self.gsflow_train, 
-            self.gsflow_test, 
-            self.loading_train, 
-            self.loading_test, 
+            self.y_train,
+            self.y_test,
+            self.gsflow_train,
+            self.gsflow_test,
+            self.loading_train,
+            self.loading_test,
         ) = train_test_split(
-            self.X, 
-            self.y, 
-            self.gsflow, 
-            self.loading, 
-            test_size=test_size, 
-            random_state=self.seed, 
+            self.X,
+            self.y,
+            self.gsflow,
+            self.loading,
+            test_size=test_size,
+            random_state=self.seed,
             stratify=self.loading,
         )
 
-        # scale features and continuous target (Qcr)
+        # =========================
+        # SCALING
+        # =========================
         if self.scale:
             self.scaler_X = StandardScaler()
             self.scaler_y = StandardScaler()
 
             self.X_train_rdy = self.scaler_X.fit_transform(self.X_train)
             self.X_test_rdy = self.scaler_X.transform(self.X_test)
-            self.X_scaled = self.scaler_X.transform(self.X)
 
-            self.y_train_rdy = self.scaler_y.fit_transform(self.y_train.values.reshape(-1, 1))
-            self.y_test_rdy = self.scaler_y.transform(self.y_test.values.reshape(-1, 1))
-
+            self.y_train_rdy = self.scaler_y.fit_transform(
+                self.y_train.values.reshape(-1, 1)
+            )
+            self.y_test_rdy = self.scaler_y.transform(
+                self.y_test.values.reshape(-1, 1)
+            )
         else:
             self.X_train_rdy = np.array(self.X_train)
             self.X_test_rdy = np.array(self.X_test)
-
             self.y_train_rdy = self.y_train.values
             self.y_test_rdy = self.y_test.values
 
-        # convert to a numpy array and store test data 
+        # Convert to numpy
         self.X_train = np.array(self.X_train)
         self.X_test = np.array(self.X_test)
-
         self.y_train = np.array(self.y_train).flatten()
         self.y_test = np.array(self.y_test).flatten()
-        
         self.loading_train = np.array(self.loading_train)
         self.loading_test = np.array(self.loading_test)
-
         self.gsflow_train = np.array(self.gsflow_train)
         self.gsflow_test = np.array(self.gsflow_test)
-            
-    def evolv_model(
-        self, 
-        build_model: Callable[[Dict[str, Any]], float],
-        hparam_grid: Dict[str, List[Any]],
-        k_folds: int=5,
-    ):
-        """
-        User calls this function to build and train the model, tune hyperparameters, and test the final model performance 
 
-        Args
-        ____
-        build_model: function 
-            Pre-specified function to build the model based on inputted hyperparameters 
-        hparam_grid: Dict 
-            Dictionary of hyperparameters and ranges for grid search 
-        k_folds: int
-            Number of folds in cross validation => Default: 5-fold CV
-        
-        """
-       
-        if k_folds > 0: # perform k-fold cross validation and hyperparametr grid search 
-            self.best_score  = -float("inf") # store the best score for hyperparameter opt 
+    # =====================================================
+    # REGRESSION METRICS
+    # =====================================================
+    def regression_scores(self, y_true: np.ndarray, y_pred: np.ndarray):
+        return {
+            "RMSE": np.sqrt(mean_squared_error(y_true, y_pred)),
+            "MAE": mean_absolute_error(y_true, y_pred),
+            "R2": r2_score(y_true, y_pred),
+        }
+
+    # =====================================================
+    # CLASSIFICATION METRICS
+    # =====================================================
+    def classification_scores(
+        self,
+        y_pred: np.ndarray,
+        gsflow: np.ndarray,
+        loading: np.ndarray,
+        interval: float = 0.01,
+    ):
+        loading_pred = np.where(
+            y_pred > gsflow + interval,
+            1,
+            np.where(y_pred < gsflow - interval, -1, 0),
+        )
+
+        self.acc = accuracy_score(loading, loading_pred)
+        self.cm = confusion_matrix(loading, loading_pred, labels=[-1, 0, 1])
+
+        return self.acc
+
+    # =====================================================
+    # CROSS VALIDATION
+    # =====================================================
+    def _cross_val(self, model):
+        kf = StratifiedKFold(
+            n_splits=self.k_folds, shuffle=True, random_state=42
+        )
+
+        acc_scores = []
+
+        for tr_idx, val_idx in kf.split(self.X_train, self.loading_train):
+            X_tr, X_val = self.X_train[tr_idx], self.X_train[val_idx]
+            y_tr, y_val = self.y_train[tr_idx], self.y_train[val_idx]
+            gs_val = self.gsflow_train[val_idx]
+            load_val = self.loading_train[val_idx]
+
+            if self.scale:
+                sx = StandardScaler()
+                sy = StandardScaler()
+                X_tr = sx.fit_transform(X_tr)
+                X_val = sx.transform(X_val)
+                y_tr_rdy = sy.fit_transform(y_tr.reshape(-1, 1))
+            else:
+                y_tr_rdy = y_tr
+
+            if isinstance(model, SINDy):
+                model.fit(X_tr, x_dot=y_tr_rdy)
+            else:
+                model.fit(X_tr, y_tr_rdy)
+
+            y_val_pred = model.predict(X_val)
+            if self.scale:
+                y_val_pred = sy.inverse_transform(
+                    y_val_pred.reshape(-1, 1)
+                ).flatten()
+
+            acc_scores.append(
+                self.classification_scores(y_val_pred, gs_val, load_val)
+            )
+
+        return float(np.mean(acc_scores)), float(np.std(acc_scores))
+
+    # =====================================================
+    # TRAIN + EVALUATE MODEL
+    # =====================================================
+    def evolv_model(
+        self,
+        build_model: Callable[[Dict[str, Any]], Any],
+        hparam_grid: Dict[str, List[Any]],
+        k_folds: int = 5,
+    ):
+        # =========================
+        # HYPERPARAMETER SEARCH
+        # =========================
+        if k_folds > 0:
+            self.best_score = -np.inf
             self.best_params = None
             self.k_folds = k_folds
-            print("Training model and optimizing hyperparameters via k-fold CV...", file=sys.stderr)
 
-            # grab the keys and corresponding lists
-            keys   = list(hparam_grid.keys()) 
+            print(
+                "Training model and optimizing hyperparameters via k-fold CV...",
+                file=sys.stderr,
+            )
+
+            keys = list(hparam_grid.keys())
             values = [hparam_grid[k] for k in keys]
 
-            # iterate over every combination in hyperparameter set 
-            for combo in itertools.product(*values): 
+            for combo in itertools.product(*values):
                 hparams = dict(zip(keys, combo))
+                model = build_model(hparams=hparams)
+                score, score_std = self._cross_val(model)
 
-                # evaluate model on these params
-                model = build_model(hparams=hparams) # model defined and passed by user
-                self.score, self.score_std = self._cross_val(model=model) # perform k-fold CV for each set of hparams 
-
-                # collect the best set of hyperparameters 
-                if self.score > self.best_score:
-                    self.best_score  = self.score
-                    self.best_score_std    = self.score_std
+                if score > self.best_score:
+                    self.best_score = score
+                    self.best_score_std = score_std
                     self.best_params = hparams
 
-            # retrain the model with the full training set and evalute test set performance 
-            print("Retraining optimized model on full training set", file=sys.stderr)
+            print(
+                "Retraining optimized model on full training set",
+                file=sys.stderr,
+            )
             self.model = build_model(hparams=self.best_params)
         else:
             self.model = build_model(hparams=hparam_grid)
 
-        if isinstance(self.model, SINDy): # PySINDy models require unconventional format
+        # =========================
+        # FINAL TRAINING
+        # =========================
+        if isinstance(self.model, SINDy):
             self.model.fit(self.X_train_rdy, x_dot=self.y_train_rdy)
         else:
             self.model.fit(self.X_train_rdy, self.y_train_rdy)
-        
+
+        # =========================
+        # PREDICTIONS
+        # =========================
         self.y_train_pred = self.model.predict(self.X_train_rdy)
         self.y_test_pred = self.model.predict(self.X_test_rdy)
+
         if self.scale:
-            self.y_train_pred = self.scaler_y.inverse_transform(self.y_train_pred.reshape(-1, 1)).flatten()
-            self.y_test_pred = self.scaler_y.inverse_transform(self.y_test_pred.reshape(-1, 1)).flatten()
-            
-        # print best score hparams from hyperparameter tuning and test set scores
-        print("Best cross-validation score and std =", self.best_score, self.best_score_std, file=sys.stderr)
-        print("Best hyperparameters:", self.best_params, file=sys.stderr)
-        print(f"Test set class score: {self.classification_scores(self.y_test_pred, self.gsflow_test, self.loading_test)}", file=sys.stderr)
+            self.y_train_pred = self.scaler_y.inverse_transform(
+                self.y_train_pred.reshape(-1, 1)
+            ).flatten()
 
-        return self.model 
+            self.y_test_pred = self.scaler_y.inverse_transform(
+                self.y_test_pred.reshape(-1, 1)
+            ).flatten()
 
-    def _cross_val(
-            self, 
-            model: Callable[[Dict[str, Any]], float],
-    ) -> float:
-        
-        """
-        This function performs k-fold cross validation based on the well classification accuracy 
+        # =========================
+        # METRICS
+        # =========================
+        train_reg = self.regression_scores(self.y_train, self.y_train_pred)
+        test_reg = self.regression_scores(self.y_test, self.y_test_pred)
 
-        Args
-        ____
-        model: Callable[[Dict[str, Any]], float],
-            Model to be trained 
-        """
-        # Use StratifiedKFold to preserve class balance in splits
-        kf = StratifiedKFold(n_splits=self.k_folds, shuffle=True, random_state=42)
+        test_class_acc = self.classification_scores(
+            self.y_test_pred,
+            self.gsflow_test,
+            self.loading_test,
+        )
 
-        acc_scores = []
-        for train_idx, val_idx in kf.split(self.X_train, self.loading_train):  # Using validation split from training data
+        # =========================
+        # OUTPUT
+        # =========================
+        print(
+            f"Best CV Classification Accuracy = {self.best_score:.4f} ± {self.best_score_std:.4f}",
+            file=sys.stderr,
+        )
+        print("Best Hyperparameters:", self.best_params, file=sys.stderr)
 
-            # divide into trianing/validation sets
-            X_train_cv, X_val_cv = self.X_train[train_idx], self.X_train[val_idx]
-            y_train_cv, y_val_cv = self.y_train[train_idx], self.y_train[val_idx]
-            gsflow_val_cv = self.gsflow_train[val_idx]
-            loading_val_cv = self.loading_train[val_idx]
-            
-            if self.scale:
-                scaler_X = StandardScaler()
-                X_train_cv_rdy = scaler_X.fit_transform(X_train_cv)
-                X_val_rdy = scaler_X.transform(X_val_cv)
-                
-                scaler_y = StandardScaler()
-                y_train_cv_rdy = scaler_y.fit_transform(y_train_cv.reshape(-1, 1))
-            else:
-                X_train_cv_rdy = X_train_cv
-                X_val_rdy = X_val_cv
-                y_train_cv_rdy = y_train_cv
+        print(
+            "Training Regression Metrics: "
+            f"RMSE={train_reg['RMSE']:.4f}, "
+            f"MAE={train_reg['MAE']:.4f}, "
+            f"R2={train_reg['R2']:.4f}",
+            file=sys.stderr,
+        )
 
-            if isinstance(model, SINDy): # PySINDy models require unconventional format
-                model.fit(X_train_cv_rdy, x_dot=y_train_cv_rdy)
-            else:
-                model.fit(X_train_cv_rdy, y_train_cv_rdy)
+        print(
+            "Test Regression Metrics: "
+            f"RMSE={test_reg['RMSE']:.4f}, "
+            f"MAE={test_reg['MAE']:.4f}, "
+            f"R2={test_reg['R2']:.4f}",
+            file=sys.stderr,
+        )
 
-            # evalaute the performance on the validation set 
-            y_val_pred_cv = model.predict(X_val_rdy)
-            if self.scale:
-                y_val_pred_cv = scaler_y.inverse_transform(y_val_pred_cv.reshape(-1, 1)).flatten()
+        print(
+            f"Test Classification Accuracy = {test_class_acc:.4f}",
+            file=sys.stderr,
+        )
 
-            acc = self.classification_scores(y_pred=y_val_pred_cv, gsflow=gsflow_val_cv, loading=loading_val_cv)
-            acc_scores.append(acc) # compute classification score based on well status 
-            
-        self.acc_cv_scores = acc_scores
-        self.mean_acc = float(np.mean(self.acc_cv_scores))
-        self.std_acc = float(np.std(self.acc_cv_scores))
+        return self.model
 
-        return self.mean_acc, self.std_acc
-    
-    def classification_scores(
-        self, 
-        y_pred: np.ndarray,
-        gsflow: np.ndarray, 
-        loading: np.ndarray, 
-        interval: float=0.01,
-    ):
-        """
-        This functiion converts model regression values to well status classificaitons and computes accuracy 
 
-        Args
-        ____
-        y_pred: np.ndarray 
-            Regressed gas velocities 
-        gsflow: np.ndarray 
-            Gas flow rate from dataset
-        loading: np.ndarray 
-            Well status: Loaded, Unloaded, Near Loader
-        Interval: float 
-            Interval for Near Loaded wells => Default: 0.01
-
-        """
-        loading_pred = np.where(y_pred > gsflow + interval, 1, 
-                        np.where(y_pred < gsflow - interval, -1, 0)) # classificy loading status based on y_pred and gs_flow
-
-        self.acc = accuracy_score(loading, loading_pred) # compute classificaiton accuracy 
-        self.cm = confusion_matrix(loading, loading_pred,  labels=[-1, 0, 1]) # compute confusion matrix 
-
-        return self.acc
-    
     def plot_model_results(
         self, 
         trained_model,
