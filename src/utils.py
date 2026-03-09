@@ -144,6 +144,8 @@ class Helm:
             stratify=self.loading,
         )
 
+        df_test = pd.DataFrame(self.y_test)
+        df_test.to_csv("test_set.csv")
         # =========================
         # SCALING
         # =========================
@@ -210,7 +212,7 @@ class Helm:
     # =====================================================
     # CROSS VALIDATION
     # =====================================================
-    def _cross_val(self, model):
+    def _cross_val(self, model, interval: float = 0.01):
         kf = StratifiedKFold(
             n_splits=self.k_folds, shuffle=True, random_state=42
         )
@@ -244,7 +246,12 @@ class Helm:
                 ).flatten()
 
             acc_scores.append(
-                self.classification_scores(y_val_pred, gs_val, load_val)
+                self.classification_scores(
+                    y_val_pred,
+                    gs_val,
+                    load_val,
+                    interval=interval,
+                )
             )
 
         return float(np.mean(acc_scores)), float(np.std(acc_scores))
@@ -258,12 +265,15 @@ class Helm:
         hparam_grid: Dict[str, List[Any]],
         k_folds: int = 5,
     ):
+        self.best_interval = 0.01
+
         # =========================
         # HYPERPARAMETER SEARCH
         # =========================
         if k_folds > 0:
             self.best_score = -np.inf
             self.best_params = None
+            self.best_search_params = None
             self.k_folds = k_folds
 
             print(
@@ -275,14 +285,21 @@ class Helm:
             values = [hparam_grid[k] for k in keys]
 
             for combo in itertools.product(*values):
-                hparams = dict(zip(keys, combo))
-                model = build_model(hparams=hparams)
-                score, score_std = self._cross_val(model)
+                search_hparams = dict(zip(keys, combo))
+                interval = float(search_hparams.get("interval", 0.01))
+                model_hparams = {
+                    k: v for k, v in search_hparams.items() if k != "interval"
+                }
+
+                model = build_model(hparams=model_hparams)
+                score, score_std = self._cross_val(model, interval=interval)
 
                 if score > self.best_score:
                     self.best_score = score
                     self.best_score_std = score_std
-                    self.best_params = hparams
+                    self.best_params = model_hparams
+                    self.best_search_params = search_hparams
+                    self.best_interval = interval
 
             print(
                 "Retraining optimized model on full training set",
@@ -290,7 +307,20 @@ class Helm:
             )
             self.model = build_model(hparams=self.best_params)
         else:
-            self.model = build_model(hparams=hparam_grid)
+            if isinstance(hparam_grid.get("interval"), (list, tuple, np.ndarray)):
+                interval_values = hparam_grid["interval"]
+                if len(interval_values) != 1:
+                    raise ValueError(
+                        "For k_folds=0, provide a single interval value."
+                    )
+                self.best_interval = float(interval_values[0])
+            else:
+                self.best_interval = float(hparam_grid.get("interval", 0.01))
+
+            self.best_params = {
+                k: v for k, v in hparam_grid.items() if k != "interval"
+            }
+            self.model = build_model(hparams=self.best_params)
 
         # =========================
         # FINAL TRAINING
@@ -325,16 +355,28 @@ class Helm:
             self.y_test_pred,
             self.gsflow_test,
             self.loading_test,
+            interval=self.best_interval,
         )
 
         # =========================
         # OUTPUT
         # =========================
-        print(
-            f"Best CV Classification Accuracy = {self.best_score:.4f} ± {self.best_score_std:.4f}",
-            file=sys.stderr,
-        )
-        print("Best Hyperparameters:", self.best_params, file=sys.stderr)
+        if k_folds > 0:
+            print(
+                f"Best CV Classification Accuracy = {self.best_score:.4f} ± {self.best_score_std:.4f}",
+                file=sys.stderr,
+            )
+            print(
+                "Best Hyperparameters:",
+                self.best_search_params,
+                file=sys.stderr,
+            )
+        else:
+            print(
+                "Hyperparameters:",
+                {**self.best_params, "interval": self.best_interval},
+                file=sys.stderr,
+            )
 
         print(
             "Training Regression Metrics: "
@@ -460,4 +502,3 @@ class Helm:
                 output_file=output_file
             )
     
-
