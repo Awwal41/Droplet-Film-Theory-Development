@@ -49,6 +49,16 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_examples.html">Usage Examples and Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#dft-model-tutorial">DFT Model Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#dft-implementation-overview">DFT Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#basic-dft-setup">Basic DFT Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#dft-data-preparation">DFT Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#dft-model-training">DFT Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#making-predictions-with-dft">Making Predictions with DFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#evaluating-dft-performance">Evaluating DFT Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#understanding-dft-output-optional">Understanding DFT Output (Optional)</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="usage_examples.html#xgboost-tutorial">XGBoost Tutorial</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-implementation-overview">XGBoost Implementation Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="usage_examples.html#basic-xgboost-setup">Basic XGBoost Setup</a></li>
@@ -111,7 +121,7 @@
 <li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-loss">Methods — _loss</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="api_reference.html#chiefbldr-class-data-management">ChiefBldr Class — Data Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#helm-class-data-management">Helm Class — Data Management</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api_reference.html#id1">Class definition</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api_reference.html#id2">Constructor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-evolv-model">Methods — evolv_model</a></li>
@@ -221,14 +231,14 @@ python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;i
 </pre></div>
 </div>
 <p>Step 2: Test Project-Specific Imports</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from scripts_2.0.dft_model import DFT; print(&#39;DFT import successful&#39;)&quot;</span>
-python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from scripts_2.0.utils import ChiefBldr; print(&#39;ChiefBldr import successful&#39;)&quot;</span>
-python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from scripts_2.0.utils import QLatticeWrapper; print(&#39;QLatticeWrapper import successful&#39;)&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from src.dfm_src import DFT; print(&#39;DFT import successful&#39;)&quot;</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from models.utils import Helm; print(&#39;Helm import successful&#39;)&quot;</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from models.utils import QLatticeWrapper; print(&#39;QLatticeWrapper import successful&#39;)&quot;</span>
 </pre></div>
 </div>
 <p>Step 3: Run Basic Functionality Test</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">scripts_2.</span><span class="mf">0.</span><span class="n">dft_model</span> <span class="kn">import</span><span class="w"> </span><span class="nn">DFT</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src.dfm_src</span><span class="w"> </span><span class="kn">import</span> <span class="n">DFT</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">DFT</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
@@ -244,7 +254,7 @@ pip install jupyter notebook ipywidgets</p>
 <p>Step 2: Launch Jupyter
 jupyter notebook</p>
 <p>Step 3: Navigate to Project
-Open the scripts_2.0 directory and explore the available notebooks:
+Open the project root (or <code class="docutils literal notranslate"><span class="pre">models/</span></code>) and explore the available notebooks:
 - DFT-PISR.ipynb: Main physics-informed implementation
 - xgboost.ipynb: Gradient boosting approach
 - sindy.ipynb: Symbolic regression analysis
@@ -323,9 +333,9 @@ Solution: Check network and credentials
 <p>Development Environment Setup</p>
 <p>Code quality and testing:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>black<span class="w"> </span>flake8<span class="w"> </span>pytest<span class="w"> </span>mypy
-black<span class="w"> </span>scripts_2.0/*.py
-flake8<span class="w"> </span>scripts_2.0/*.py
-mypy<span class="w"> </span>scripts_2.0/*.py
+black<span class="w"> </span>src/*.py<span class="w"> </span>models/*.py
+flake8<span class="w"> </span>src/*.py<span class="w"> </span>models/*.py
+mypy<span class="w"> </span>src/*.py<span class="w"> </span>models/*.py
 pytest<span class="w"> </span>tests/
 </pre></div>
 </div>

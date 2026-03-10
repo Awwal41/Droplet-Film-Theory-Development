@@ -126,41 +126,36 @@ Methods — _loss
 
 Compute loss function for optimization. **Returns:** float (MSE).
 
-ChiefBldr Class — Data Management
----------------------------------
-The ChiefBldr class handles dataset loading, preprocessing, model training, and evaluation.
+Helm Class — Data Management
+-----------------------------
+The **Helm** class (in ``models.utils``) handles dataset loading, train/test splitting, scaling, and model training/evaluation. The CSV must include the feature columns, plus **Qcr** (target), **Gasflowrate**, and **Test status**.
 
 Class definition
 ~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
-   class ChiefBldr:
-       """
-       Data management and model training utility class.
-       Provides functionality for loading datasets, splitting data,
-       training models, and evaluating performance.
-       """
+   from models.utils import Helm
 
 Constructor
 ~~~~~~~~~~~
 
 .. code-block:: python
 
-   __init__(self, path, seed=42, drop_cols=None, includ_cols=None, test_size=0.20, scale=False)
+   __init__(self, path, seed=42, drop_cols=None, includ_cols=None, test_size=0.20, scale=True)
 
-**Parameters:** path (str), seed (int), drop_cols, includ_cols (lists), test_size (float, default 0.20), scale (bool, default False).
+**Parameters:** path (str), seed (int), drop_cols, includ_cols (lists), test_size (float, default 0.20), scale (bool, default True).
 
-**Attributes (set after initialization):** X, y, X_train, X_test, y_train, y_test, feature_names, scaler (if scale=True).
+**Attributes (set after initialization):** X_train, X_test, y_train, y_test (numpy arrays). If scale=True, use X_train_rdy, X_test_rdy (and optionally y_train_rdy, y_test_rdy) for scaled data. Also: feature_names, scaler_X, scaler_y (when scale=True).
 
 Methods — evolv_model
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
    evolv_model(self, build_model, hparam_grid, k_folds=5)
 
-Train model with hyperparameter optimization. **Returns:** best trained model. Performs grid search and k-fold cross-validation; stores predictions and metrics (MSE, R²).
+Train model with hyperparameter optimization. **Returns:** best trained model. Performs grid search and k-fold cross-validation; stores predictions and metrics.
 
 QLatticeWrapper Class — Symbolic Regression
 -------------------------------------------
@@ -179,11 +174,11 @@ Constructor
 
 Data Format Requirements
 ------------------------
-Input CSV must contain exactly: Dia, Dev(deg), Area (m2), z, GasDens, LiquidDens, g (m/s2), P/T, friction_factor, critical_film_thickness (types and units as in Installation Guide).
+Input CSV must contain the 10 features (Dia, Dev(deg), Area (m2), z, GasDens, LiquidDens, g (m/s2), P/T, friction_factor, critical_film_thickness) plus **Qcr**, **Gasflowrate**, and **Test status** for Helm.
 
 Data Validation, Error Handling, Performance
 ---------------------------------------------
-ChiefBldr validates format, handles missing values and types. The API includes error handling for invalid inputs, missing columns, optimization failures, and (for QLattice) network issues. Memory and training time scale as documented in the guide.
+Helm loads CSV and splits by stratify=loading (Test status). The API includes error handling for invalid inputs, missing columns, optimization failures, and (for QLattice) network issues.
 
 Support and Resources
 ---------------------

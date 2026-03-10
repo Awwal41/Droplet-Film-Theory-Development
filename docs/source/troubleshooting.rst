@@ -15,7 +15,7 @@ Issue 1: Python Import Errors
 Problem: ModuleNotFoundError when importing project modules
 
 Symptoms:
-- "ModuleNotFoundError: No module named 'scripts_2.0'"
+- "ModuleNotFoundError: No module named 'src'" or "No module named 'models'"
 - "ImportError: cannot import name 'DFT'"
 - "ModuleNotFoundError: No module named 'feyn'"
 

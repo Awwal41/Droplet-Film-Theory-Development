@@ -48,6 +48,16 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation_guide.html">Installation Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_examples.html">Usage Examples and Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#dft-model-tutorial">DFT Model Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#dft-implementation-overview">DFT Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#basic-dft-setup">Basic DFT Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#dft-data-preparation">DFT Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#dft-model-training">DFT Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#making-predictions-with-dft">Making Predictions with DFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#evaluating-dft-performance">Evaluating DFT Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#understanding-dft-output-optional">Understanding DFT Output (Optional)</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="usage_examples.html#xgboost-tutorial">XGBoost Tutorial</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-implementation-overview">XGBoost Implementation Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="usage_examples.html#basic-xgboost-setup">Basic XGBoost Setup</a></li>
@@ -110,7 +120,7 @@
 <li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-loss">Methods — _loss</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="api_reference.html#chiefbldr-class-data-management">ChiefBldr Class — Data Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#helm-class-data-management">Helm Class — Data Management</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api_reference.html#id1">Class definition</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api_reference.html#id2">Constructor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-evolv-model">Methods — evolv_model</a></li>
@@ -163,7 +173,7 @@ This guide addresses the most frequently encountered problems when using the DFT
 <p>Issue 1: Python Import Errors
 Problem: ModuleNotFoundError when importing project modules</p>
 <p>Symptoms:
-- “ModuleNotFoundError: No module named ‘scripts_2.0’”
+- “ModuleNotFoundError: No module named ‘src’” or “No module named ‘models’”
 - “ImportError: cannot import name ‘DFT’”
 - “ModuleNotFoundError: No module named ‘feyn’”</p>
 <p>Root Causes:

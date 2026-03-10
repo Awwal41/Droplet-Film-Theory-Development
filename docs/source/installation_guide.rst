@@ -90,16 +90,16 @@ Step 2: Test Project-Specific Imports
 
 .. code-block:: bash
 
-   python -c "from scripts_2.0.dft_model import DFT; print('DFT import successful')"
-   python -c "from scripts_2.0.utils import ChiefBldr; print('ChiefBldr import successful')"
-   python -c "from scripts_2.0.utils import QLatticeWrapper; print('QLatticeWrapper import successful')"
+   python -c "from src.dfm_src import DFT; print('DFT import successful')"
+   python -c "from models.utils import Helm; print('Helm import successful')"
+   python -c "from models.utils import QLatticeWrapper; print('QLatticeWrapper import successful')"
 
 Step 3: Run Basic Functionality Test
 
 .. code-block:: python
 
    import numpy as np
-   from scripts_2.0.dft_model import DFT
+   from src.dfm_src import DFT
    X = np.random.rand(10, 10)
    y = np.random.rand(10)
    model = DFT(seed=42)
@@ -117,7 +117,7 @@ Step 2: Launch Jupyter
 jupyter notebook
 
 Step 3: Navigate to Project
-Open the scripts_2.0 directory and explore the available notebooks:
+Open the project root (or ``models/``) and explore the available notebooks:
 - DFT-PISR.ipynb: Main physics-informed implementation
 - xgboost.ipynb: Gradient boosting approach
 - sindy.ipynb: Symbolic regression analysis
@@ -218,9 +218,9 @@ Code quality and testing:
 .. code-block:: bash
 
    pip install black flake8 pytest mypy
-   black scripts_2.0/*.py
-   flake8 scripts_2.0/*.py
-   mypy scripts_2.0/*.py
+   black src/*.py models/*.py
+   flake8 src/*.py models/*.py
+   mypy src/*.py models/*.py
    pytest tests/
 
 IDE Configuration (Visual Studio Code): add to ``settings.json``:

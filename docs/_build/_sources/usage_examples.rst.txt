@@ -6,6 +6,115 @@ Droplet-Film Model Development Project
 This comprehensive guide provides practical examples and tutorials for using all machine learning methods available in the DFT Development framework. Each method is demonstrated with complete code examples, function calls, and best practices.
 
 
+DFT Model Tutorial
+==================
+
+
+DFT Implementation Overview
+----------------------------
+
+
+The DFT (Droplet-Film Model) is the core physics-informed model in the framework. It combines fundamental droplet and film flow principles with data-driven optimization to predict critical flow rates in gas wells. The model is interpretable, uses physical parameters, and is a good starting point before trying other ML approaches.
+
+
+Basic DFT Setup
+---------------
+
+
+.. code-block:: python
+
+   # Import required modules
+   import numpy as np
+   from sklearn.metrics import mean_squared_error, r2_score
+   import matplotlib.pyplot as plt
+
+   # Import DFT framework components (from project src and models)
+   from src.dfm_src import DFT
+   from models.utils import Helm
+
+
+DFT Data Preparation
+--------------------
+
+
+Your CSV must include the 10 feature columns below, plus **Qcr** (target), **Gasflowrate**, and **Test status** (used by the data loader for splitting). Load data with **Helm** (same parameter names as in the code):
+
+.. code-block:: python
+
+   # Load and prepare data using Helm
+   data_path = "path/to/your/well_data.csv"
+   builder = Helm(
+       path=data_path,
+       drop_cols=None,
+       includ_cols=['Dia', 'Dev(deg)', 'Area (m2)', 'z', 'GasDens',
+                    'LiquidDens', 'g (m/s2)', 'P/T', 'friction_factor',
+                    'critical_film_thickness'],
+       test_size=0.2,
+       scale=False   # DFT uses unscaled physical features
+   )
+
+   # Access training and test data (Helm stores them as attributes)
+   X_train = builder.X_train
+   X_test = builder.X_test
+   y_train = builder.y_train
+   y_test = builder.y_test
+
+
+DFT Model Training
+------------------
+
+
+.. code-block:: python
+
+   # Create and train the DFT physics model
+   dft_model = DFT(seed=42, feature_tol=1.0, dev_tol=1e-3, multiple_dev_policy="max")
+
+   # Fit the model (optimizes physics parameters and alpha values)
+   dft_model.fit(X_train, y_train)
+
+
+Making Predictions with DFT
+---------------------------
+
+
+.. code-block:: python
+
+   # Predict critical flow rates on test data
+   # The model uses training data internally for alpha assignment
+   y_pred = dft_model.predict(X_test)
+
+
+Evaluating DFT Performance
+--------------------------
+
+
+.. code-block:: python
+
+   # Compute metrics
+   mse = mean_squared_error(y_test, y_pred)
+   r2 = r2_score(y_test, y_pred)
+   print(f"DFT MSE: {mse:.4f}")
+   print(f"DFT R²: {r2:.4f}")
+
+   # Optional: plot predictions vs actual
+   plt.figure(figsize=(6, 5))
+   plt.scatter(y_test, y_pred, alpha=0.6)
+   plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', label='Perfect')
+   plt.xlabel('Actual Critical Flow Rate')
+   plt.ylabel('Predicted Critical Flow Rate')
+   plt.title('DFT Model: Predictions vs Actual')
+   plt.legend()
+   plt.tight_layout()
+   plt.show()
+
+
+Understanding DFT Output (Optional)
+-----------------------------------
+
+
+After fitting, the model stores optimized parameters in ``dft_model.opt_params`` (five global parameters plus one alpha per training sample). The physics equation uses these to balance droplet vs film effects. See the API Reference for full details.
+
+
 XGBoost Tutorial
 ================
 
@@ -34,8 +143,8 @@ Basic XGBoost Setup
    import matplotlib.pyplot as plt
    
    # Import DFT framework components
-   from scripts_2.0.utils import ChiefBldr
-   from scripts_2.0.dft_model import DFT
+   from models.utils import Helm
+   from src.dfm_src import DFT
 
 
 
@@ -46,19 +155,19 @@ XGBoost Data Preparation
 
 .. code-block:: python
 
-   # Load and prepare data using ChiefBldr
+   # Load and prepare data using Helm (CSV must include Qcr, Gasflowrate, Test status)
    data_path = "path/to/your/well_data.csv"
-   builder = ChiefBldr(
+   builder = Helm(
        path=data_path,
-       includ_cols=['Dia', 'Dev(deg)', 'Area (m2)', 'z', 'GasDens', 
-                    'LiquidDens', 'g (m/s2)', 'P/T', 'friction_factor', 
+       includ_cols=['Dia', 'Dev(deg)', 'Area (m2)', 'z', 'GasDens',
+                    'LiquidDens', 'g (m/s2)', 'P/T', 'friction_factor',
                     'critical_film_thickness'],
        test_size=0.2,
-       scale=True  # XGBoost benefits from scaled features
+       scale=True   # XGBoost benefits from scaled features
    )
-   
-   # Get training and test data
-   X_train, X_test, y_train, y_test = builder.get_data()
+   # Access data (use _rdy for scaled features when scale=True)
+   X_train, X_test = builder.X_train_rdy, builder.X_test_rdy
+   y_train, y_test = builder.y_train, builder.y_test
 
 
 
@@ -144,9 +253,9 @@ XGBoost Feature Importance Analysis
 
 .. code-block:: python
 
-   # Get feature importance
-   feature_importance = best_xgb_model.feature_importance_
-   feature_names = builder.get_feature_names()
+   # Get feature importance (Helm stores feature_names)
+   feature_importance = best_xgb_model.feature_importances_
+   feature_names = builder.feature_names
    
    # Create feature importance plot
    plt.figure(figsize=(10, 6))

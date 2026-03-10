@@ -49,6 +49,16 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation_guide.html">Installation Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Usage Examples and Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#dft-model-tutorial">DFT Model Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dft-implementation-overview">DFT Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-dft-setup">Basic DFT Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dft-data-preparation">DFT Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dft-model-training">DFT Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#making-predictions-with-dft">Making Predictions with DFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#evaluating-dft-performance">Evaluating DFT Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#understanding-dft-output-optional">Understanding DFT Output (Optional)</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="#xgboost-tutorial">XGBoost Tutorial</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#xgboost-implementation-overview">XGBoost Implementation Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#basic-xgboost-setup">Basic XGBoost Setup</a></li>
@@ -111,7 +121,7 @@
 <li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-loss">Methods — _loss</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="api_reference.html#chiefbldr-class-data-management">ChiefBldr Class — Data Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#helm-class-data-management">Helm Class — Data Management</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api_reference.html#id1">Class definition</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api_reference.html#id2">Constructor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-evolv-model">Methods — evolv_model</a></li>
@@ -158,6 +168,92 @@
 <p>Droplet-Film Model Development Project</p>
 <p>This comprehensive guide provides practical examples and tutorials for using all machine learning methods available in the DFT Development framework. Each method is demonstrated with complete code examples, function calls, and best practices.</p>
 </section>
+<section id="dft-model-tutorial">
+<h1>DFT Model Tutorial<a class="headerlink" href="#dft-model-tutorial" title="Link to this heading"></a></h1>
+<section id="dft-implementation-overview">
+<h2>DFT Implementation Overview<a class="headerlink" href="#dft-implementation-overview" title="Link to this heading"></a></h2>
+<p>The DFT (Droplet-Film Model) is the core physics-informed model in the framework. It combines fundamental droplet and film flow principles with data-driven optimization to predict critical flow rates in gas wells. The model is interpretable, uses physical parameters, and is a good starting point before trying other ML approaches.</p>
+</section>
+<section id="basic-dft-setup">
+<h2>Basic DFT Setup<a class="headerlink" href="#basic-dft-setup" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import required modules</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_squared_error</span><span class="p">,</span> <span class="n">r2_score</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="c1"># Import DFT framework components (from project src and models)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src.dfm_src</span><span class="w"> </span><span class="kn">import</span> <span class="n">DFT</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">models.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">Helm</span>
+</pre></div>
+</div>
+</section>
+<section id="dft-data-preparation">
+<h2>DFT Data Preparation<a class="headerlink" href="#dft-data-preparation" title="Link to this heading"></a></h2>
+<p>Your CSV must include the 10 feature columns below, plus <strong>Qcr</strong> (target), <strong>Gasflowrate</strong>, and <strong>Test status</strong> (used by the data loader for splitting). Load data with <strong>Helm</strong> (same parameter names as in the code):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load and prepare data using Helm</span>
+<span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;path/to/your/well_data.csv&quot;</span>
+<span class="n">builder</span> <span class="o">=</span> <span class="n">Helm</span><span class="p">(</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">data_path</span><span class="p">,</span>
+    <span class="n">drop_cols</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">includ_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dia&#39;</span><span class="p">,</span> <span class="s1">&#39;Dev(deg)&#39;</span><span class="p">,</span> <span class="s1">&#39;Area (m2)&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;GasDens&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;LiquidDens&#39;</span><span class="p">,</span> <span class="s1">&#39;g (m/s2)&#39;</span><span class="p">,</span> <span class="s1">&#39;P/T&#39;</span><span class="p">,</span> <span class="s1">&#39;friction_factor&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;critical_film_thickness&#39;</span><span class="p">],</span>
+    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">scale</span><span class="o">=</span><span class="kc">False</span>   <span class="c1"># DFT uses unscaled physical features</span>
+<span class="p">)</span>
+
+<span class="c1"># Access training and test data (Helm stores them as attributes)</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">X_train</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">X_test</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">y_train</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">y_test</span>
+</pre></div>
+</div>
+</section>
+<section id="dft-model-training">
+<h2>DFT Model Training<a class="headerlink" href="#dft-model-training" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create and train the DFT physics model</span>
+<span class="n">dft_model</span> <span class="o">=</span> <span class="n">DFT</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">feature_tol</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">dev_tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">multiple_dev_policy</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">)</span>
+
+<span class="c1"># Fit the model (optimizes physics parameters and alpha values)</span>
+<span class="n">dft_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="making-predictions-with-dft">
+<h2>Making Predictions with DFT<a class="headerlink" href="#making-predictions-with-dft" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Predict critical flow rates on test data</span>
+<span class="c1"># The model uses training data internally for alpha assignment</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">dft_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="evaluating-dft-performance">
+<h2>Evaluating DFT Performance<a class="headerlink" href="#evaluating-dft-performance" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compute metrics</span>
+<span class="n">mse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">r2</span> <span class="o">=</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;DFT MSE: </span><span class="si">{</span><span class="n">mse</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;DFT R²: </span><span class="si">{</span><span class="n">r2</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Optional: plot predictions vs actual</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">y_test</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">y_test</span><span class="o">.</span><span class="n">max</span><span class="p">()],</span> <span class="p">[</span><span class="n">y_test</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">y_test</span><span class="o">.</span><span class="n">max</span><span class="p">()],</span> <span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Perfect&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Actual Critical Flow Rate&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Predicted Critical Flow Rate&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;DFT Model: Predictions vs Actual&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="understanding-dft-output-optional">
+<h2>Understanding DFT Output (Optional)<a class="headerlink" href="#understanding-dft-output-optional" title="Link to this heading"></a></h2>
+<p>After fitting, the model stores optimized parameters in <code class="docutils literal notranslate"><span class="pre">dft_model.opt_params</span></code> (five global parameters plus one alpha per training sample). The physics equation uses these to balance droplet vs film effects. See the API Reference for full details.</p>
+</section>
+</section>
 <section id="xgboost-tutorial">
 <h1>XGBoost Tutorial<a class="headerlink" href="#xgboost-tutorial" title="Link to this heading"></a></h1>
 <section id="xgboost-implementation-overview">
@@ -175,26 +271,26 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
 <span class="c1"># Import DFT framework components</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">scripts_2.</span><span class="mf">0.</span><span class="n">utils</span> <span class="kn">import</span><span class="w"> </span><span class="nn">ChiefBldr</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">scripts_2.</span><span class="mf">0.</span><span class="n">dft_model</span> <span class="kn">import</span><span class="w"> </span><span class="nn">DFT</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">models.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">Helm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src.dfm_src</span><span class="w"> </span><span class="kn">import</span> <span class="n">DFT</span>
 </pre></div>
 </div>
 </section>
 <section id="xgboost-data-preparation">
 <h2>XGBoost Data Preparation<a class="headerlink" href="#xgboost-data-preparation" title="Link to this heading"></a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load and prepare data using ChiefBldr</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load and prepare data using Helm (CSV must include Qcr, Gasflowrate, Test status)</span>
 <span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;path/to/your/well_data.csv&quot;</span>
-<span class="n">builder</span> <span class="o">=</span> <span class="n">ChiefBldr</span><span class="p">(</span>
+<span class="n">builder</span> <span class="o">=</span> <span class="n">Helm</span><span class="p">(</span>
     <span class="n">path</span><span class="o">=</span><span class="n">data_path</span><span class="p">,</span>
     <span class="n">includ_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dia&#39;</span><span class="p">,</span> <span class="s1">&#39;Dev(deg)&#39;</span><span class="p">,</span> <span class="s1">&#39;Area (m2)&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;GasDens&#39;</span><span class="p">,</span>
                  <span class="s1">&#39;LiquidDens&#39;</span><span class="p">,</span> <span class="s1">&#39;g (m/s2)&#39;</span><span class="p">,</span> <span class="s1">&#39;P/T&#39;</span><span class="p">,</span> <span class="s1">&#39;friction_factor&#39;</span><span class="p">,</span>
                  <span class="s1">&#39;critical_film_thickness&#39;</span><span class="p">],</span>
     <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
-    <span class="n">scale</span><span class="o">=</span><span class="kc">True</span>  <span class="c1"># XGBoost benefits from scaled features</span>
+    <span class="n">scale</span><span class="o">=</span><span class="kc">True</span>   <span class="c1"># XGBoost benefits from scaled features</span>
 <span class="p">)</span>
-
-<span class="c1"># Get training and test data</span>
-<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+<span class="c1"># Access data (use _rdy for scaled features when scale=True)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">X_train_rdy</span><span class="p">,</span> <span class="n">builder</span><span class="o">.</span><span class="n">X_test_rdy</span>
+<span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">y_train</span><span class="p">,</span> <span class="n">builder</span><span class="o">.</span><span class="n">y_test</span>
 </pre></div>
 </div>
 </section>
@@ -265,9 +361,9 @@
 </section>
 <section id="xgboost-feature-importance-analysis">
 <h2>XGBoost Feature Importance Analysis<a class="headerlink" href="#xgboost-feature-importance-analysis" title="Link to this heading"></a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get feature importance</span>
-<span class="n">feature_importance</span> <span class="o">=</span> <span class="n">best_xgb_model</span><span class="o">.</span><span class="n">feature_importance_</span>
-<span class="n">feature_names</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get feature importance (Helm stores feature_names)</span>
+<span class="n">feature_importance</span> <span class="o">=</span> <span class="n">best_xgb_model</span><span class="o">.</span><span class="n">feature_importances_</span>
+<span class="n">feature_names</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">feature_names</span>
 
 <span class="c1"># Create feature importance plot</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
