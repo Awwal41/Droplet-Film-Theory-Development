@@ -60,7 +60,7 @@ def convert_srt_to_html(srt_file, output_dir):
     <div class="container">
         <header>
             <h1>{title}</h1>
-            <p>Droplet-Film Theory Development Project</p>
+            <p>Droplet-Film Model Development Project</p>
             <nav>
                 <a href="../index.html">Home</a>
                 <a href="documentation.html">Documentation</a>
@@ -95,7 +95,7 @@ def convert_srt_to_html(srt_file, output_dir):
         
         <footer>
             <p>Generated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
-            <p>Droplet-Film Theory Development Project</p>
+            <p>Droplet-Film Model Development Project</p>
         </footer>
     </div>
 </body>
@@ -291,14 +291,14 @@ def create_main_index(output_dir):
 <body>
     <div class="container">
         <header>
-            <h1>Droplet-Film Theory Development</h1>
+            <h1>Droplet-Film Model Development</h1>
             <p>Physics-Informed Machine Learning for Gas Well Liquid Loading Prediction</p>
         </header>
         
         <main>
             <div class="content">
                 <h2>Welcome to DFT Documentation</h2>
-                <p>This documentation provides comprehensive information about the Droplet-Film Theory Development project, which implements physics-informed machine learning models for predicting liquid loading in gas wells.</p>
+                <p>This documentation provides comprehensive information about the Droplet-Film Model Development project, which implements physics-informed machine learning models for predicting liquid loading in gas wells.</p>
                 
                 <div class="card-grid">
                     <div class="card">
@@ -339,7 +339,7 @@ def create_main_index(output_dir):
         
         <footer>
             <p>Generated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
-            <p>Droplet-Film Theory Development Project</p>
+            <p>Droplet-Film Model Development Project</p>
         </footer>
     </div>
 </body>

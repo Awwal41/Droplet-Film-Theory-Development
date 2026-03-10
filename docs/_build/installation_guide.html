@@ -47,7 +47,65 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#system-requirements">System Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#minimum">Minimum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recommended">Recommended</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#python-environment-setup">Python Environment Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-install-python">Step 1 — Install Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-create-virtual-environment">Step 2 — Create Virtual Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-3-upgrade-pip">Step 3 — Upgrade pip</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#package-installation">Package Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#method-1-from-repository-recommended">Method 1: From repository (recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#method-2-manual-install">Method 2: Manual install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#method-3-requirements-file">Method 3: Requirements file</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#verification">Verification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-test-basic-imports">Step 1 — Test basic imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-test-project-modules">Step 2 — Test project modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-3-quick-functionality-test">Step 3 — Quick functionality test</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#jupyter-notebooks">Jupyter Notebooks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-install-jupyter">Step 1 — Install Jupyter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-launch-and-open-notebooks">Step 2 — Launch and open notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-preparation">Data Preparation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#required-csv-columns">Required CSV columns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#validate-your-data">Validate your data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#common-installation-issues">Common Installation Issues</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#permission-errors">Permission errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#version-conflicts">Version conflicts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-errors">Memory errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#network-download-failures">Network / download failures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compilation-errors-windows">Compilation errors (Windows)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#qlattice-connection">QLattice connection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#development-setup">Development Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#code-quality-and-tests">Code quality and tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ide-vs-code">IDE (VS Code)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-and-maintenance">Performance and Maintenance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#upgrade-packages">Upgrade packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#optional-intel-mkl">Optional: Intel MKL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#backup-and-cleanup">Backup and cleanup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#uninstall">Uninstall</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-checklist">Installation Checklist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="usage_examples.html">Usage Examples and Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_examples.html#dft-model-tutorial">DFT Model Tutorial</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="usage_examples.html#dft-implementation-overview">DFT Implementation Overview</a></li>
@@ -165,173 +223,234 @@
              
   <section id="installation-guide">
 <h1>Installation Guide<a class="headerlink" href="#installation-guide" title="Link to this heading"></a></h1>
-<p>Droplet-Film Model Development Project
-Complete Setup Instructions</p>
-<p>System Requirements
-Before installing the DFT Development project, ensure your system meets the following requirements:</p>
-<p>Minimum System Requirements
-- Python 3.7 or higher (Python 3.9+ recommended)
-- 8GB RAM (16GB recommended for large datasets)
-- 2GB free disk space
-- Internet connection for package installation
-- Operating System: Windows 10/11, macOS 10.14+, or Ubuntu 18.04+</p>
-<p>Recommended System Configuration
-- Python 3.9 or 3.10
-- 16GB RAM or more
-- 5GB free disk space
-- SSD storage for better performance
-- Multi-core processor for faster training</p>
-<p>Python Environment Setup
-The project requires a properly configured Python environment. We strongly recommend using a virtual environment to avoid conflicts with other projects.</p>
-<p>Step 1: Install Python
-Download and install Python from the official website (python.org):
-- Choose Python 3.9 or 3.10 for best compatibility
-- Ensure “Add Python to PATH” is checked during installation
-- Verify installation by opening a terminal and running: python –version</p>
-<p>Step 2: Create Virtual Environment
-Create a dedicated virtual environment for the project:</p>
+<p>Droplet-Film Model Development Project — Complete Setup Instructions.</p>
+<section id="system-requirements">
+<h2>System Requirements<a class="headerlink" href="#system-requirements" title="Link to this heading"></a></h2>
+<p>Before installing, ensure your system meets the following requirements.</p>
+<section id="minimum">
+<h3>Minimum<a class="headerlink" href="#minimum" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Python 3.7 or higher (3.9+ recommended)</p></li>
+<li><p>8 GB RAM (16 GB recommended for large datasets)</p></li>
+<li><p>2 GB free disk space</p></li>
+<li><p>Internet connection for package installation</p></li>
+<li><p>OS: Windows 10/11, macOS 10.14+, or Ubuntu 18.04+</p></li>
+</ul>
+</section>
+<section id="recommended">
+<h3>Recommended<a class="headerlink" href="#recommended" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Python 3.9 or 3.10</p></li>
+<li><p>16 GB RAM or more</p></li>
+<li><p>5 GB free disk space</p></li>
+<li><p>SSD storage</p></li>
+<li><p>Multi-core processor</p></li>
+</ul>
+</section>
+</section>
+<section id="python-environment-setup">
+<h2>Python Environment Setup<a class="headerlink" href="#python-environment-setup" title="Link to this heading"></a></h2>
+<p>Use a virtual environment to avoid conflicts with other projects.</p>
+<section id="step-1-install-python">
+<h3>Step 1 — Install Python<a class="headerlink" href="#step-1-install-python" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Download from <a class="reference external" href="https://www.python.org/">https://www.python.org/</a></p></li>
+<li><p>Choose Python 3.9 or 3.10 for best compatibility</p></li>
+<li><p>During installation, check <strong>Add Python to PATH</strong></p></li>
+<li><p>Verify: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">--version</span></code> (or <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">--version</span></code> on macOS/Linux)</p></li>
+</ul>
+</section>
+<section id="step-2-create-virtual-environment">
+<h3>Step 2 — Create Virtual Environment<a class="headerlink" href="#step-2-create-virtual-environment" title="Link to this heading"></a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Windows</span>
 python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>dft_env
-dft_env<span class="se">\\</span>Scripts<span class="se">\\</span>activate
+dft_env<span class="se">\S</span>cripts<span class="se">\a</span>ctivate
+
 <span class="c1"># macOS/Linux</span>
 python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>dft_env
 <span class="nb">source</span><span class="w"> </span>dft_env/bin/activate
 </pre></div>
 </div>
-<p>Step 3: Upgrade pip</p>
+</section>
+<section id="step-3-upgrade-pip">
+<h3>Step 3 — Upgrade pip<a class="headerlink" href="#step-3-upgrade-pip" title="Link to this heading"></a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
 </pre></div>
 </div>
-<p>Package Installation Methods
-The project can be installed using several methods. Choose the one that best fits your needs:</p>
-<p>Method 1: Complete Installation (Recommended)</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/your-username/Droplet-Film-Theory-Development.git
-<span class="nb">cd</span><span class="w"> </span>Droplet-Film-Theory-Development
+</section>
+</section>
+<section id="package-installation">
+<h2>Package Installation<a class="headerlink" href="#package-installation" title="Link to this heading"></a></h2>
+<p>Choose one of the following methods.</p>
+<section id="method-1-from-repository-recommended">
+<h3>Method 1: From repository (recommended)<a class="headerlink" href="#method-1-from-repository-recommended" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/your-username/Droplet-Film-Model-Development.git
+<span class="nb">cd</span><span class="w"> </span>Droplet-Film-Model-Development
 pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </pre></div>
 </div>
-<p>Method 2: Manual Installation</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>numpy&gt;<span class="o">=</span><span class="m">1</span>.21.0<span class="w"> </span>pandas&gt;<span class="o">=</span><span class="m">1</span>.3.0<span class="w"> </span>scipy&gt;<span class="o">=</span><span class="m">1</span>.7.0<span class="w"> </span>scikit-learn&gt;<span class="o">=</span><span class="m">1</span>.0.0
-pip<span class="w"> </span>install<span class="w"> </span>matplotlib&gt;<span class="o">=</span><span class="m">3</span>.4.0<span class="w"> </span>seaborn&gt;<span class="o">=</span><span class="m">0</span>.11.0<span class="w"> </span>plotly&gt;<span class="o">=</span><span class="m">5</span>.0.0
+</section>
+<section id="method-2-manual-install">
+<h3>Method 2: Manual install<a class="headerlink" href="#method-2-manual-install" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>numpy<span class="w"> </span>pandas<span class="w"> </span>scipy<span class="w"> </span>scikit-learn
+pip<span class="w"> </span>install<span class="w"> </span>matplotlib<span class="w"> </span>seaborn<span class="w"> </span>plotly
 pip<span class="w"> </span>install<span class="w"> </span>jupyter<span class="w"> </span>notebook<span class="w"> </span>ipywidgets
 pip<span class="w"> </span>install<span class="w"> </span>feyn<span class="w"> </span>pysindy<span class="w"> </span>xgboost
 </pre></div>
 </div>
-<p>Method 3: Using Requirements File</p>
+</section>
+<section id="method-3-requirements-file">
+<h3>Method 3: Requirements file<a class="headerlink" href="#method-3-requirements-file" title="Link to this heading"></a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-<span class="c1"># Or create one: pip freeze &gt; requirements.txt</span>
 </pre></div>
 </div>
-<p>Verification and Testing</p>
-<p>Step 1: Test Basic Imports</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import numpy; print(&#39;NumPy version:&#39;, numpy.__version__)&quot;</span>
-python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import pandas; print(&#39;Pandas version:&#39;, pandas.__version__)&quot;</span>
-python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import scipy; print(&#39;SciPy version:&#39;, scipy.__version__)&quot;</span>
-python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import sklearn; print(&#39;Scikit-learn version:&#39;, sklearn.__version__)&quot;</span>
+</section>
+</section>
+<section id="verification">
+<h2>Verification<a class="headerlink" href="#verification" title="Link to this heading"></a></h2>
+<section id="step-1-test-basic-imports">
+<h3>Step 1 — Test basic imports<a class="headerlink" href="#step-1-test-basic-imports" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import numpy; print(&#39;NumPy:&#39;, numpy.__version__)&quot;</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import pandas; print(&#39;Pandas:&#39;, pandas.__version__)&quot;</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import scipy; print(&#39;SciPy:&#39;, scipy.__version__)&quot;</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import sklearn; print(&#39;Scikit-learn:&#39;, sklearn.__version__)&quot;</span>
 </pre></div>
 </div>
-<p>Step 2: Test Project-Specific Imports</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from src.dfm_src import DFT; print(&#39;DFT import successful&#39;)&quot;</span>
-python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from models.utils import Helm; print(&#39;Helm import successful&#39;)&quot;</span>
-python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from models.utils import QLatticeWrapper; print(&#39;QLatticeWrapper import successful&#39;)&quot;</span>
+</section>
+<section id="step-2-test-project-modules">
+<h3>Step 2 — Test project modules<a class="headerlink" href="#step-2-test-project-modules" title="Link to this heading"></a></h3>
+<p>Run from the <strong>project root</strong> so <code class="docutils literal notranslate"><span class="pre">src</span></code> and <code class="docutils literal notranslate"><span class="pre">models</span></code> are on the path:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from src.dfm_src import DFT; print(&#39;DFT OK&#39;)&quot;</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from models.utils import Helm; print(&#39;Helm OK&#39;)&quot;</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from models.utils import QLatticeWrapper; print(&#39;QLatticeWrapper OK&#39;)&quot;</span>
 </pre></div>
 </div>
-<p>Step 3: Run Basic Functionality Test</p>
+</section>
+<section id="step-3-quick-functionality-test">
+<h3>Step 3 — Quick functionality test<a class="headerlink" href="#step-3-quick-functionality-test" title="Link to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">src.dfm_src</span><span class="w"> </span><span class="kn">import</span> <span class="n">DFT</span>
+
 <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">DFT</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;DFT model test successful&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DFT model test successful&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Jupyter Notebook Setup
-For interactive development and exploration:</p>
-<p>Step 1: Install Jupyter
-pip install jupyter notebook ipywidgets</p>
-<p>Step 2: Launch Jupyter
-jupyter notebook</p>
-<p>Step 3: Navigate to Project
-Open the project root (or <code class="docutils literal notranslate"><span class="pre">models/</span></code>) and explore the available notebooks:
-- DFT-PISR.ipynb: Main physics-informed implementation
-- xgboost.ipynb: Gradient boosting approach
-- sindy.ipynb: Symbolic regression analysis
-- QLattice.ipynb: Automated model discovery</p>
-<p>Data Preparation
-Before using the project, prepare your dataset:</p>
-<p>Required Data Format
-Your data must be in CSV format with the following columns:
-- Dia: Well diameter (meters)
-- Dev(deg): Well deviation angle (degrees)
-- Area (m2): Cross-sectional area (square meters)
-- z: Elevation change (meters)
-- GasDens: Gas density (kg/m³)
-- LiquidDens: Liquid density (kg/m³)
-- g (m/s2): Gravitational acceleration (m/s²)
-- P/T: Pressure/Temperature ratio (Pa/K)
-- friction_factor: Friction factor (dimensionless)
-- critical_film_thickness: Critical film thickness (meters)</p>
-<p>Data Validation
-Use the following code to validate your data:</p>
-<p>import pandas as pd
-import numpy as np</p>
-<p>def validate_data(file_path):</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
-<span class="n">required_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Dia&#39;</span><span class="p">,</span> <span class="s1">&#39;Dev(deg)&#39;</span><span class="p">,</span> <span class="s1">&#39;Area (m2)&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span>
-<span class="s1">&#39;GasDens&#39;</span><span class="p">,</span> <span class="s1">&#39;LiquidDens&#39;</span><span class="p">,</span> <span class="s1">&#39;g (m/s2)&#39;</span><span class="p">,</span>
-<span class="s1">&#39;P/T&#39;</span><span class="p">,</span> <span class="s1">&#39;friction_factor&#39;</span><span class="p">,</span> <span class="s1">&#39;critical_film_thickness&#39;</span><span class="p">]</span>
-
-<span class="n">missing_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">required_cols</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
-<span class="k">if</span> <span class="n">missing_cols</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing columns: </span><span class="si">{</span><span class="n">missing_cols</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="kc">False</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All required columns present&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data shape: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data types:</span><span class="se">\n</span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">dtypes</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="k">return</span> <span class="kc">True</span>
+</section>
+</section>
+<section id="jupyter-notebooks">
+<h2>Jupyter Notebooks<a class="headerlink" href="#jupyter-notebooks" title="Link to this heading"></a></h2>
+<section id="step-1-install-jupyter">
+<h3>Step 1 — Install Jupyter<a class="headerlink" href="#step-1-install-jupyter" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>jupyter<span class="w"> </span>notebook<span class="w"> </span>ipywidgets
 </pre></div>
 </div>
-<p># Validate your data
-validate_data(“your_data.csv”)</p>
-<p>Common Installation Issues
-Here are solutions to frequently encountered problems:</p>
-<p>Issue 1: Permission Errors — use <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">--user</span> <span class="pre">package_name</span></code> or a virtual environment.</p>
-<p>Issue 2: Version Conflicts — use a fresh venv:</p>
+</section>
+<section id="step-2-launch-and-open-notebooks">
+<h3>Step 2 — Launch and open notebooks<a class="headerlink" href="#step-2-launch-and-open-notebooks" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jupyter<span class="w"> </span>notebook
+</pre></div>
+</div>
+<p>Then open the project root or <code class="docutils literal notranslate"><span class="pre">models/</span></code> and run:</p>
+<ul class="simple">
+<li><p><strong>DFT-PISR.ipynb</strong> — physics-informed DFM</p></li>
+<li><p><strong>xgboost.ipynb</strong> — gradient boosting</p></li>
+<li><p><strong>sindy.ipynb</strong> — symbolic regression (PySINDy)</p></li>
+<li><p><strong>QLattice.ipynb</strong> — QLattice symbolic regression</p></li>
+</ul>
+</section>
+</section>
+<section id="data-preparation">
+<h2>Data Preparation<a class="headerlink" href="#data-preparation" title="Link to this heading"></a></h2>
+<section id="required-csv-columns">
+<h3>Required CSV columns<a class="headerlink" href="#required-csv-columns" title="Link to this heading"></a></h3>
+<p>Your CSV must include these 10 feature columns (and for <strong>Helm</strong>, also <strong>Qcr</strong>, <strong>Gasflowrate</strong>, <strong>Test status</strong>):</p>
+<ul class="simple">
+<li><p><strong>Dia</strong> — well diameter (m)</p></li>
+<li><p><strong>Dev(deg)</strong> — well deviation angle (degrees)</p></li>
+<li><p><strong>Area (m2)</strong> — cross-sectional area (m²)</p></li>
+<li><p><strong>z</strong> — elevation change (m)</p></li>
+<li><p><strong>GasDens</strong> — gas density (kg/m³)</p></li>
+<li><p><strong>LiquidDens</strong> — liquid density (kg/m³)</p></li>
+<li><p><strong>g (m/s2)</strong> — gravitational acceleration (m/s²)</p></li>
+<li><p><strong>P/T</strong> — pressure/temperature ratio (Pa/K)</p></li>
+<li><p><strong>friction_factor</strong> — dimensionless</p></li>
+<li><p><strong>critical_film_thickness</strong> — critical film thickness (m)</p></li>
+</ul>
+</section>
+<section id="validate-your-data">
+<h3>Validate your data<a class="headerlink" href="#validate-your-data" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">validate_data</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+    <span class="n">required</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;Dia&#39;</span><span class="p">,</span> <span class="s1">&#39;Dev(deg)&#39;</span><span class="p">,</span> <span class="s1">&#39;Area (m2)&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;GasDens&#39;</span><span class="p">,</span> <span class="s1">&#39;LiquidDens&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;g (m/s2)&#39;</span><span class="p">,</span> <span class="s1">&#39;P/T&#39;</span><span class="p">,</span> <span class="s1">&#39;friction_factor&#39;</span><span class="p">,</span> <span class="s1">&#39;critical_film_thickness&#39;</span>
+    <span class="p">]</span>
+    <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">required</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Missing columns:&quot;</span><span class="p">,</span> <span class="n">missing</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All required columns present. Shape:&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+<span class="n">validate_data</span><span class="p">(</span><span class="s2">&quot;your_data.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="common-installation-issues">
+<h2>Common Installation Issues<a class="headerlink" href="#common-installation-issues" title="Link to this heading"></a></h2>
+<section id="permission-errors">
+<h3>Permission errors<a class="headerlink" href="#permission-errors" title="Link to this heading"></a></h3>
+<p>Use a virtual environment, or: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">--user</span> <span class="pre">package_name</span></code></p>
+</section>
+<section id="version-conflicts">
+<h3>Version conflicts<a class="headerlink" href="#version-conflicts" title="Link to this heading"></a></h3>
+<p>Use a fresh virtual environment and reinstall:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>fresh_env
-fresh_env<span class="se">\\</span>Scripts<span class="se">\\</span>activate
+<span class="c1"># Windows: fresh_env\Scripts\activate</span>
+<span class="c1"># macOS/Linux: source fresh_env/bin/activate</span>
 pip<span class="w"> </span>install<span class="w"> </span>package_name
 </pre></div>
 </div>
-<p>Issue 3: Memory Issues
-Problem: Out of memory during installation
-Solution: Close other applications and try again
-- Close unnecessary programs
-- Restart your computer
-- Use pip install –no-cache-dir package_name</p>
-<p>Issue 4: Network Issues</p>
+</section>
+<section id="memory-errors">
+<h3>Memory errors<a class="headerlink" href="#memory-errors" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Close other applications</p></li>
+<li><p>Use: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">--no-cache-dir</span> <span class="pre">package_name</span></code></p></li>
+<li><p>Restart and try again</p></li>
+</ul>
+</section>
+<section id="network-download-failures">
+<h3>Network / download failures<a class="headerlink" href="#network-download-failures" title="Link to this heading"></a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-i<span class="w"> </span>https://pypi.org/simple/<span class="w"> </span>package_name
-pip<span class="w"> </span>install<span class="w"> </span>--trusted-host<span class="w"> </span>pypi.org<span class="w"> </span>--trusted-host<span class="w"> </span>pypi.python.org<span class="w"> </span>package_name
+pip<span class="w"> </span>install<span class="w"> </span>--trusted-host<span class="w"> </span>pypi.org<span class="w"> </span>--trusted-host<span class="w"> </span>files.pythonhosted.org<span class="w"> </span>package_name
 </pre></div>
 </div>
-<p>Issue 5: Compilation Errors
-Problem: C/C++ compilation errors on Windows
-Solution: Install Microsoft Visual C++ Build Tools
-- Download from Microsoft website
-- Install “C++ build tools” workload
-- Restart terminal and try again</p>
-<p>Issue 6: QLattice Connection Issues
-Problem: Cannot connect to Feyn QLattice
-Solution: Check network and credentials
-- Ensure internet connection
-- Verify Feyn account setup
-- Check firewall settings
-- Try alternative symbolic regression (PySINDy)</p>
-<p>Development Environment Setup</p>
-<p>Code quality and testing:</p>
+</section>
+<section id="compilation-errors-windows">
+<h3>Compilation errors (Windows)<a class="headerlink" href="#compilation-errors-windows" title="Link to this heading"></a></h3>
+<p>Install <strong>Microsoft Visual C++ Build Tools</strong> (include “Desktop development with C++” or “C++ build tools”), then restart the terminal.</p>
+</section>
+<section id="qlattice-connection">
+<h3>QLattice connection<a class="headerlink" href="#qlattice-connection" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Check internet and firewall</p></li>
+<li><p>Verify Feyn account and API setup</p></li>
+<li><p>Use PySINDy or other methods if QLattice is unavailable</p></li>
+</ul>
+</section>
+</section>
+<section id="development-setup">
+<h2>Development Setup<a class="headerlink" href="#development-setup" title="Link to this heading"></a></h2>
+<section id="code-quality-and-tests">
+<h3>Code quality and tests<a class="headerlink" href="#code-quality-and-tests" title="Link to this heading"></a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>black<span class="w"> </span>flake8<span class="w"> </span>pytest<span class="w"> </span>mypy
 black<span class="w"> </span>src/*.py<span class="w"> </span>models/*.py
 flake8<span class="w"> </span>src/*.py<span class="w"> </span>models/*.py
@@ -339,75 +458,79 @@ mypy<span class="w"> </span>src/*.py<span class="w"> </span>models/*.py
 pytest<span class="w"> </span>tests/
 </pre></div>
 </div>
-<p>IDE Configuration (Visual Studio Code): add to <code class="docutils literal notranslate"><span class="pre">settings.json</span></code>:</p>
+</section>
+<section id="ide-vs-code">
+<h3>IDE (VS Code)<a class="headerlink" href="#ide-vs-code" title="Link to this heading"></a></h3>
+<p>Add to <code class="docutils literal notranslate"><span class="pre">.vscode/settings.json</span></code> or user settings:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;python.defaultInterpreterPath&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;./dft_env/Scripts/python.exe&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;python.defaultInterpreterPath&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${workspaceFolder}/dft_env/Scripts/python.exe&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">&quot;python.linting.enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">&quot;python.linting.flake8Enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">&quot;python.formatting.provider&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;black&quot;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>PyCharm: set project interpreter to the virtual environment, enable code inspection, and use PEP 8 code style.</p>
-<p>Performance Optimization</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>numpy<span class="w"> </span>--upgrade<span class="w"> </span>pandas<span class="w"> </span>--upgrade<span class="w"> </span>scipy<span class="w"> </span>--upgrade
-<span class="c1"># Or with Conda: conda install numpy pandas scipy scikit-learn matplotlib</span>
-</pre></div>
-</div>
-<p>Install Intel MKL Libraries
-pip install mkl</p>
-<p>Security Considerations
-- Always use virtual environments
-- Keep packages updated regularly
-- Use trusted package sources
-- Verify package signatures when possible
-- Never install packages as root/admin unless necessary</p>
-<p>Maintenance and Updates</p>
+<p>On macOS/Linux, use <code class="docutils literal notranslate"><span class="pre">dft_env/bin/python</span></code> instead of <code class="docutils literal notranslate"><span class="pre">Scripts/python.exe</span></code>.</p>
+<p>PyCharm: set the project interpreter to the virtual environment and enable PEP 8 inspection.</p>
+</section>
+</section>
+<section id="performance-and-maintenance">
+<h2>Performance and Maintenance<a class="headerlink" href="#performance-and-maintenance" title="Link to this heading"></a></h2>
+<section id="upgrade-packages">
+<h3>Upgrade packages<a class="headerlink" href="#upgrade-packages" title="Link to this heading"></a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>package_name
 pip<span class="w"> </span>list<span class="w"> </span>--outdated
 pip<span class="w"> </span>audit
-pip<span class="w"> </span>freeze<span class="w"> </span>&gt;<span class="w"> </span>requirements_backup.txt
+</pre></div>
+</div>
+</section>
+<section id="optional-intel-mkl">
+<h3>Optional: Intel MKL<a class="headerlink" href="#optional-intel-mkl" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>mkl
+</pre></div>
+</div>
+</section>
+<section id="backup-and-cleanup">
+<h3>Backup and cleanup<a class="headerlink" href="#backup-and-cleanup" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>freeze<span class="w"> </span>&gt;<span class="w"> </span>requirements_backup.txt
 pip<span class="w"> </span>cache<span class="w"> </span>purge
 </pre></div>
 </div>
-<p>Uninstallation</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Windows: rmdir /s dft_env</span>
+</section>
+</section>
+<section id="uninstall">
+<h2>Uninstall<a class="headerlink" href="#uninstall" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove virtual environment</span>
+<span class="c1"># Windows: rmdir /s dft_env</span>
 <span class="c1"># macOS/Linux: rm -rf dft_env</span>
+
 pip<span class="w"> </span>uninstall<span class="w"> </span>package_name
 pip<span class="w"> </span>cache<span class="w"> </span>purge
 </pre></div>
 </div>
-<p>Installation Checklist
-Use this checklist to verify your installation:</p>
-<p>□ Python 3.7+ installed and accessible
-□ Virtual environment created and activated
-□ Core packages installed (numpy, pandas, scipy, sklearn)
-□ Visualization packages installed (matplotlib, seaborn)
-□ Jupyter notebook working
-□ Project modules importing successfully
-□ Basic functionality test passing
-□ Sample data prepared and validated
-□ Jupyter notebooks opening correctly</p>
-<p>Next Steps
-After successful installation:</p>
+</section>
+<section id="installation-checklist">
+<h2>Installation Checklist<a class="headerlink" href="#installation-checklist" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>[ ] Python 3.7+ installed and on PATH</p></li>
+<li><p>[ ] Virtual environment created and activated</p></li>
+<li><p>[ ] Core packages installed (numpy, pandas, scipy, scikit-learn)</p></li>
+<li><p>[ ] Optional: matplotlib, seaborn, jupyter</p></li>
+<li><p>[ ] Project imports work (<code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">src.dfm_src</span> <span class="pre">import</span> <span class="pre">DFT</span></code>, <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">models.utils</span> <span class="pre">import</span> <span class="pre">Helm</span></code>)</p></li>
+<li><p>[ ] Quick DFT test runs successfully</p></li>
+<li><p>[ ] CSV data has required columns (and Qcr, Gasflowrate, Test status for Helm)</p></li>
+</ul>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
-<li><p>Read the main documentation for project overview</p></li>
-<li><p>Explore the usage examples for practical implementation</p></li>
-<li><p>Review the API reference for technical details</p></li>
-<li><p>Check the troubleshooting guide for common issues</p></li>
-<li><p>Start with the DFT-PISR.ipynb notebook</p></li>
-<li><p>Prepare your own dataset for analysis</p></li>
+<li><p>See <strong>Usage examples</strong> for the DFT and other model tutorials.</p></li>
+<li><p>See <strong>API reference</strong> for classes and parameters.</p></li>
+<li><p>See <strong>Troubleshooting</strong> if you run into errors.</p></li>
+<li><p>Open <strong>DFT-PISR.ipynb</strong> and run the workflow end-to-end.</p></li>
 </ol>
-<p>Support and Resources
-If you encounter issues:</p>
-<ol class="arabic simple">
-<li><p>Check this installation guide first</p></li>
-<li><p>Review the troubleshooting section</p></li>
-<li><p>Search the GitHub issues</p></li>
-<li><p>Contact the development team</p></li>
-<li><p>Join the community discussions</p></li>
-</ol>
-<p>The project is actively maintained and supported by the development team and community contributors.</p>
+<p>For more help: check the troubleshooting guide, search GitHub issues, or contact the development team.</p>
+</section>
 </section>
 
 

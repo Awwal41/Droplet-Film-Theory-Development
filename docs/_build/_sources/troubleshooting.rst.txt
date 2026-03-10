@@ -71,7 +71,7 @@ Solution 3: Install Project in Development Mode
 
 .. code-block:: bash
 
-   cd /path/to/Droplet-Film-Theory-Development
+   cd /path/to/Droplet-Film-Model-Development
    pip install -e .
 
 Solution 4: Fix Python Path
@@ -79,7 +79,7 @@ Solution 4: Fix Python Path
 .. code-block:: python
 
    import sys
-   sys.path.append('/path/to/Droplet-Film-Theory-Development')
+   sys.path.append('/path/to/Droplet-Film-Model-Development')
 
 Prevention:
 - Always use virtual environments

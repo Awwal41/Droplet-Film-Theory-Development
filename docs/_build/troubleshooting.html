@@ -46,7 +46,65 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="installation_guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation_guide.html">Installation Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#system-requirements">System Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#minimum">Minimum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#recommended">Recommended</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#python-environment-setup">Python Environment Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#step-1-install-python">Step 1 — Install Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#step-2-create-virtual-environment">Step 2 — Create Virtual Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#step-3-upgrade-pip">Step 3 — Upgrade pip</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#package-installation">Package Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#method-1-from-repository-recommended">Method 1: From repository (recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#method-2-manual-install">Method 2: Manual install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#method-3-requirements-file">Method 3: Requirements file</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#verification">Verification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#step-1-test-basic-imports">Step 1 — Test basic imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#step-2-test-project-modules">Step 2 — Test project modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#step-3-quick-functionality-test">Step 3 — Quick functionality test</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#jupyter-notebooks">Jupyter Notebooks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#step-1-install-jupyter">Step 1 — Install Jupyter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#step-2-launch-and-open-notebooks">Step 2 — Launch and open notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#data-preparation">Data Preparation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#required-csv-columns">Required CSV columns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#validate-your-data">Validate your data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#common-installation-issues">Common Installation Issues</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#permission-errors">Permission errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#version-conflicts">Version conflicts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#memory-errors">Memory errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#network-download-failures">Network / download failures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#compilation-errors-windows">Compilation errors (Windows)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#qlattice-connection">QLattice connection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#development-setup">Development Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#code-quality-and-tests">Code quality and tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#ide-vs-code">IDE (VS Code)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#performance-and-maintenance">Performance and Maintenance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#upgrade-packages">Upgrade packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#optional-intel-mkl">Optional: Intel MKL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#backup-and-cleanup">Backup and cleanup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#uninstall">Uninstall</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#installation-checklist">Installation Checklist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="usage_examples.html">Usage Examples and Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_examples.html#dft-model-tutorial">DFT Model Tutorial</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="usage_examples.html#dft-implementation-overview">DFT Implementation Overview</a></li>
@@ -214,13 +272,13 @@ dft_env<span class="se">\S</span>cripts<span class="se">\a</span>ctivate
 </pre></div>
 </div>
 <p>Solution 3: Install Project in Development Mode</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/path/to/Droplet-Film-Theory-Development
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/path/to/Droplet-Film-Model-Development
 pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </pre></div>
 </div>
 <p>Solution 4: Fix Python Path</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;/path/to/Droplet-Film-Theory-Development&#39;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;/path/to/Droplet-Film-Model-Development&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Prevention:

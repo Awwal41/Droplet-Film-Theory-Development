@@ -5,7 +5,7 @@ from typing import Optional, List, Callable, Dict, Any, List
 
 class DFT():
     """
-    This class defines the Droplet-Film Theory model for predicitng well flow rates 
+    This class defines the Droplet-Film Model model for predicitng well flow rates 
 
     Args 
     ____
