@@ -15,7 +15,6 @@ def test_documentation_build():
 
     source_dir = Path('docs/source')
     rst_files = [
-        'documentation.rst',
         'installation_guide.rst',
         'usage_examples.rst',
         'api_reference.rst',

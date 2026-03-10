@@ -27,7 +27,6 @@ def build_documentation():
         return False
 
     required_rst = [
-        'documentation.rst',
         'installation_guide.rst',
         'usage_examples.rst',
         'api_reference.rst',

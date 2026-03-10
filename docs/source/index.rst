@@ -16,7 +16,6 @@ Contents
    :maxdepth: 2
    :caption: Documentation
 
-   documentation
    installation_guide
    usage_examples
    api_reference
@@ -31,7 +30,6 @@ Indices and tables
 Quick links
 -----------
 
-* :doc:`documentation` — Project overview and user guide
 * :doc:`installation_guide` — Setup and installation
 * :doc:`usage_examples` — Tutorials and examples
 * :doc:`api_reference` — API reference

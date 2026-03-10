@@ -103,7 +103,6 @@ def main():
     source_dir.mkdir(parents=True, exist_ok=True)
 
     srt_files = [
-        ('DOCUMENTATION.srt', 'documentation.rst'),
         ('INSTALLATION_GUIDE.srt', 'installation_guide.rst'),
         ('USAGE_EXAMPLES.srt', 'usage_examples.rst'),
         ('API_REFERENCE.srt', 'api_reference.rst'),
