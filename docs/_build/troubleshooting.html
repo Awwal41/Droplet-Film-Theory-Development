@@ -1,0 +1,924 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Troubleshooting Guide &mdash; DFT Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=60dbed4a"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="API Reference" href="api_reference.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Droplet-Film Model Development
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="documentation.html">Droplet-Film Model Development Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#introduction">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#overview-of-dft-development">1.1. Overview of DFT Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#what-does-a-dft-development-version-mean">1.2. What does a DFT Development version mean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#dft-development-features">1.3. DFT Development features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#dft-development-applications">1.4. DFT Development applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#dft-development-compatibility">1.5. DFT Development compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#dft-development-open-source-license">1.6. DFT Development open-source license</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#authors-of-dft-development">1.7. Authors of DFT Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#citing-dft-development">1.8. Citing DFT Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#additional-resources">1.9. Additional resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#installation">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#system-requirements">2.1. System requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#python-environment-setup">2.2. Python environment setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#package-installation-methods">2.3. Package installation methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#verification-and-testing">2.4. Verification and testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#jupyter-notebook-setup">2.5. Jupyter notebook setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#data-preparation">2.6. Data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#common-installation-issues">2.7. Common installation issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#development-environment-setup">2.8. Development environment setup</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#quick-start">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#basic-workflow">3.1. Basic workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#your-first-prediction">3.2. Your first prediction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#understanding-the-output">3.3. Understanding the output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#next-steps">3.4. Next steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#data-format">Data Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#required-input-parameters">4.1. Required input parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#data-validation">4.2. Data validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#data-preprocessing">4.3. Data preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#common-data-issues">4.4. Common data issues</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#running-dft-development">Running DFT Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#basic-usage">5.1. Basic usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#command-line-options">5.2. Command-line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#jupyter-notebook-usage">5.3. Jupyter notebook usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#output-formats">5.4. Output formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#error-handling">5.5. Error handling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#common-issues">6.1. Common issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#installation-problems">6.2. Installation problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#data-loading-errors">6.3. Data loading errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#memory-and-performance-issues">6.4. Memory and performance issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#model-convergence-problems">6.5. Model convergence problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#getting-help">6.6. Getting help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#examples">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#basic-examples">7.1. Basic examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#advanced-examples">7.2. Advanced examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#production-deployment">7.3. Production deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#custom-implementations">7.4. Custom implementations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#performance">Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#benchmarks">8.1. Benchmarks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#performance-optimization">8.2. Performance optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#memory-management">8.3. Memory management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#parallel-processing">8.4. Parallel processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#how-to-guides">How-to Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#general-how-to">9.1. General how-to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#data-preparation-how-to">9.2. Data preparation how-to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#model-training-how-to">9.3. Model training how-to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#visualization-how-to">9.4. Visualization how-to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#deployment-how-to">9.5. Deployment how-to</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#tutorial-scripts">Tutorial Scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#basic-tutorials">10.1. Basic tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#advanced-tutorials">10.2. Advanced tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#case-studies">10.3. Case studies</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation_guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html">Usage Examples and Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#xgboost-tutorial">XGBoost Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-implementation-overview">XGBoost Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#basic-xgboost-setup">Basic XGBoost Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-data-preparation">XGBoost Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-model-training">XGBoost Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-hyperparameter-tuning">XGBoost Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-feature-importance-analysis">XGBoost Feature Importance Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#pysindy-tutorial">PySINDy Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-implementation-overview">PySINDy Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-setup-and-installation">PySINDy Setup and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-data-preparation">PySINDy Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-model-training">PySINDy Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-model-evaluation">PySINDy Model Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#pysr-tutorial">PySR Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-implementation-overview">PySR Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-setup-and-installation">PySR Setup and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-data-preparation">PySR Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-model-training">PySR Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-model-evaluation">PySR Model Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#qlattice-tutorial">QLattice Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-implementation-overview">QLattice Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-setup-and-installation">QLattice Setup and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-data-preparation">QLattice Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-model-training">QLattice Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-model-evaluation">QLattice Model Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#ensemble-methods-tutorial">Ensemble Methods Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#ensemble-implementation-overview">Ensemble Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#ensemble-model-creation">Ensemble Model Creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#model-comparison">Model Comparison</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#advanced-usage-examples">Advanced Usage Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#custom-alpha-strategy-implementation">Custom Alpha Strategy Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#production-deployment-example">Production Deployment Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#batch-processing-example">Batch Processing Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#performance-optimization">Performance Optimization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#memory-efficient-processing">Memory-Efficient Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#parallel-processing">Parallel Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#core-classes-and-modules">Core Classes and Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#dft-class-core-physics-model">DFT Class — Core Physics Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#class-definition">Class definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#constructor">Constructor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-fit">Methods — fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-predict">Methods — predict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-eq-physics-equation">Methods — _eq (physics equation)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-loss">Methods — _loss</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#chiefbldr-class-data-management">ChiefBldr Class — Data Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#id1">Class definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#id2">Constructor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-evolv-model">Methods — evolv_model</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#qlatticewrapper-class-symbolic-regression">QLatticeWrapper Class — Symbolic Regression</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#id3">Constructor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#data-format-requirements">Data Format Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#data-validation-error-handling-performance">Data Validation, Error Handling, Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#support-and-resources">Support and Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Troubleshooting Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Droplet-Film Model Development</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Troubleshooting Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/troubleshooting.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="troubleshooting-guide">
+<h1>Troubleshooting Guide<a class="headerlink" href="#troubleshooting-guide" title="Link to this heading"></a></h1>
+<p>Droplet-Film Model Development Project
+Common Issues and Solutions</p>
+<p>Introduction
+This guide addresses the most frequently encountered problems when using the DFT Development project. Each issue includes detailed diagnostic steps, multiple solution approaches, and prevention strategies.</p>
+<p>The guide is organized by problem category, with solutions ranging from quick fixes to comprehensive debugging approaches.</p>
+<p>Installation and Environment Issues</p>
+<p>Issue 1: Python Import Errors
+Problem: ModuleNotFoundError when importing project modules</p>
+<p>Symptoms:
+- “ModuleNotFoundError: No module named ‘scripts_2.0’”
+- “ImportError: cannot import name ‘DFT’”
+- “ModuleNotFoundError: No module named ‘feyn’”</p>
+<p>Root Causes:
+- Virtual environment not activated
+- Missing dependencies
+- Incorrect Python path
+- Package installation failures</p>
+<p>Diagnostic Steps:
+1. Check Python environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>--version
+which<span class="w"> </span>python
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Verify virtual environment activation:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="nv">$VIRTUAL_ENV</span><span class="w">  </span><span class="c1"># Linux/Mac</span>
+<span class="nb">echo</span><span class="w"> </span>%VIRTUAL_ENV%<span class="w">  </span><span class="c1"># Windows</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Test basic imports:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import numpy; print(&#39;NumPy OK&#39;)&quot;</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import pandas; print(&#39;Pandas OK&#39;)&quot;</span>
+</pre></div>
+</div>
+<p>Solutions:</p>
+<p>Solution 1: Activate Virtual Environment</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Windows</span>
+dft_env<span class="se">\S</span>cripts<span class="se">\a</span>ctivate
+<span class="c1"># macOS/Linux</span>
+<span class="nb">source</span><span class="w"> </span>dft_env/bin/activate
+</pre></div>
+</div>
+<p>Solution 2: Install Missing Dependencies</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>numpy<span class="w"> </span>pandas<span class="w"> </span>scipy<span class="w"> </span>scikit-learn<span class="w"> </span>matplotlib<span class="w"> </span>seaborn<span class="w"> </span>feyn<span class="w"> </span>pysindy
+</pre></div>
+</div>
+<p>Solution 3: Install Project in Development Mode</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/path/to/Droplet-Film-Theory-Development
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>Solution 4: Fix Python Path</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;/path/to/Droplet-Film-Theory-Development&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Prevention:
+- Always use virtual environments
+- Document exact package versions
+- Use requirements.txt for reproducibility</p>
+<p>Issue 2: Data Loading and Format Errors
+Problem: Errors when loading or processing datasets</p>
+<p>Symptoms:
+- “FileNotFoundError: [Errno 2] No such file or directory”
+- “KeyError: ‘Dia’”
+- “ValueError: could not convert string to float”
+- “pandas.errors.EmptyDataError”</p>
+<p>Root Causes:
+- Incorrect file paths
+- Missing required columns
+- Data format inconsistencies
+- File permission issues</p>
+<p>Diagnostic Steps:
+1. Verify file existence:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;your_data.csv&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;your_data.csv&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Check file format:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;your_data.csv&quot;</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Validate data content:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Solutions:</p>
+<p>Solution 1: Fix File Paths</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use absolute paths</span>
+<span class="n">data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;datasets/well_data.csv&quot;</span><span class="p">)</span>
+<span class="c1"># Check current working directory</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Solution 2: Validate Required Columns</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">required_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Dia&#39;</span><span class="p">,</span> <span class="s1">&#39;Dev(deg)&#39;</span><span class="p">,</span> <span class="s1">&#39;Area (m2)&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;GasDens&#39;</span><span class="p">,</span> <span class="s1">&#39;LiquidDens&#39;</span><span class="p">,</span> <span class="s1">&#39;g (m/s2)&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;P/T&#39;</span><span class="p">,</span> <span class="s1">&#39;friction_factor&#39;</span><span class="p">,</span> <span class="s1">&#39;critical_film_thickness&#39;</span><span class="p">]</span>
+<span class="n">missing_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">required_cols</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">missing_cols</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing columns: </span><span class="si">{</span><span class="n">missing_cols</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">missing_cols</span><span class="p">:</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+</pre></div>
+</div>
+<p>Solution 3: Handle Data Format Issues</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clean data before processing</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">numeric_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Dia&#39;</span><span class="p">,</span> <span class="s1">&#39;Dev(deg)&#39;</span><span class="p">,</span> <span class="s1">&#39;Area (m2)&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;GasDens&#39;</span><span class="p">,</span> <span class="s1">&#39;LiquidDens&#39;</span><span class="p">,</span> <span class="s1">&#39;g (m/s2)&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;P/T&#39;</span><span class="p">,</span> <span class="s1">&#39;friction_factor&#39;</span><span class="p">,</span> <span class="s1">&#39;critical_film_thickness&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">numeric_cols</span><span class="p">:</span>
+    <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Solution 4: Fix File Permissions</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">stat</span>
+<span class="n">file_stat</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="s2">&quot;your_data.csv&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Readable: </span><span class="si">{</span><span class="nb">bool</span><span class="p">(</span><span class="n">file_stat</span><span class="o">.</span><span class="n">st_mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">stat</span><span class="o">.</span><span class="n">S_IRUSR</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writable: </span><span class="si">{</span><span class="nb">bool</span><span class="p">(</span><span class="n">file_stat</span><span class="o">.</span><span class="n">st_mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">stat</span><span class="o">.</span><span class="n">S_IWUSR</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Prevention:
+- Use consistent file naming conventions
+- Validate data before processing
+- Implement data quality checks
+- Use version control for datasets</p>
+<p>Issue 3: Memory and Performance Issues
+Problem: Out of memory or slow performance</p>
+<p>Symptoms:
+- “MemoryError: Unable to allocate array”
+- “Killed: 9” (Linux/Mac)
+- Extremely slow training times
+- System becomes unresponsive</p>
+<p>Root Causes:
+- Dataset too large for available memory
+- Inefficient data structures
+- Large hyperparameter grids
+- Memory leaks in optimization</p>
+<p>Diagnostic Steps:
+1. Check system memory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Available memory: </span><span class="si">{</span><span class="n">psutil</span><span class="o">.</span><span class="n">virtual_memory</span><span class="p">()</span><span class="o">.</span><span class="n">available</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e9</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> GB&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Monitor memory usage:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">tracemalloc</span>
+<span class="n">tracemalloc</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="c1"># Your code here</span>
+<span class="n">current</span><span class="p">,</span> <span class="n">peak</span> <span class="o">=</span> <span class="n">tracemalloc</span><span class="o">.</span><span class="n">get_traced_memory</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current memory usage: </span><span class="si">{</span><span class="n">current</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e6</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> MB&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Peak memory usage: </span><span class="si">{</span><span class="n">peak</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e6</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> MB&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Profile data size:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dataset shape: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Memory usage: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">memory_usage</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e6</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> MB&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Solutions:</p>
+<p>Solution 1: Reduce Dataset Size</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_sample</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="n">X_sample</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">y_sample</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">y</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Solution 2: Optimize Hyperparameter Grid</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">hparam_grid</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;dev_tol&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1e-3</span><span class="p">],</span>
+    <span class="s2">&quot;feature_tol&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span>
+    <span class="s2">&quot;multiple_dev_policy&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="n">k_folds</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>Solution 3: Process Data in Chunks</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">chunk_size</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">chunk_size</span><span class="p">):</span>
+    <span class="n">chunk</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">chunk_size</span><span class="p">]</span>
+    <span class="n">chunk_result</span> <span class="o">=</span> <span class="n">process_chunk</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunk_result</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Solution 4: Use Memory-Efficient Data Types</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">({</span>
+    <span class="s1">&#39;Dia&#39;</span><span class="p">:</span> <span class="s1">&#39;float32&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Dev(deg)&#39;</span><span class="p">:</span> <span class="s1">&#39;float32&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Area (m2)&#39;</span><span class="p">:</span> <span class="s1">&#39;float32&#39;</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>Prevention:
+- Start with small datasets during development
+- Monitor memory usage regularly
+- Use appropriate data types
+- Implement data streaming for large files</p>
+<p>Issue 4: Optimization Convergence Problems
+Problem: Model training fails to converge</p>
+<p>Symptoms:
+- “RuntimeError: Optimization failed”
+- “ConvergenceWarning: Optimization terminated early”
+- Very poor model performance
+- Unrealistic parameter values</p>
+<p>Root Causes:
+- Poor initial parameter values
+- Inappropriate optimization bounds
+- Insufficient iterations
+- Numerical instability
+- Poor data quality</p>
+<p>Diagnostic Steps:
+1. Check optimization status:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Success: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Message: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Function evaluations: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">nfev</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Analyze parameter values:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parameter range: </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parameter mean: </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Check data quality:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data range: </span><span class="si">{</span><span class="n">X</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">X</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data mean: </span><span class="si">{</span><span class="n">X</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;NaN values: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Solutions:</p>
+<p>Solution 1: Adjust Optimization Parameters</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_loss</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;Powell&quot;</span><span class="p">,</span>
+    <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;maxiter&#39;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span> <span class="s1">&#39;maxfun&#39;</span><span class="p">:</span> <span class="mi">20000</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Solution 2: Improve Initial Parameters</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span>
+    <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">n_train</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="p">))</span>
+<span class="n">p1_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]))</span>
+<span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">p1_init</span>
+</pre></div>
+</div>
+<p>Solution 3: Scale Input Data</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">X_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Solution 4: Add Numerical Stability</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-8</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">)</span>
+<span class="n">GasDens</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">GasDens</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">log_loss</span><span class="p">(</span><span class="n">log_params</span><span class="p">):</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_params</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loss</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Prevention:
+- Always scale input data
+- Use appropriate initial values
+- Monitor optimization progress
+- Validate data quality before training</p>
+<p>Issue 5: QLattice Connection Problems
+Problem: Cannot connect to Feyn QLattice service</p>
+<p>Symptoms:
+- “ConnectionError: Failed to connect to QLattice”
+- “TimeoutError: Connection timed out”
+- “AuthenticationError: Invalid credentials”</p>
+<p>Root Causes:
+- Network connectivity issues
+- Invalid API credentials
+- Service unavailability
+- Firewall restrictions</p>
+<p>Diagnostic Steps:
+1. Test network connectivity:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="k">try</span><span class="p">:</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://api.feynlab.com&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connection status: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connection failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Check Feyn configuration:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">feyn</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Feyn version: </span><span class="si">{</span><span class="n">feyn</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Test QLattice connection:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+<span class="n">ql</span> <span class="o">=</span> <span class="n">feyn</span><span class="o">.</span><span class="n">connect_qlattice</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;QLattice connection successful&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;QLattice connection failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Solutions:</p>
+<p>Solution 1: Check Network Settings</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">socket</span><span class="o">.</span><span class="n">create_connection</span><span class="p">((</span><span class="s2">&quot;api.feynlab.com&quot;</span><span class="p">,</span> <span class="mi">443</span><span class="p">),</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Network connection OK&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Network connection failed&quot;</span><span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;HTTP_PROXY: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;HTTP_PROXY&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Not set&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;HTTPS_PROXY: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;HTTPS_PROXY&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Not set&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Solution 2: Verify API Credentials</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">feyn</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">ql</span> <span class="o">=</span> <span class="n">feyn</span><span class="o">.</span><span class="n">connect_qlattice</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Authentication successful&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Authentication failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Solution 3: Use Alternative Symbolic Regression</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pysindy</span><span class="w"> </span><span class="kn">import</span> <span class="n">SINDy</span>
+<span class="n">sindy_model</span> <span class="o">=</span> <span class="n">SINDy</span><span class="p">(</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;STLSQ&#39;</span><span class="p">,</span>
+    <span class="n">feature_library</span><span class="o">=</span><span class="s1">&#39;polynomial&#39;</span><span class="p">,</span>
+    <span class="n">feature_names</span><span class="o">=</span><span class="n">builder</span><span class="o">.</span><span class="n">feature_names</span>
+<span class="p">)</span>
+<span class="n">sindy_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sindy_model</span><span class="o">.</span><span class="n">equations</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Solution 4: Implement Offline Mode</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OfflineQLatticeWrapper</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature_tags</span><span class="p">,</span> <span class="n">output_tag</span><span class="o">=</span><span class="s2">&quot;Qcr&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_tags</span> <span class="o">=</span> <span class="n">feature_tags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_tag</span> <span class="o">=</span> <span class="n">output_tag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearRegression</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">express</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Linear regression (offline mode)&quot;</span>
+</pre></div>
+</div>
+<p>Prevention:
+- Test QLattice connection during installation
+- Implement fallback methods
+- Monitor service status
+- Keep credentials secure</p>
+<p>Issue 6: Model Performance Issues
+Problem: Poor model performance or unexpected results</p>
+<p>Symptoms:
+- Very low R² scores (&lt; 0.5)
+- High prediction errors
+- Overfitting (good training, poor test performance)
+- Unrealistic predictions</p>
+<p>Root Causes:
+- Insufficient or poor quality data
+- Inappropriate hyperparameters
+- Data leakage
+- Model complexity mismatch</p>
+<p>Diagnostic Steps:
+1. Analyze performance metrics:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training MSE: </span><span class="si">{</span><span class="n">train_mse</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test MSE: </span><span class="si">{</span><span class="n">test_mse</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training R²: </span><span class="si">{</span><span class="n">train_r2</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test R²: </span><span class="si">{</span><span class="n">test_r2</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Check for overfitting:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">train_r2</span> <span class="o">-</span> <span class="n">test_r2</span> <span class="o">&gt;</span> <span class="mf">0.2</span><span class="p">:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: Potential overfitting detected&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Analyze prediction errors:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">residuals</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>y_test<span class="w"> </span>-<span class="w"> </span>y_pred
+print<span class="o">(</span>f<span class="s2">&quot;Residual statistics:&quot;</span><span class="o">)</span>
+print<span class="o">(</span>f<span class="s2">&quot;  Mean: {residuals.mean():.6f}&quot;</span><span class="o">)</span>
+print<span class="o">(</span>f<span class="s2">&quot;  Std: {residuals.std():.6f}&quot;</span><span class="o">)</span>
+print<span class="o">(</span>f<span class="s2">&quot;  Max: {residuals.max():.6f}&quot;</span><span class="o">)</span>
+print<span class="o">(</span>f<span class="s2">&quot;  Min: {residuals.min():.6f}&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>Solutions:</p>
+<p>Solution 1: Improve Data Quality</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
+<span class="n">z_scores</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+<span class="n">data_clean</span> <span class="o">=</span> <span class="n">data</span><span class="p">[(</span><span class="n">z_scores</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+<span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: Training and test sets are identical!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Solution 2: Optimize Hyperparameters</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">hparam_grid</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;dev_tol&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1e-5</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="mf">1e-2</span><span class="p">],</span>
+    <span class="s2">&quot;feature_tol&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">],</span>
+    <span class="s2">&quot;multiple_dev_policy&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;median&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="n">k_folds</span> <span class="o">=</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p>Solution 3: Regularize the Model</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">regularized_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+    <span class="n">mse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loss</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="n">l2_penalty</span> <span class="o">=</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mse</span> <span class="o">+</span> <span class="n">l2_penalty</span>
+</pre></div>
+</div>
+<p>Solution 4: Use Ensemble Methods</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">VotingRegressor</span>
+<span class="n">ensemble</span> <span class="o">=</span> <span class="n">VotingRegressor</span><span class="p">([</span>
+    <span class="p">(</span><span class="s1">&#39;dft&#39;</span><span class="p">,</span> <span class="n">dft_model</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">LinearRegression</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;ridge&#39;</span><span class="p">,</span> <span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">))</span>
+<span class="p">])</span>
+<span class="n">ensemble</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Prevention:
+- Always use cross-validation
+- Monitor train/test performance gap
+- Validate data quality before training
+- Use appropriate model complexity</p>
+<p>Issue 7: Visualization and Plotting Errors
+Problem: Errors when creating plots or visualizations</p>
+<p>Symptoms:
+- “RuntimeError: Invalid DISPLAY variable”
+- “UserWarning: Matplotlib is currently using agg”
+- “ValueError: x and y must have same first dimension”
+- Blank or empty plots</p>
+<p>Root Causes:
+- Backend configuration issues
+- Data type mismatches
+- Missing display (headless environments)
+- Memory issues with large datasets</p>
+<p>Diagnostic Steps:
+1. Check matplotlib backend:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Backend: </span><span class="si">{</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">get_backend</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Test basic plotting:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Check data compatibility:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;X shape: </span><span class="si">{</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;y shape: </span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;X dtype: </span><span class="si">{</span><span class="n">X</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;y dtype: </span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Solutions:</p>
+<p>Solution 1: Configure Matplotlib Backend</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;Agg&#39;</span><span class="p">)</span>  <span class="c1"># headless</span>
+<span class="c1"># For Jupyter: %matplotlib inline</span>
+<span class="c1"># Interactive: matplotlib.use(&#39;TkAgg&#39;)</span>
+</pre></div>
+</div>
+<p>Solution 2: Fix Data Type Issues</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="o">~</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Solution 3: Handle Large Datasets</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n_samples</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">n_samples</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">X_plot</span><span class="p">,</span> <span class="n">y_plot</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">indices</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">y_plot</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">[</span><span class="n">indices</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Solution 4: Alternative Visualization</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">plotly.express</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">px</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Model Performance&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_pred</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Prevention:
+- Test plotting functionality during setup
+- Use appropriate backends for your environment
+- Validate data before plotting
+- Consider data size for visualization</p>
+<p>Issue 8: Cross-Validation Errors
+Problem: Errors during k-fold cross-validation</p>
+<p>Symptoms:
+- “ValueError: n_splits=5 cannot be greater than the number of samples”
+- “TypeError: ‘NoneType’ object is not iterable”
+- “MemoryError during cross-validation”</p>
+<p>Root Causes:
+- Insufficient data for requested folds
+- Data splitting issues
+- Memory constraints
+- Invalid fold configuration</p>
+<p>Diagnostic Steps:
+1. Check data size:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data size: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Requested folds: </span><span class="si">{</span><span class="n">k_folds</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">k_folds</span><span class="p">:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Not enough data for requested folds&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Test basic splitting:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">KFold</span>
+<span class="n">kf</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">k_folds</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">train_idx</span><span class="p">,</span> <span class="n">val_idx</span> <span class="ow">in</span> <span class="n">kf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Train: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">train_idx</span><span class="p">)</span><span class="si">}</span><span class="s2">, Val: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">val_idx</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Solutions:
+Solution 1: Adjust Fold Count</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">k_folds</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">k_folds</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">k_folds</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="n">k_folds</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">LeaveOneOut</span>
+    <span class="n">cv</span> <span class="o">=</span> <span class="n">LeaveOneOut</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">KFold</span>
+    <span class="n">cv</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">k_folds</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Solution 2: Fix Data Splitting</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">StratifiedKFold</span>
+<span class="n">skf</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">k_folds</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Solution 3: Reduce Memory Usage
+# Use smaller datasets for cross-validation
+X_cv = X[:1000]  # Limit to 1000 samples
+y_cv = y[:1000]</p>
+<p># Process folds sequentially instead of in parallel
+for train_idx, val_idx in kf.split(X_cv):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Process one fold at a time</span>
+pass
+</pre></div>
+</div>
+<p>Prevention:
+- Check data size before cross-validation
+- Use appropriate fold counts
+- Monitor memory usage
+- Test with small datasets first</p>
+<p>General Debugging Strategies</p>
+<p>1. Enable Verbose Logging
+import logging
+logging.basicConfig(level=logging.DEBUG)</p>
+<p>2. Use Debugging Tools
+import pdb
+pdb.set_trace()  # Set breakpoint</p>
+<p>3. Profile Performance
+import cProfile
+profiler = cProfile.Profile()
+profiler.enable()
+# Your code here
+profiler.disable()
+profiler.print_stats(sort=’cumulative’)</p>
+<p>4. Check System Resources
+import psutil
+print(f”CPU usage: {psutil.cpu_percent()}%”)
+print(f”Memory usage: {psutil.virtual_memory().percent}%”)
+print(f”Disk usage: {psutil.disk_usage(‘/’).percent}%”)</p>
+<p>5. Validate Inputs
+def validate_inputs(X, y):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>assert<span class="w"> </span>X.shape<span class="o">[</span><span class="m">0</span><span class="o">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>y.shape<span class="o">[</span><span class="m">0</span><span class="o">]</span>,<span class="w"> </span><span class="s2">&quot;X and y must have same number of samples&quot;</span>
+assert<span class="w"> </span>not<span class="w"> </span>np.isnan<span class="o">(</span>X<span class="o">)</span>.any<span class="o">()</span>,<span class="w"> </span><span class="s2">&quot;X contains NaN values&quot;</span>
+assert<span class="w"> </span>not<span class="w"> </span>np.isnan<span class="o">(</span>y<span class="o">)</span>.any<span class="o">()</span>,<span class="w"> </span><span class="s2">&quot;y contains NaN values&quot;</span>
+assert<span class="w"> </span>not<span class="w"> </span>np.isinf<span class="o">(</span>X<span class="o">)</span>.any<span class="o">()</span>,<span class="w"> </span><span class="s2">&quot;X contains infinite values&quot;</span>
+assert<span class="w"> </span>not<span class="w"> </span>np.isinf<span class="o">(</span>y<span class="o">)</span>.any<span class="o">()</span>,<span class="w"> </span><span class="s2">&quot;y contains infinite values&quot;</span>
+</pre></div>
+</div>
+<p>Getting Help
+If problems persist:</p>
+<ol class="arabic simple">
+<li><p>Check the GitHub issues page</p></li>
+<li><p>Review the API reference for detailed information</p></li>
+<li><p>Consult the usage examples for similar cases</p></li>
+<li><p>Search online for similar error messages</p></li>
+<li><p>Contact the development team with:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>-<span class="w"> </span>Complete<span class="w"> </span>error<span class="w"> </span>message
+-<span class="w"> </span>System<span class="w"> </span>information
+-<span class="w"> </span>Code<span class="w"> </span>snippet<span class="w"> </span>that<span class="w"> </span>reproduces<span class="w"> </span>the<span class="w"> </span>issue
+-<span class="w"> </span>Expected<span class="w"> </span>vs<span class="w"> </span>actual<span class="w"> </span>behavior
+</pre></div>
+</div>
+<p>Prevention Strategies
+1. Use version control for code and data
+2. Test with sample data before full datasets
+3. Document your workflow and parameters
+4. Keep dependencies updated
+5. Use consistent environments
+6. Monitor performance metrics
+7. Implement proper error handling
+8. Regular backups of important work</p>
+<p>This troubleshooting guide covers the most common issues encountered when using the DFT Development project. For additional support, please refer to the project repository or contact the development team.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api_reference.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Droplet-Film Model Development Project.
+      <span class="lastupdated">Last updated on 2026-03-09.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

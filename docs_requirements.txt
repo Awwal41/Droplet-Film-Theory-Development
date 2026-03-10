@@ -1,8 +1,10 @@
 # Documentation build requirements
-# These packages are needed to convert SRT files to HTML and build the docs site
+# Used to build documentation from reStructuredText (.rst) with Sphinx
 
-# Core dependencies
-pathlib2>=2.3.0; python_version < "3.4"
+# Sphinx and theme
+sphinx>=5.0,<8
+sphinx-rtd-theme>=2.0
+sphinx-copybutton>=0.5
 
-# Optional: For enhanced SRT processing
-# srt>=3.5.0  # Uncomment if you want to use the srt library
+# Optional: regenerate RST from legacy SRT (run srt_to_rst.py)
+# pathlib2>=2.3.0; python_version < "3.4"

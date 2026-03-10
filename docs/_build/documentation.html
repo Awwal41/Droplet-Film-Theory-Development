@@ -1,0 +1,728 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Droplet-Film Model Development Project &mdash; DFT Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=60dbed4a"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation Guide" href="installation_guide.html" />
+    <link rel="prev" title="Droplet-Film Model Development" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Droplet-Film Model Development
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Droplet-Film Model Development Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview-of-dft-development">1.1. Overview of DFT Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-does-a-dft-development-version-mean">1.2. What does a DFT Development version mean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dft-development-features">1.3. DFT Development features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dft-development-applications">1.4. DFT Development applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dft-development-compatibility">1.5. DFT Development compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dft-development-open-source-license">1.6. DFT Development open-source license</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#authors-of-dft-development">1.7. Authors of DFT Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#citing-dft-development">1.8. Citing DFT Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#additional-resources">1.9. Additional resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#system-requirements">2.1. System requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-environment-setup">2.2. Python environment setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#package-installation-methods">2.3. Package installation methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#verification-and-testing">2.4. Verification and testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jupyter-notebook-setup">2.5. Jupyter notebook setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-preparation">2.6. Data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-installation-issues">2.7. Common installation issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#development-environment-setup">2.8. Development environment setup</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#quick-start">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-workflow">3.1. Basic workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#your-first-prediction">3.2. Your first prediction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#understanding-the-output">3.3. Understanding the output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">3.4. Next steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#data-format">Data Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#required-input-parameters">4.1. Required input parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-validation">4.2. Data validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-preprocessing">4.3. Data preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-data-issues">4.4. Common data issues</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#running-dft-development">Running DFT Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-usage">5.1. Basic usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-line-options">5.2. Command-line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jupyter-notebook-usage">5.3. Jupyter notebook usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-formats">5.4. Output formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#error-handling">5.5. Error handling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#common-issues">6.1. Common issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-problems">6.2. Installation problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-loading-errors">6.3. Data loading errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#memory-and-performance-issues">6.4. Memory and performance issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-convergence-problems">6.5. Model convergence problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-help">6.6. Getting help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-examples">7.1. Basic examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-examples">7.2. Advanced examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#production-deployment">7.3. Production deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-implementations">7.4. Custom implementations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#performance">Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#benchmarks">8.1. Benchmarks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-optimization">8.2. Performance optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#memory-management">8.3. Memory management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parallel-processing">8.4. Parallel processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#how-to-guides">How-to Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-how-to">9.1. General how-to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-preparation-how-to">9.2. Data preparation how-to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-training-how-to">9.3. Model training how-to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#visualization-how-to">9.4. Visualization how-to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deployment-how-to">9.5. Deployment how-to</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#tutorial-scripts">Tutorial Scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-tutorials">10.1. Basic tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-tutorials">10.2. Advanced tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#case-studies">10.3. Case studies</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation_guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html">Usage Examples and Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#xgboost-tutorial">XGBoost Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-implementation-overview">XGBoost Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#basic-xgboost-setup">Basic XGBoost Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-data-preparation">XGBoost Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-model-training">XGBoost Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-hyperparameter-tuning">XGBoost Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-feature-importance-analysis">XGBoost Feature Importance Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#pysindy-tutorial">PySINDy Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-implementation-overview">PySINDy Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-setup-and-installation">PySINDy Setup and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-data-preparation">PySINDy Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-model-training">PySINDy Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-model-evaluation">PySINDy Model Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#pysr-tutorial">PySR Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-implementation-overview">PySR Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-setup-and-installation">PySR Setup and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-data-preparation">PySR Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-model-training">PySR Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-model-evaluation">PySR Model Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#qlattice-tutorial">QLattice Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-implementation-overview">QLattice Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-setup-and-installation">QLattice Setup and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-data-preparation">QLattice Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-model-training">QLattice Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-model-evaluation">QLattice Model Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#ensemble-methods-tutorial">Ensemble Methods Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#ensemble-implementation-overview">Ensemble Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#ensemble-model-creation">Ensemble Model Creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#model-comparison">Model Comparison</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#advanced-usage-examples">Advanced Usage Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#custom-alpha-strategy-implementation">Custom Alpha Strategy Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#production-deployment-example">Production Deployment Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#batch-processing-example">Batch Processing Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#performance-optimization">Performance Optimization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#memory-efficient-processing">Memory-Efficient Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#parallel-processing">Parallel Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#core-classes-and-modules">Core Classes and Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#dft-class-core-physics-model">DFT Class — Core Physics Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#class-definition">Class definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#constructor">Constructor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-fit">Methods — fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-predict">Methods — predict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-eq-physics-equation">Methods — _eq (physics equation)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-loss">Methods — _loss</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#chiefbldr-class-data-management">ChiefBldr Class — Data Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#id1">Class definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#id2">Constructor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-evolv-model">Methods — evolv_model</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#qlatticewrapper-class-symbolic-regression">QLatticeWrapper Class — Symbolic Regression</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#id3">Constructor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#data-format-requirements">Data Format Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#data-validation-error-handling-performance">Data Validation, Error Handling, Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#support-and-resources">Support and Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Droplet-Film Model Development</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Droplet-Film Model Development Project</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/documentation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="droplet-film-model-development-project">
+<h1>Droplet-Film Model Development Project<a class="headerlink" href="#droplet-film-model-development-project" title="Link to this heading"></a></h1>
+<p>Documentation</p>
+<p>Version: 2.0</p>
+<p>About DFT Development and this manual</p>
+<p>DFT Development stands for Droplet-Film Model Development for Physics-Informed Machine Learning.</p>
+<p>DFT Development is a comprehensive framework for predicting liquid loading in gas wells using physics-informed machine learning. The framework combines fundamental Droplet-Film Model principles with advanced machine learning techniques to provide accurate, interpretable predictions of critical flow rates. Originally developed for petroleum engineering applications, DFT Development now includes contributions from multiple research groups and supports various modeling approaches including PySINDY, PySR, XGBoost, and QLattice. The project is open-source software distributed under the terms of the MIT License.</p>
+<p>The DFT Development website provides comprehensive information about the framework. It includes links to this documentation, example notebooks, and a GitHub repository where all development is coordinated.</p>
+<p>—</p>
+<p>The content for this manual is part of the DFT Development distribution in its docs directory.</p>
+<p>The version of the manual on the project website corresponds to the latest DFT Development release. It is available at: [project-docs-url].
+A version of the manual corresponding to the latest stable release is available online at: [stable-docs-url].
+A version of the most recently added features is available at: [latest-docs-url].</p>
+<p>If needed, you can build a copy on your local machine of the manual (HTML pages) for the version of DFT Development you have downloaded. Follow the steps in the Installation Guide.</p>
+<p>—</p>
+<p>The manual is organized into three parts:</p>
+<p>The User Guide with information about how to obtain, configure, install, and use DFT Development,
+The API Reference with detailed technical documentation of all classes, methods, and parameters,
+The Examples and Tutorials with practical examples, use cases, and step-by-step tutorials.</p>
+<p>—</p>
+<p>After becoming familiar with DFT Development, consider bookmarking this page, since it gives quick access to all documentation sections and examples.</p>
+</section>
+<section id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h1>
+<section id="overview-of-dft-development">
+<h2>1.1. Overview of DFT Development<a class="headerlink" href="#overview-of-dft-development" title="Link to this heading"></a></h2>
+<p>The Droplet-Film Model Development project represents a sophisticated approach to predicting liquid loading in gas wells through the integration of fundamental physics principles with advanced machine learning techniques. This comprehensive framework addresses one of the most critical challenges in petroleum engineering: determining when gas wells will experience liquid loading, a phenomenon that significantly impacts production efficiency and well performance.</p>
+<p>Liquid loading occurs when the gas velocity in a well drops below a critical threshold, causing liquid accumulation in the tubing or casing. This phenomenon leads to reduced gas production rates, increased pressure drop, potential well shutdown, and significant economic losses. The DFT Development project provides sophisticated models to predict critical flow rates, enabling operators to optimize well performance and prevent costly production interruptions.</p>
+<p>The project is built on the Droplet-Film Model, a fundamental framework that describes the complex multiphase flow behavior in gas wells. This theory accounts for droplet entrainment and transport mechanisms, film formation and stability criteria, gravity and buoyancy effects, friction and pressure drop relationships, and well deviation angle impacts. This physics-based approach ensures that predictions are not only accurate but also interpretable and grounded in established engineering principles.</p>
+</section>
+<section id="what-does-a-dft-development-version-mean">
+<h2>1.2. What does a DFT Development version mean<a class="headerlink" href="#what-does-a-dft-development-version-mean" title="Link to this heading"></a></h2>
+<p>DFT Development uses semantic versioning (MAJOR.MINOR.PATCH) to indicate the nature of changes between releases. The MAJOR version number indicates incompatible API changes that may require code modifications when upgrading. The MINOR version number indicates new functionality that has been added in a backwards compatible manner, allowing existing code to continue working while providing access to new features. The PATCH version number indicates backwards compatible bug fixes that improve stability and performance without changing the API.</p>
+<p>The current version is 2.0.0, representing a major release that includes significant improvements to the physics model implementation, enhanced machine learning integration, and expanded support for multiple modeling approaches including PySINDY, PySR, XGBoost, and QLattice.</p>
+</section>
+<section id="dft-development-features">
+<h2>1.3. DFT Development features<a class="headerlink" href="#dft-development-features" title="Link to this heading"></a></h2>
+<p>The DFT Development framework offers a comprehensive suite of features designed for both research and industrial applications. The core physics model implements the Droplet-Film Model equations, handling complex multiphase flow phenomena while supporting various well geometries and conditions. The model provides interpretable physical parameters that maintain the connection between predictions and underlying physical processes.</p>
+<p>The framework includes multiple machine learning approaches to suit different use cases and preferences. The pure physics-based DFT model provides the most interpretable results, while hybrid physics-ML approaches combine the benefits of both methodologies. Symbolic regression capabilities through QLattice enable automated equation discovery, while ensemble methods improve accuracy through model combination.</p>
+<p>Advanced data handling capabilities ensure robust operation across diverse datasets. The framework provides automated data validation and preprocessing, support for various input formats, comprehensive error checking and handling, and scalable processing for large datasets. The system includes sophisticated hyperparameter tuning, cross-validation for model selection, performance monitoring and visualization, and production-ready deployment capabilities.</p>
+</section>
+<section id="dft-development-applications">
+<h2>1.4. DFT Development applications<a class="headerlink" href="#dft-development-applications" title="Link to this heading"></a></h2>
+<p>The DFT Development framework serves multiple user communities across research, industry, and education. In academic research, the framework supports multiphase flow studies, development of new physics-based models, validation of theoretical frameworks, and publication of scientific results. The comprehensive documentation and open-source nature make it ideal for collaborative research projects.</p>
+<p>Industrial applications focus on practical implementation and operational benefits. The framework supports well performance optimization, production forecasting, equipment sizing and design, and operational decision support. The production-ready implementation ensures reliable operation in industrial environments, while the comprehensive error handling and monitoring capabilities provide confidence in critical applications.</p>
+<p>Educational use cases leverage the framework’s combination of physics and machine learning to teach multiphase flow concepts, demonstrate physics-ML integration, provide hands-on learning with real data, and train students in research methodology. The extensive documentation and example notebooks make the framework accessible to students at various levels.</p>
+</section>
+<section id="dft-development-compatibility">
+<h2>1.5. DFT Development compatibility<a class="headerlink" href="#dft-development-compatibility" title="Link to this heading"></a></h2>
+<p>The DFT Development framework is designed for broad compatibility across different computing environments. The system requires Python 3.7 or higher, with Python 3.9 or later recommended for optimal performance and access to the latest features. The framework has been tested and verified on Windows 10/11 (64-bit), macOS 10.14 and later, Ubuntu 18.04 LTS and later, and CentOS 7 and later.</p>
+<p>The framework integrates with a comprehensive ecosystem of scientific computing libraries. Core dependencies include NumPy for numerical operations, Pandas for data handling, SciPy for optimization algorithms, and Scikit-learn for machine learning utilities. Visualization capabilities are provided through Matplotlib and Seaborn, while Jupyter notebook support enables interactive development and analysis.</p>
+<p>Specialized machine learning libraries extend the framework’s capabilities. Feyn QLattice provides symbolic regression capabilities, PySINDy offers equation discovery through sparse identification, XGBoost enables gradient boosting approaches, and PySR supports additional symbolic regression methods. The modular design allows users to choose the most appropriate tools for their specific needs.</p>
+</section>
+<section id="dft-development-open-source-license">
+<h2>1.6. DFT Development open-source license<a class="headerlink" href="#dft-development-open-source-license" title="Link to this heading"></a></h2>
+<p>DFT Development is distributed under the MIT License, which provides maximum flexibility for both academic and commercial use. The license allows for commercial use without restrictions, enabling companies to integrate the framework into their proprietary systems and products. Users may modify the source code to meet their specific requirements, and the license permits distribution of both original and modified versions.</p>
+<p>The open-source nature of the project encourages community contributions and collaborative development. Researchers and developers can contribute improvements, new features, and bug fixes, benefiting the entire community. The comprehensive documentation and example code make it easy for new contributors to understand the codebase and participate in development.</p>
+</section>
+<section id="authors-of-dft-development">
+<h2>1.7. Authors of DFT Development<a class="headerlink" href="#authors-of-dft-development" title="Link to this heading"></a></h2>
+<p>The DFT Development project is developed and maintained by a diverse team of researchers and engineers with expertise in petroleum engineering, machine learning, and software development. The primary development team includes specialists in multiphase flow modeling, physics-informed machine learning, and software engineering. Contributing researchers from various institutions bring domain expertise and fresh perspectives to the project.</p>
+<p>Community contributors play a vital role in the project’s success, providing bug reports, feature requests, code contributions, and documentation improvements. The collaborative development model ensures that the framework continues to evolve and improve based on real-world usage and feedback from the community.</p>
+</section>
+<section id="citing-dft-development">
+<h2>1.8. Citing DFT Development<a class="headerlink" href="#citing-dft-development" title="Link to this heading"></a></h2>
+<p>When using DFT Development in your research, please cite the project to acknowledge the contributions of the development team and community. The recommended citation format includes the project title, authors, year, and URL. This citation helps track the impact of the project and provides proper attribution for the work of the development team.</p>
+<p>For academic publications, we recommend including a brief description of how the framework was used in your research, including any modifications or extensions that were made. This information helps other researchers understand the context and reproducibility of your work.</p>
+</section>
+<section id="additional-resources">
+<h2>1.9. Additional resources<a class="headerlink" href="#additional-resources" title="Link to this heading"></a></h2>
+<p>The DFT Development project provides extensive resources to support users and contributors. The GitHub repository serves as the central hub for development, issue tracking, and community discussions. The comprehensive documentation includes detailed guides for installation, usage, and development, while the example notebooks provide practical demonstrations of the framework’s capabilities.</p>
+<p>The project website offers additional resources including research papers, case studies, and community forums. The issue tracker enables users to report bugs, request features, and ask questions, while the community forum facilitates discussions and knowledge sharing among users and developers.</p>
+<p>—</p>
+</section>
+</section>
+<section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
+<section id="system-requirements">
+<h2>2.1. System requirements<a class="headerlink" href="#system-requirements" title="Link to this heading"></a></h2>
+<p>The DFT Development framework is designed to run efficiently on a wide range of computing systems, from personal laptops to high-performance computing clusters. The minimum system requirements ensure that the framework can run on modest hardware, while the recommended requirements provide optimal performance for production use and large-scale analysis.</p>
+<p>The minimum system requirements include Python 3.7 or higher, 8GB of RAM, 2GB of free disk space, and an internet connection for package installation. These requirements ensure that the framework can run on most modern computers, making it accessible to a broad range of users. The Python requirement is necessary for the core functionality, while the RAM requirement ensures sufficient memory for data processing and model training.</p>
+<p>The recommended system configuration includes Python 3.9 or later, 16GB of RAM or more, 5GB of free disk space, SSD storage for better performance, and a multi-core processor. These specifications provide optimal performance for large datasets, complex models, and production deployments. The additional RAM enables processing of larger datasets without memory constraints, while SSD storage significantly improves I/O performance for data loading and model saving.</p>
+</section>
+<section id="python-environment-setup">
+<h2>2.2. Python environment setup<a class="headerlink" href="#python-environment-setup" title="Link to this heading"></a></h2>
+<p>Setting up a proper Python environment is crucial for the successful installation and operation of the DFT Development framework. We strongly recommend using a virtual environment to avoid conflicts with other Python projects and to ensure reproducible installations across different systems.</p>
+<p>The first step is to install Python from the official website at python.org. Choose Python 3.9 or 3.10 for the best compatibility with the framework and its dependencies. During installation, ensure that “Add Python to PATH” is checked, which allows you to run Python from the command line. After installation, verify that Python is working correctly by opening a terminal and running the command <cite>python –version</cite>.</p>
+<p>Creating a virtual environment provides isolation for the DFT Development project and its dependencies. On Windows, create a virtual environment using the commands <cite>python -m venv dft_env</cite> followed by <cite>dft_envScriptsactivate</cite>. On macOS and Linux, use <cite>python3 -m venv dft_env</cite> followed by <cite>source dft_env/bin/activate</cite>. The virtual environment should be activated whenever you work with the DFT Development framework.</p>
+<p>After creating and activating the virtual environment, upgrade pip to ensure you have the latest version. Run <cite>python -m pip install –upgrade pip</cite> to update pip to the latest version. This step is important because some packages may require the latest pip features for proper installation.</p>
+</section>
+<section id="package-installation-methods">
+<h2>2.3. Package installation methods<a class="headerlink" href="#package-installation-methods" title="Link to this heading"></a></h2>
+<p>The DFT Development framework can be installed using several methods, each offering different advantages depending on your needs and preferences. The complete installation method is recommended for most users as it installs all dependencies and the project in development mode, enabling easy updates and modifications.</p>
+<p>The complete installation method involves cloning the repository from GitHub and installing the project in development mode. First, clone the repository using <cite>git clone https://github.com/your-username/Droplet-Film-Theory-Development.git</cite>, then navigate to the project directory with <cite>cd Droplet-Film-Theory-Development</cite>. Finally, install the project and all dependencies using <cite>pip install -e .</cite>. This method ensures that all dependencies are installed with compatible versions and that the project is properly configured.</p>
+<p>The manual installation method provides more control over the installation process by allowing you to install packages individually. This method is useful when you need to customize the installation or when you encounter issues with the complete installation. Install the core dependencies first using <cite>pip install numpy pandas scipy scikit-learn</cite>, then add visualization packages with <cite>pip install matplotlib seaborn jupyter</cite>, and finally install specialized machine learning libraries with <cite>pip install feyn pysindy xgboost pysr</cite>.</p>
+<p>The requirements file method provides a middle ground between complete and manual installation. If a requirements.txt file exists in the project directory, you can install all dependencies using <cite>pip install -r requirements.txt</cite>. This method ensures that all packages are installed with the exact versions that were tested and verified by the development team.</p>
+</section>
+<section id="verification-and-testing">
+<h2>2.4. Verification and testing<a class="headerlink" href="#verification-and-testing" title="Link to this heading"></a></h2>
+<p>After installation, it is important to verify that the DFT Development framework is working correctly. This verification process includes testing basic imports, checking project-specific functionality, and running a simple example to ensure everything is properly configured.</p>
+<p>Test the basic Python packages by running commands such as <cite>python -c “import numpy; print(‘NumPy version:’, numpy.__version__)”</cite> for NumPy, <cite>python -c “import pandas; print(‘Pandas version:’, pandas.__version__)”</cite> for Pandas, and similar commands for SciPy and Scikit-learn. These commands verify that the core dependencies are installed and accessible.</p>
+<p>Test the project-specific modules by running <cite>python -c “from scripts_2.0.dft_model import DFT; print(‘DFT import successful’)”</cite> for the DFT class, <cite>python -c “from scripts_2.0.utils import ChiefBldr; print(‘ChiefBldr import successful’)”</cite> for the ChiefBldr class, and <cite>python -c “from scripts_2.0.utils import QLatticeWrapper; print(‘QLatticeWrapper import successful’)”</cite> for the QLatticeWrapper class. These commands verify that the project modules can be imported without errors.</p>
+<p>Test the basic functionality by running a simple example that creates sample data, initializes a model, trains it, and makes predictions. This test verifies that the entire pipeline is working correctly and that there are no runtime errors or configuration issues.</p>
+</section>
+<section id="jupyter-notebook-setup">
+<h2>2.5. Jupyter notebook setup<a class="headerlink" href="#jupyter-notebook-setup" title="Link to this heading"></a></h2>
+<p>Jupyter notebooks provide an excellent environment for interactive development and analysis with the DFT Development framework. The notebook interface allows you to combine code, documentation, and visualizations in a single document, making it ideal for exploratory analysis and sharing results with colleagues.</p>
+<p>Install Jupyter and related packages using <cite>pip install jupyter notebook ipywidgets</cite>. The Jupyter package provides the core notebook functionality, while the notebook package includes additional features for notebook management. The ipywidgets package enables interactive widgets that can enhance the notebook experience.</p>
+<p>Launch Jupyter by running <cite>jupyter notebook</cite> in your terminal. This command starts the Jupyter server and opens your web browser to the notebook interface. Navigate to the scripts_2.0 directory to access the example notebooks that demonstrate various aspects of the DFT Development framework.</p>
+<p>The framework includes several example notebooks that showcase different modeling approaches and use cases. The DFT-PISR.ipynb notebook demonstrates the main physics-informed implementation, while xgboost.ipynb shows the gradient boosting approach. The sindy.ipynb notebook illustrates symbolic regression analysis using PySINDY, and QLattice.ipynb demonstrates automated model discovery using QLattice.</p>
+</section>
+<section id="data-preparation">
+<h2>2.6. Data preparation<a class="headerlink" href="#data-preparation" title="Link to this heading"></a></h2>
+<p>Preparing your data correctly is essential for successful use of the DFT Development framework. The framework requires data in a specific format with particular column names and data types. Understanding these requirements and properly preparing your data will ensure optimal performance and accurate results.</p>
+<p>The framework requires data to be in CSV format with exactly ten columns representing different physical parameters of the gas well system. The first column, Dia, represents the well diameter in meters and should contain positive floating-point values. The second column, Dev(deg), represents the well deviation angle in degrees and should contain values between 0 and 90 degrees.</p>
+<p>The third column, Area (m2), represents the cross-sectional area in square meters and should be calculated based on the well diameter. The fourth column, z, represents the elevation change in meters and should contain positive values. The fifth column, GasDens, represents the gas density in kg/m³ and should contain positive values typically between 0.5 and 2.0 kg/m³.</p>
+<p>The remaining columns follow similar patterns with specific units and value ranges. LiquidDens represents liquid density in kg/m³, g (m/s2) represents gravitational acceleration in m/s², P/T represents the pressure-to-temperature ratio in Pa/K, friction_factor represents the dimensionless friction factor, and critical_film_thickness represents the critical film thickness in meters.</p>
+</section>
+<section id="common-installation-issues">
+<h2>2.7. Common installation issues<a class="headerlink" href="#common-installation-issues" title="Link to this heading"></a></h2>
+<p>Installation issues can arise due to various factors including system configuration, package conflicts, and network connectivity. Understanding common issues and their solutions will help you resolve problems quickly and get the framework running smoothly.</p>
+<p>Permission errors often occur when trying to install packages system-wide or when the user account lacks sufficient privileges. The solution is to use the –user flag with pip install commands, which installs packages in the user’s home directory rather than system-wide. Alternatively, using a virtual environment eliminates permission issues by keeping all packages isolated within the project directory.</p>
+<p>Version conflicts can occur when different packages require incompatible versions of the same dependency. The solution is to create a fresh virtual environment and install packages one by one, testing after each installation to identify the problematic package. Using the complete installation method often resolves version conflicts by installing all packages with compatible versions.</p>
+<p>Memory issues can occur during installation when the system runs out of available memory. The solution is to close other applications to free up memory, restart the computer if necessary, and use the –no-cache-dir flag with pip install commands to reduce memory usage during installation.</p>
+<p>Network issues can prevent package downloads due to firewall restrictions, proxy settings, or connectivity problems. The solution is to use alternative package sources such as PyPI mirrors, configure proxy settings if necessary, and ensure that the system has proper internet connectivity.</p>
+</section>
+<section id="development-environment-setup">
+<h2>2.8. Development environment setup<a class="headerlink" href="#development-environment-setup" title="Link to this heading"></a></h2>
+<p>Setting up a proper development environment is essential for contributors and advanced users who want to modify or extend the DFT Development framework. The development environment includes code quality tools, testing frameworks, and IDE configuration that support professional software development practices.</p>
+<p>Install code quality tools using <cite>pip install black flake8 pytest mypy</cite>. The black package provides automatic code formatting according to Python style guidelines, while flake8 performs linting to identify potential issues and style violations. The pytest package provides a comprehensive testing framework, and mypy performs static type checking to identify type-related errors.</p>
+<p>Configure code formatting by running <cite>black scripts_2.0/*.py</cite> to format all Python files in the project. Configure linting by running <cite>flake8 scripts_2.0/*.py</cite> to check for style violations and potential issues. Configure type checking by running <cite>mypy scripts_2.0/*.py</cite> to identify type-related errors and inconsistencies.</p>
+<p>For IDE configuration, Visual Studio Code users should install the Python extension and configure the project interpreter to use the virtual environment. PyCharm users should configure the project interpreter and enable code inspection features. Both IDEs provide excellent support for Python development with features such as syntax highlighting, code completion, and debugging capabilities.</p>
+<p>—</p>
+</section>
+</section>
+<section id="quick-start">
+<h1>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h1>
+<section id="basic-workflow">
+<h2>3.1. Basic workflow<a class="headerlink" href="#basic-workflow" title="Link to this heading"></a></h2>
+<p>The basic workflow for using the DFT Development framework involves five main steps that guide you from data preparation to making predictions. This workflow is designed to be straightforward and accessible to users with varying levels of experience in machine learning and petroleum engineering.</p>
+<p>The first step is to load your data using the ChiefBldr class, which handles data loading, validation, and preprocessing. The ChiefBldr class automatically splits your data into training and test sets, validates the required columns and data types, and prepares the data for model training. This step ensures that your data is in the correct format and ready for analysis.</p>
+<p>The second step is to initialize the model you want to use. The framework provides several modeling approaches including the DFT physics model, QLattice symbolic regression, XGBoost gradient boosting, and PySINDy equation discovery. Choose the model that best fits your needs and data characteristics.</p>
+<p>The third step is to train the model using your prepared data. The training process involves optimizing model parameters to minimize prediction errors on the training data. The framework provides automatic hyperparameter optimization and cross-validation to ensure robust model performance.</p>
+<p>The fourth step is to make predictions on new data using the trained model. The prediction process uses the optimized parameters to estimate critical flow rates for new well conditions. The framework provides confidence intervals and uncertainty estimates to help assess prediction reliability.</p>
+<p>The fifth step is to analyze the results and evaluate model performance. The framework provides comprehensive performance metrics, visualization tools, and analysis capabilities to help you understand the model’s behavior and validate its predictions.</p>
+</section>
+<section id="your-first-prediction">
+<h2>3.2. Your first prediction<a class="headerlink" href="#your-first-prediction" title="Link to this heading"></a></h2>
+<p>Creating your first prediction with the DFT Development framework is straightforward and requires only a few lines of code. This example demonstrates the complete process from data loading to making predictions, providing a foundation for more complex analyses.</p>
+<p>Begin by importing the necessary modules from the framework. The DFT class provides the core physics model, while the ChiefBldr class handles data management and preprocessing. These classes work together to provide a complete solution for predicting critical flow rates in gas wells.</p>
+<p>Load your data using the ChiefBldr class, specifying the path to your CSV file and the desired test set size. The ChiefBldr class automatically validates your data, ensures all required columns are present, and splits the data into training and test sets. This process handles common data issues and prepares your data for model training.</p>
+<p>Create and train a DFT model using the prepared data. The DFT model implements the Droplet-Film Model equations and provides physics-informed predictions of critical flow rates. The model automatically optimizes its parameters to minimize prediction errors while maintaining physical interpretability.</p>
+<p>Make predictions on the test data to evaluate model performance. The prediction process uses the optimized parameters to estimate critical flow rates for the test wells. The framework provides both point predictions and uncertainty estimates to help assess prediction reliability.</p>
+</section>
+<section id="understanding-the-output">
+<h2>3.3. Understanding the output<a class="headerlink" href="#understanding-the-output" title="Link to this heading"></a></h2>
+<p>The output from the DFT Development framework includes several components that provide comprehensive information about the model’s predictions and performance. Understanding these components is essential for interpreting results and making informed decisions based on the model’s output.</p>
+<p>The primary output is the predicted critical flow rates, which represent the minimum gas flow rate required to prevent liquid loading in each well. These predictions are based on the physics-informed model and provide estimates of the critical conditions for each well in your dataset.</p>
+<p>The model also provides optimized parameters that describe the physical behavior of the system. These parameters include global coefficients that characterize the overall flow behavior and sample-specific alpha values that represent the balance between droplet and film effects for each well.</p>
+<p>Performance metrics provide quantitative measures of the model’s accuracy and reliability. The mean squared error (MSE) indicates the average prediction error, while the R-squared value shows the proportion of variance explained by the model. These metrics help assess the model’s performance and identify potential issues.</p>
+<p>The framework also provides uncertainty estimates and confidence intervals for the predictions. These estimates help assess the reliability of individual predictions and identify cases where the model may be less certain about its estimates.</p>
+</section>
+<section id="next-steps">
+<h2>3.4. Next steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<p>After successfully creating your first prediction, there are several directions you can explore to gain deeper insights and improve your results. These next steps build upon the basic workflow and introduce more advanced features and capabilities.</p>
+<p>Explore different modeling approaches to compare their performance and characteristics. The framework provides several modeling options including the DFT physics model, QLattice symbolic regression, XGBoost gradient boosting, and PySINDy equation discovery. Each approach has different strengths and may be more suitable for specific types of data or applications.</p>
+<p>Experiment with hyperparameter optimization to improve model performance. The framework provides automatic hyperparameter tuning that can significantly improve prediction accuracy. Try different parameter ranges and optimization strategies to find the best configuration for your specific dataset.</p>
+<p>Investigate ensemble methods that combine multiple models to improve prediction accuracy and robustness. The framework supports various ensemble approaches that can leverage the strengths of different modeling methods while mitigating their individual weaknesses.</p>
+<p>Explore the visualization and analysis tools to gain deeper insights into your data and model behavior. The framework provides comprehensive visualization capabilities that can help identify patterns, outliers, and relationships in your data that may not be apparent from numerical results alone.</p>
+<p>—</p>
+</section>
+</section>
+<section id="data-format">
+<h1>Data Format<a class="headerlink" href="#data-format" title="Link to this heading"></a></h1>
+<section id="required-input-parameters">
+<h2>4.1. Required input parameters<a class="headerlink" href="#required-input-parameters" title="Link to this heading"></a></h2>
+<p>The DFT Development framework requires input data in a specific format with exactly ten columns representing different physical parameters of the gas well system. Each parameter has specific units, value ranges, and physical significance that are essential for accurate model predictions.</p>
+<p>The well diameter (Dia) is measured in meters and represents the internal diameter of the production tubing or casing. This parameter directly affects the flow area and influences both droplet and film behavior. Typical values range from 0.05 to 0.3 meters for most gas wells, with larger diameters generally requiring higher critical flow rates.</p>
+<p>The well deviation angle (Dev(deg)) is measured in degrees from vertical and represents the angle at which the well deviates from the vertical direction. This parameter is crucial for understanding the effects of gravity on liquid droplet behavior and film formation. Values range from 0 degrees (vertical) to 90 degrees (horizontal), with different flow regimes occurring at different angles.</p>
+<p>The cross-sectional area (Area (m2)) is calculated from the well diameter and represents the available flow area for gas and liquid. This parameter is used in the physics equations to determine flow velocities and pressure drops. The area is typically calculated as π × (diameter/2)² for circular cross-sections.</p>
+<p>The elevation change (z) is measured in meters and represents the vertical distance over which the flow occurs. This parameter accounts for gravitational effects on the flow and is particularly important for wells with significant vertical components. Positive values indicate upward flow, while negative values indicate downward flow.</p>
+<p>The gas density (GasDens) is measured in kg/m³ and represents the density of the gas phase at the operating conditions. This parameter varies with pressure, temperature, and gas composition. Typical values range from 0.5 to 2.0 kg/m³ for natural gas at standard conditions.</p>
+<p>The liquid density (LiquidDens) is measured in kg/m³ and represents the density of the liquid phase, typically water or condensate. This parameter is relatively constant for most applications, typically around 1000 kg/m³ for water. The density difference between liquid and gas phases drives the gravitational separation effects.</p>
+<p>The gravitational acceleration (g (m/s2)) is measured in m/s² and represents the local gravitational acceleration. This parameter is typically 9.81 m/s² for most locations on Earth but may vary slightly with latitude and altitude. The gravitational acceleration affects both droplet settling and film flow behavior.</p>
+<p>The pressure-to-temperature ratio (P/T) is measured in Pa/K and represents the ratio of operating pressure to operating temperature. This parameter affects gas density and viscosity, which in turn influence flow behavior. The ratio is typically calculated from the absolute pressure and absolute temperature at the operating conditions.</p>
+<p>The friction factor (friction_factor) is dimensionless and represents the resistance to flow due to wall friction. This parameter depends on the pipe roughness, Reynolds number, and flow regime. Typical values range from 0.01 to 0.05 for most gas wells, with higher values indicating more resistance to flow.</p>
+<p>The critical film thickness (critical_film_thickness) is measured in meters and represents the minimum film thickness required for stable film flow. This parameter is crucial for determining the transition between droplet and film flow regimes. Typical values range from 0.0001 to 0.01 meters, depending on the specific flow conditions.</p>
+</section>
+<section id="data-validation">
+<h2>4.2. Data validation<a class="headerlink" href="#data-validation" title="Link to this heading"></a></h2>
+<p>Data validation is a critical step in ensuring the accuracy and reliability of the DFT Development framework. The framework includes comprehensive validation procedures that check data format, completeness, and consistency before processing. Understanding these validation procedures helps ensure that your data is properly prepared and that potential issues are identified early.</p>
+<p>The framework automatically validates that all required columns are present in your dataset. Missing columns are identified and reported, allowing you to add them or correct column names before processing. The validation process is case-sensitive and requires exact matches for column names.</p>
+<p>Data type validation ensures that each column contains the expected data types. Numeric columns must contain numeric values, and the framework will attempt to convert string values to numbers where possible. Invalid data types are reported with specific error messages that help identify and correct the issues.</p>
+<p>Range validation checks that parameter values fall within physically reasonable ranges. Values outside these ranges may indicate data entry errors or unusual conditions that require special attention. The framework provides warnings for values that are outside typical ranges but still physically possible.</p>
+<p>Consistency validation checks for logical relationships between parameters. For example, the cross-sectional area should be consistent with the well diameter, and the pressure-to-temperature ratio should be reasonable for the operating conditions. These checks help identify potential data entry errors or measurement issues.</p>
+<p>The framework also checks for missing values, infinite values, and other data quality issues that could affect model performance. Missing values are identified and can be handled through various strategies including removal, interpolation, or imputation. Infinite values are flagged as they can cause numerical issues during model training.</p>
+</section>
+<section id="data-preprocessing">
+<h2>4.3. Data preprocessing<a class="headerlink" href="#data-preprocessing" title="Link to this heading"></a></h2>
+<p>Data preprocessing is an essential step in preparing your data for analysis with the DFT Development framework. The framework provides automatic preprocessing capabilities that handle common data issues and prepare your data for optimal model performance. Understanding these preprocessing steps helps ensure that your data is properly prepared and that the model can achieve its best performance.</p>
+<p>The framework automatically handles missing values through various strategies depending on the specific situation. For small numbers of missing values, the framework can interpolate or impute values based on statistical methods. For larger numbers of missing values, the framework may recommend removing problematic rows or using more sophisticated imputation methods.</p>
+<p>Data type conversion ensures that all parameters are in the correct format for analysis. The framework automatically converts string values to numeric values where possible, and provides clear error messages when conversion is not possible. This process handles common data format issues such as comma-separated numbers or scientific notation.</p>
+<p>Scaling and normalization can be applied to improve model performance and numerical stability. The framework provides options for standard scaling, min-max scaling, and other normalization methods. These preprocessing steps are particularly important when using machine learning approaches that are sensitive to the scale of input features.</p>
+<p>Outlier detection and handling help identify and address unusual data points that may affect model performance. The framework provides statistical methods for outlier detection and various strategies for handling outliers including removal, transformation, or special treatment during model training.</p>
+<p>Feature engineering capabilities allow you to create new features or transform existing ones to improve model performance. The framework provides functions for common transformations such as logarithmic scaling, polynomial features, and interaction terms. These capabilities help you extract the maximum information from your data.</p>
+</section>
+<section id="common-data-issues">
+<h2>4.4. Common data issues<a class="headerlink" href="#common-data-issues" title="Link to this heading"></a></h2>
+<p>Several common data issues can affect the performance of the DFT Development framework and should be addressed before analysis. Understanding these issues and their solutions helps ensure that your data is properly prepared and that the model can achieve its best performance.</p>
+<p>Missing values are one of the most common data issues and can occur due to various reasons including measurement failures, data entry errors, or incomplete records. The framework provides several strategies for handling missing values including removal of incomplete records, interpolation based on statistical methods, or imputation using machine learning techniques.</p>
+<p>Data type mismatches occur when numeric data is stored as text or when different numeric formats are mixed in the same column. The framework automatically attempts to convert data to the correct types, but manual correction may be necessary for complex cases. Common issues include comma-separated numbers, scientific notation, and mixed formats.</p>
+<p>Outliers are data points that are significantly different from the majority of the data and can affect model performance. The framework provides statistical methods for outlier detection and various strategies for handling outliers. Some outliers may represent genuine unusual conditions that are important for the analysis, while others may be data entry errors that should be corrected.</p>
+<p>Inconsistent units can cause significant problems in physics-based models where unit consistency is crucial. The framework expects specific units for each parameter and will provide warnings if units appear to be inconsistent. Common issues include mixing metric and imperial units, or using different reference conditions for pressure and temperature.</p>
+<p>Data leakage occurs when information from the future or test set inadvertently influences the training process. This can lead to overly optimistic performance estimates and poor generalization to new data. The framework includes checks for common data leakage scenarios and provides guidance on proper data splitting and preprocessing procedures.</p>
+<p>—</p>
+</section>
+</section>
+<section id="running-dft-development">
+<h1>Running DFT Development<a class="headerlink" href="#running-dft-development" title="Link to this heading"></a></h1>
+<section id="basic-usage">
+<h2>5.1. Basic usage<a class="headerlink" href="#basic-usage" title="Link to this heading"></a></h2>
+<p>The DFT Development framework can be used in several ways depending on your needs and preferences. The most common usage patterns include command-line execution for batch processing, Python script execution for custom workflows, and Jupyter notebook usage for interactive analysis and development.</p>
+<p>Command-line usage is ideal for batch processing and automated workflows. The framework provides command-line scripts for common tasks such as data conversion, model training, and prediction generation. These scripts can be integrated into larger workflows and automated systems for production use.</p>
+<p>Python script usage provides the most flexibility and control over the analysis process. You can write custom Python scripts that use the framework’s classes and methods to implement specific workflows or integrate the framework into larger applications. This approach is ideal for users who need custom functionality or want to extend the framework’s capabilities.</p>
+<p>Jupyter notebook usage is perfect for interactive analysis, exploratory work, and sharing results with colleagues. The notebook interface allows you to combine code, documentation, and visualizations in a single document, making it easy to explore data, develop models, and communicate results.</p>
+<p>The framework is designed to be user-friendly and accessible to users with varying levels of programming experience. The comprehensive documentation and example code make it easy to get started, while the flexible architecture supports advanced users who need custom functionality.</p>
+</section>
+<section id="command-line-options">
+<h2>5.2. Command-line options<a class="headerlink" href="#command-line-options" title="Link to this heading"></a></h2>
+<p>The DFT Development framework provides several command-line tools for common tasks. These tools are designed to be easy to use and can be integrated into automated workflows and batch processing systems.</p>
+<p>The convert_srt_to_html.py script converts SRT documentation files to HTML format for web display. This script is useful for generating documentation websites and maintaining up-to-date documentation. The script automatically processes all SRT files in the project directory and generates corresponding HTML files with proper formatting and styling.</p>
+<p>The build_docs.py script creates a complete documentation website from the HTML files generated by the conversion script. This script organizes the documentation into a cohesive website with navigation, styling, and additional features such as search and cross-referencing.</p>
+<p>The test_docs.py script validates the documentation build process and ensures that all components are working correctly. This script is useful for verifying that the documentation system is properly configured and that all files are accessible and correctly formatted.</p>
+<p>Additional command-line tools may be available depending on your specific installation and configuration. These tools provide convenient access to common functionality and can be integrated into larger workflows and automated systems.</p>
+</section>
+<section id="jupyter-notebook-usage">
+<h2>5.3. Jupyter notebook usage<a class="headerlink" href="#jupyter-notebook-usage" title="Link to this heading"></a></h2>
+<p>Jupyter notebooks provide an excellent environment for interactive analysis and development with the DFT Development framework. The notebook interface allows you to combine code, documentation, and visualizations in a single document, making it ideal for exploratory analysis and sharing results with colleagues.</p>
+<p>To use Jupyter notebooks with the framework, first ensure that Jupyter is installed and properly configured. Launch Jupyter by running the <cite>jupyter notebook</cite> command in your terminal, which will start the Jupyter server and open your web browser to the notebook interface.</p>
+<p>Navigate to the scripts_2.0 directory to access the example notebooks that demonstrate various aspects of the framework. These notebooks provide comprehensive examples of different modeling approaches and use cases, making them excellent starting points for your own analysis.</p>
+<p>The framework includes several example notebooks that showcase different capabilities and approaches. The DFT-PISR.ipynb notebook demonstrates the main physics-informed implementation, while xgboost.ipynb shows the gradient boosting approach. The sindy.ipynb notebook illustrates symbolic regression analysis using PySINDY, and QLattice.ipynb demonstrates automated model discovery using QLattice.</p>
+<p>Each notebook is designed to be self-contained and includes detailed explanations of the concepts and methods being demonstrated. The notebooks progress from basic examples to more advanced topics, making them suitable for users with varying levels of experience.</p>
+</section>
+<section id="output-formats">
+<h2>5.4. Output formats<a class="headerlink" href="#output-formats" title="Link to this heading"></a></h2>
+<p>The DFT Development framework provides output in several formats to support different use cases and workflows. Understanding these output formats helps you choose the most appropriate format for your specific needs and integrate the framework into your existing systems.</p>
+<p>Model outputs include predicted critical flow rates, optimized parameters, and performance metrics. These outputs are typically provided as NumPy arrays or Python objects that can be easily integrated into other analysis tools and workflows. The framework provides methods for saving and loading models to support reproducible analysis and production deployment.</p>
+<p>Documentation outputs include HTML files, CSS styling, and additional assets such as images and resources. These outputs are designed to create professional-looking documentation websites that can be easily shared and maintained. The framework provides tools for generating and updating documentation automatically.</p>
+<p>Data outputs include processed datasets, analysis results, and visualization files. These outputs can be saved in various formats including CSV, JSON, and image files to support different analysis and reporting needs. The framework provides flexible options for data export and formatting.</p>
+<p>The framework is designed to be compatible with standard scientific computing tools and formats, making it easy to integrate into existing workflows and share results with colleagues. The output formats are chosen to be widely supported and easy to use with common analysis tools.</p>
+</section>
+<section id="error-handling">
+<h2>5.5. Error handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h2>
+<p>The DFT Development framework includes comprehensive error handling to ensure robust operation and provide clear feedback when issues occur. Understanding the error handling system helps you diagnose and resolve problems quickly and effectively.</p>
+<p>The framework provides detailed error messages that explain what went wrong and suggest possible solutions. These error messages are designed to be informative and actionable, helping you understand the issue and take appropriate corrective action.</p>
+<p>Common error types include data validation errors, model convergence issues, memory allocation problems, and network connectivity issues. Each error type has specific handling procedures and recovery strategies that are automatically applied when possible.</p>
+<p>The framework includes logging capabilities that record detailed information about the analysis process, including warnings, errors, and performance metrics. This logging information is valuable for debugging issues and optimizing performance.</p>
+<p>The framework is designed to fail gracefully when errors occur, providing partial results and clear error messages rather than crashing unexpectedly. This approach ensures that you can recover from errors and continue your analysis with minimal data loss.</p>
+<p>—</p>
+</section>
+</section>
+<section id="troubleshooting">
+<h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h1>
+<section id="common-issues">
+<h2>6.1. Common issues<a class="headerlink" href="#common-issues" title="Link to this heading"></a></h2>
+<p>The DFT Development framework is designed to be robust and user-friendly, but users may encounter various issues during installation, configuration, or usage. Understanding common issues and their solutions helps ensure smooth operation and quick problem resolution.</p>
+<p>Import errors are among the most common issues and typically occur when the framework or its dependencies are not properly installed. These errors usually manifest as “ModuleNotFoundError” or “ImportError” messages and can be resolved by ensuring that all required packages are installed and that the Python path is correctly configured.</p>
+<p>Data loading errors can occur when the input data does not meet the framework’s requirements. These errors typically involve missing columns, incorrect data types, or invalid values. The framework provides detailed error messages that help identify and resolve these issues.</p>
+<p>Memory issues can occur when working with large datasets or complex models that exceed the available system memory. These issues can be resolved by using data sampling, reducing model complexity, or increasing available memory.</p>
+<p>Performance issues can manifest as slow execution times or poor model performance. These issues can often be resolved by optimizing hyperparameters, using more efficient algorithms, or improving data quality.</p>
+</section>
+<section id="installation-problems">
+<h2>6.2. Installation problems<a class="headerlink" href="#installation-problems" title="Link to this heading"></a></h2>
+<p>Installation problems can occur due to various factors including system configuration, package conflicts, and network connectivity. Understanding common installation issues and their solutions helps ensure successful installation and configuration.</p>
+<p>Permission errors often occur when trying to install packages system-wide or when the user account lacks sufficient privileges. The solution is to use the –user flag with pip install commands, which installs packages in the user’s home directory rather than system-wide. Alternatively, using a virtual environment eliminates permission issues by keeping all packages isolated within the project directory.</p>
+<p>Version conflicts can occur when different packages require incompatible versions of the same dependency. The solution is to create a fresh virtual environment and install packages one by one, testing after each installation to identify the problematic package. Using the complete installation method often resolves version conflicts by installing all packages with compatible versions.</p>
+<p>Network issues can prevent package downloads due to firewall restrictions, proxy settings, or connectivity problems. The solution is to use alternative package sources such as PyPI mirrors, configure proxy settings if necessary, and ensure that the system has proper internet connectivity.</p>
+<p>Compilation errors can occur when installing packages that require compilation from source code. These errors are more common on Windows systems and can be resolved by installing Microsoft Visual C++ Build Tools or using pre-compiled packages when available.</p>
+</section>
+<section id="data-loading-errors">
+<h2>6.3. Data loading errors<a class="headerlink" href="#data-loading-errors" title="Link to this heading"></a></h2>
+<p>Data loading errors can occur when the input data does not meet the framework’s requirements or when there are issues with the data file itself. Understanding these errors and their solutions helps ensure successful data processing.</p>
+<p>File not found errors occur when the specified data file path is incorrect or when the file does not exist. The solution is to verify the file path, ensure the file exists, and check file permissions. Using absolute paths can help avoid path-related issues.</p>
+<p>Column missing errors occur when required columns are not present in the data file. The solution is to check the column names, ensure they match the framework’s requirements exactly, and add missing columns if necessary. The framework provides detailed error messages that list the missing columns.</p>
+<p>Data type errors occur when columns contain data in the wrong format. The solution is to convert the data to the correct types, handle missing values appropriately, and ensure that numeric columns contain only numeric values. The framework provides automatic type conversion for common cases.</p>
+<p>Value range errors occur when parameter values fall outside physically reasonable ranges. The solution is to check the data for outliers, verify that units are correct, and correct any data entry errors. The framework provides warnings for values that are outside typical ranges but still physically possible.</p>
+</section>
+<section id="memory-and-performance-issues">
+<h2>6.4. Memory and performance issues<a class="headerlink" href="#memory-and-performance-issues" title="Link to this heading"></a></h2>
+<p>Memory and performance issues can occur when working with large datasets or complex models that exceed the available system resources. Understanding these issues and their solutions helps ensure optimal performance and successful analysis.</p>
+<p>Out of memory errors occur when the system runs out of available memory during data processing or model training. The solution is to use data sampling to reduce dataset size, process data in smaller chunks, or increase available memory. The framework provides options for data sampling and chunked processing.</p>
+<p>Slow performance can occur due to inefficient algorithms, large hyperparameter grids, or insufficient computational resources. The solution is to optimize hyperparameters, use more efficient algorithms, or increase computational resources. The framework provides performance monitoring tools to help identify bottlenecks.</p>
+<p>Convergence issues can occur when models fail to converge to optimal solutions within the specified time limits. The solution is to increase iteration limits, adjust initial parameters, or use different optimization algorithms. The framework provides options for customizing optimization procedures.</p>
+<p>Scalability issues can occur when the framework’s performance degrades significantly with larger datasets or more complex models. The solution is to use distributed computing, optimize algorithms, or implement custom solutions for specific use cases. The framework provides guidance on scaling to larger problems.</p>
+</section>
+<section id="model-convergence-problems">
+<h2>6.5. Model convergence problems<a class="headerlink" href="#model-convergence-problems" title="Link to this heading"></a></h2>
+<p>Model convergence problems can occur when the optimization algorithms fail to find optimal solutions within the specified time limits or when the optimization process encounters numerical issues. Understanding these problems and their solutions helps ensure successful model training.</p>
+<p>Poor initial parameters can cause convergence problems by starting the optimization process far from the optimal solution. The solution is to use better initial parameter estimates based on physical knowledge or previous experience. The framework provides options for customizing initial parameters.</p>
+<p>Inappropriate bounds can prevent the optimization algorithm from exploring the parameter space effectively. The solution is to adjust the parameter bounds to allow exploration of the full parameter space while maintaining physical constraints. The framework provides options for customizing parameter bounds.</p>
+<p>Insufficient iterations can cause convergence problems when the optimization algorithm needs more time to find the optimal solution. The solution is to increase the maximum number of iterations or function evaluations. The framework provides options for customizing optimization limits.</p>
+<p>Numerical instability can cause convergence problems when the optimization process encounters numerical issues such as division by zero or overflow. The solution is to improve data scaling, add numerical safeguards, or use more robust optimization algorithms. The framework provides options for improving numerical stability.</p>
+</section>
+<section id="getting-help">
+<h2>6.6. Getting help<a class="headerlink" href="#getting-help" title="Link to this heading"></a></h2>
+<p>When you encounter issues that cannot be resolved using the troubleshooting guide, there are several resources available to help you get the support you need. These resources provide access to the development team, community support, and additional documentation.</p>
+<p>The GitHub repository serves as the central hub for issue tracking and community support. You can report bugs, request features, and ask questions through the issue tracker. The development team monitors the issue tracker and responds to user questions and concerns.</p>
+<p>The community forum provides a platform for users to discuss issues, share solutions, and collaborate on projects. The forum is monitored by both the development team and experienced users who can provide assistance and guidance.</p>
+<p>The comprehensive documentation includes detailed guides for installation, usage, and development. The documentation is regularly updated and includes examples, tutorials, and troubleshooting information. The documentation is available both online and as part of the project distribution.</p>
+<p>The development team can be contacted directly for urgent issues or questions that require immediate attention. Contact information is available through the project website and GitHub repository. The development team is committed to providing timely support and assistance to users.</p>
+<p>—</p>
+</section>
+</section>
+<section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h1>
+<section id="basic-examples">
+<h2>7.1. Basic examples<a class="headerlink" href="#basic-examples" title="Link to this heading"></a></h2>
+<p>The DFT Development framework includes comprehensive examples that demonstrate its capabilities and provide starting points for your own analysis. These examples progress from basic usage to advanced applications, making them suitable for users with varying levels of experience.</p>
+<p>The simple prediction example demonstrates the basic workflow for using the framework. This example shows how to load data, initialize a model, train it, and make predictions. The example includes detailed explanations of each step and provides a foundation for more complex analyses.</p>
+<p>The data loading and validation example demonstrates how to prepare data for analysis with the framework. This example shows how to check data format, validate required columns, and handle common data issues. The example includes error handling and data quality checks that are essential for successful analysis.</p>
+<p>The model training example demonstrates how to train different types of models using the framework. This example shows how to configure model parameters, perform hyperparameter optimization, and evaluate model performance. The example includes cross-validation and performance metrics that help ensure robust model performance.</p>
+<p>The prediction example demonstrates how to make predictions using trained models. This example shows how to prepare new data, make predictions, and interpret the results. The example includes uncertainty estimates and confidence intervals that help assess prediction reliability.</p>
+</section>
+<section id="advanced-examples">
+<h2>7.2. Advanced examples<a class="headerlink" href="#advanced-examples" title="Link to this heading"></a></h2>
+<p>Advanced examples demonstrate sophisticated techniques and applications that build upon the basic examples. These examples show how to use the framework for complex analysis tasks and production applications.</p>
+<p>The hyperparameter optimization example demonstrates how to systematically search for optimal model parameters. This example shows how to define parameter grids, perform grid search, and evaluate different parameter combinations. The example includes cross-validation and performance comparison that help ensure robust parameter selection.</p>
+<p>The cross-validation analysis example demonstrates how to evaluate model performance using multiple data splits. This example shows how to perform k-fold cross-validation, analyze performance across folds, and identify potential overfitting. The example includes statistical analysis and visualization that help interpret the results.</p>
+<p>The model comparison example demonstrates how to compare different modeling approaches and select the best one for your specific needs. This example shows how to train multiple models, compare their performance, and create ensemble methods. The example includes performance metrics and visualization that help make informed decisions.</p>
+<p>The visualization example demonstrates how to create comprehensive visualizations of your data and model results. This example shows how to create performance plots, residual analysis, and feature importance visualizations. The example includes interactive plots and publication-quality figures that help communicate your results.</p>
+</section>
+<section id="production-deployment">
+<h2>7.3. Production deployment<a class="headerlink" href="#production-deployment" title="Link to this heading"></a></h2>
+<p>Production deployment examples demonstrate how to use the framework in production environments and integrate it into larger systems. These examples show how to save and load models, create prediction APIs, and handle production data.</p>
+<p>The model saving example demonstrates how to save trained models for later use. This example shows how to serialize models, save them to disk, and load them for prediction. The example includes error handling and validation that ensure reliable model persistence.</p>
+<p>The model loading example demonstrates how to load saved models and use them for prediction. This example shows how to deserialize models, validate their integrity, and use them for new predictions. The example includes error handling and fallback procedures that ensure robust operation.</p>
+<p>The prediction API example demonstrates how to create a web API for making predictions. This example shows how to create REST endpoints, handle HTTP requests, and return prediction results. The example includes error handling, input validation, and response formatting that ensure reliable API operation.</p>
+<p>The batch processing example demonstrates how to process large datasets efficiently. This example shows how to process data in chunks, handle memory constraints, and manage computational resources. The example includes progress monitoring and error recovery that ensure reliable batch processing.</p>
+</section>
+<section id="custom-implementations">
+<h2>7.4. Custom implementations<a class="headerlink" href="#custom-implementations" title="Link to this heading"></a></h2>
+<p>Custom implementation examples demonstrate how to extend the framework’s capabilities and integrate it with other tools and systems. These examples show how to create custom models, implement new features, and integrate with external services.</p>
+<p>The custom alpha strategy example demonstrates how to implement custom strategies for assigning alpha values. This example shows how to create custom functions, integrate them with the framework, and evaluate their performance. The example includes testing and validation that ensure reliable custom implementations.</p>
+<p>The ensemble method example demonstrates how to create custom ensemble methods that combine multiple models. This example shows how to implement voting, averaging, and stacking methods, and evaluate their performance. The example includes performance comparison and optimization that help select the best ensemble strategy.</p>
+<p>The external integration example demonstrates how to integrate the framework with external services and databases. This example shows how to connect to databases, retrieve data, and store results. The example includes error handling and data validation that ensure reliable integration.</p>
+<p>The custom visualization example demonstrates how to create custom visualizations and analysis tools. This example shows how to extend the framework’s visualization capabilities, create interactive plots, and generate reports. The example includes styling and formatting that ensure professional-quality output.</p>
+<p>—</p>
+</section>
+</section>
+<section id="performance">
+<h1>Performance<a class="headerlink" href="#performance" title="Link to this heading"></a></h1>
+<section id="benchmarks">
+<h2>8.1. Benchmarks<a class="headerlink" href="#benchmarks" title="Link to this heading"></a></h2>
+<p>The DFT Development framework has been extensively benchmarked to ensure optimal performance across different use cases and computing environments. These benchmarks provide performance baselines and help users understand the framework’s capabilities and limitations.</p>
+<p>The framework typically achieves R² values exceeding 0.95 for well-characterized datasets, indicating excellent prediction accuracy. Mean absolute percentage errors are typically below 10% for most applications, demonstrating reliable performance across diverse conditions. These performance metrics are achieved through the combination of physics-informed modeling and advanced machine learning techniques.</p>
+<p>Training time scales approximately linearly with dataset size, making the framework suitable for both small research datasets and large industrial applications. The framework includes optimizations for memory usage and computational efficiency that enable processing of large datasets without excessive resource requirements.</p>
+<p>The framework has been tested on various computing platforms including personal laptops, workstations, and high-performance computing clusters. Performance scales well with available computational resources, enabling users to leverage additional computing power when available.</p>
+<p>Cross-validation performance demonstrates robust generalization across different data splits and conditions. The framework maintains consistent performance across different well types, operating conditions, and geographic regions, indicating reliable applicability across diverse applications.</p>
+</section>
+<section id="performance-optimization">
+<h2>8.2. Performance optimization<a class="headerlink" href="#performance-optimization" title="Link to this heading"></a></h2>
+<p>The DFT Development framework provides several options for optimizing performance to meet specific requirements and constraints. Understanding these optimization options helps ensure that the framework performs optimally for your specific use case.</p>
+<p>Data optimization techniques can significantly improve performance by reducing memory usage and computational requirements. The framework provides options for data sampling, feature selection, and data compression that can reduce resource requirements while maintaining prediction accuracy.</p>
+<p>Model optimization techniques can improve both training speed and prediction accuracy. The framework provides options for model simplification, parameter reduction, and algorithm selection that can optimize the trade-off between performance and accuracy.</p>
+<p>Computational optimization techniques can leverage available hardware resources to improve performance. The framework provides options for parallel processing, GPU acceleration, and distributed computing that can significantly reduce processing time for large datasets.</p>
+<p>Memory optimization techniques can enable processing of larger datasets within available memory constraints. The framework provides options for data streaming, chunked processing, and memory-efficient algorithms that can handle datasets that exceed available memory.</p>
+</section>
+<section id="memory-management">
+<h2>8.3. Memory management<a class="headerlink" href="#memory-management" title="Link to this heading"></a></h2>
+<p>The DFT Development framework includes sophisticated memory management capabilities that enable processing of large datasets within available memory constraints. Understanding these capabilities helps ensure optimal performance and successful analysis of large datasets.</p>
+<p>The framework automatically manages memory allocation and deallocation to prevent memory leaks and optimize memory usage. Memory is allocated as needed and released when no longer required, ensuring efficient use of available resources.</p>
+<p>Data streaming capabilities enable processing of datasets that exceed available memory by loading and processing data in smaller chunks. The framework provides options for chunk size optimization and memory monitoring that help ensure reliable processing of large datasets.</p>
+<p>Memory-efficient algorithms are used throughout the framework to minimize memory requirements while maintaining accuracy and performance. These algorithms are designed to process data efficiently without requiring excessive memory allocation.</p>
+<p>The framework provides memory monitoring and profiling tools that help identify memory bottlenecks and optimize memory usage. These tools provide detailed information about memory allocation patterns and help identify opportunities for optimization.</p>
+</section>
+<section id="parallel-processing">
+<h2>8.4. Parallel processing<a class="headerlink" href="#parallel-processing" title="Link to this heading"></a></h2>
+<p>The DFT Development framework supports parallel processing to leverage multiple CPU cores and improve performance for computationally intensive tasks. Understanding the parallel processing capabilities helps ensure optimal performance on multi-core systems.</p>
+<p>Hyperparameter optimization can be parallelized to evaluate multiple parameter combinations simultaneously. The framework automatically detects available CPU cores and distributes the optimization workload across multiple processes.</p>
+<p>Cross-validation can be parallelized to evaluate multiple data splits simultaneously. This parallelization significantly reduces the time required for comprehensive model evaluation and validation.</p>
+<p>Data preprocessing can be parallelized to process large datasets more efficiently. The framework provides options for parallel data loading, validation, and preprocessing that can significantly reduce processing time.</p>
+<p>Model training can be parallelized for ensemble methods that train multiple models simultaneously. The framework provides options for parallel model training and evaluation that can improve performance for complex ensemble methods.</p>
+<p>—</p>
+</section>
+</section>
+<section id="how-to-guides">
+<h1>How-to Guides<a class="headerlink" href="#how-to-guides" title="Link to this heading"></a></h1>
+<section id="general-how-to">
+<h2>9.1. General how-to<a class="headerlink" href="#general-how-to" title="Link to this heading"></a></h2>
+<p>The DFT Development framework includes comprehensive how-to guides that provide step-by-step instructions for common tasks and workflows. These guides are designed to be practical and actionable, helping users accomplish their goals efficiently and effectively.</p>
+<p>The getting started guide provides a comprehensive introduction to the framework and walks users through the complete process from installation to making their first predictions. This guide includes detailed explanations of each step and provides a solid foundation for more advanced usage.</p>
+<p>The data preparation guide explains how to prepare data for analysis with the framework. This guide covers data format requirements, validation procedures, and preprocessing techniques that ensure optimal performance and accurate results.</p>
+<p>The model training guide explains how to train different types of models using the framework. This guide covers model configuration, hyperparameter optimization, and performance evaluation techniques that help ensure robust and accurate models.</p>
+<p>The visualization guide explains how to create comprehensive visualizations of your data and model results. This guide covers performance plots, residual analysis, and feature importance visualizations that help communicate your results effectively.</p>
+</section>
+<section id="data-preparation-how-to">
+<h2>9.2. Data preparation how-to<a class="headerlink" href="#data-preparation-how-to" title="Link to this heading"></a></h2>
+<p>Data preparation is a critical step in ensuring successful analysis with the DFT Development framework. The data preparation guide provides comprehensive instructions for preparing data in the correct format and ensuring data quality.</p>
+<p>The data format guide explains the required data format and provides examples of properly formatted data files. This guide covers column names, data types, and value ranges that ensure compatibility with the framework.</p>
+<p>The data validation guide explains how to validate data quality and identify potential issues. This guide covers missing value detection, outlier identification, and consistency checks that help ensure reliable analysis results.</p>
+<p>The data preprocessing guide explains how to preprocess data to improve model performance and handle common data issues. This guide covers scaling, normalization, and feature engineering techniques that can significantly improve model performance.</p>
+<p>The data quality guide explains how to assess and improve data quality to ensure optimal analysis results. This guide covers data completeness, accuracy, and consistency checks that help identify and resolve data quality issues.</p>
+</section>
+<section id="model-training-how-to">
+<h2>9.3. Model training how-to<a class="headerlink" href="#model-training-how-to" title="Link to this heading"></a></h2>
+<p>Model training is a crucial step in developing accurate and reliable models using the DFT Development framework. The model training guide provides comprehensive instructions for training different types of models and optimizing their performance.</p>
+<p>The model configuration guide explains how to configure different types of models and select appropriate parameters. This guide covers model selection, parameter configuration, and optimization settings that ensure optimal performance.</p>
+<p>The hyperparameter optimization guide explains how to systematically search for optimal model parameters. This guide covers parameter grid definition, search strategies, and evaluation techniques that help ensure robust parameter selection.</p>
+<p>The cross-validation guide explains how to evaluate model performance using multiple data splits. This guide covers k-fold cross-validation, performance analysis, and overfitting detection that help ensure reliable model evaluation.</p>
+<p>The performance evaluation guide explains how to assess model performance and identify areas for improvement. This guide covers performance metrics, statistical analysis, and visualization techniques that help interpret model results.</p>
+</section>
+<section id="visualization-how-to">
+<h2>9.4. Visualization how-to<a class="headerlink" href="#visualization-how-to" title="Link to this heading"></a></h2>
+<p>Visualization is an essential tool for understanding data and communicating results effectively. The visualization guide provides comprehensive instructions for creating professional-quality visualizations using the DFT Development framework.</p>
+<p>The performance plotting guide explains how to create visualizations of model performance and accuracy. This guide covers scatter plots, residual plots, and performance metrics visualization that help assess model quality.</p>
+<p>The data visualization guide explains how to create visualizations of your input data and analysis results. This guide covers histograms, scatter plots, and correlation matrices that help understand data characteristics and relationships.</p>
+<p>The result visualization guide explains how to create visualizations of model predictions and analysis results. This guide covers prediction plots, confidence intervals, and uncertainty visualization that help communicate results effectively.</p>
+<p>The publication plotting guide explains how to create publication-quality figures for academic papers and reports. This guide covers styling, formatting, and export options that ensure professional-quality output.</p>
+</section>
+<section id="deployment-how-to">
+<h2>9.5. Deployment how-to<a class="headerlink" href="#deployment-how-to" title="Link to this heading"></a></h2>
+<p>Deployment is the final step in implementing the DFT Development framework in production environments. The deployment guide provides comprehensive instructions for deploying models and integrating them into larger systems.</p>
+<p>The model saving guide explains how to save trained models for later use and deployment. This guide covers model serialization, file formats, and version control that ensure reliable model persistence.</p>
+<p>The model loading guide explains how to load saved models and use them for prediction. This guide covers model deserialization, validation, and error handling that ensure robust model loading.</p>
+<p>The API development guide explains how to create web APIs for making predictions. This guide covers REST endpoint creation, request handling, and response formatting that ensure reliable API operation.</p>
+<p>The production integration guide explains how to integrate the framework into production systems and workflows. This guide covers system integration, monitoring, and maintenance that ensure reliable production operation.</p>
+<p>—</p>
+</section>
+</section>
+<section id="tutorial-scripts">
+<h1>Tutorial Scripts<a class="headerlink" href="#tutorial-scripts" title="Link to this heading"></a></h1>
+<section id="basic-tutorials">
+<h2>10.1. Basic tutorials<a class="headerlink" href="#basic-tutorials" title="Link to this heading"></a></h2>
+<p>The DFT Development framework includes comprehensive tutorial scripts that provide hands-on learning experiences and practical examples. These tutorials are designed to be self-contained and progressive, building from basic concepts to advanced applications.</p>
+<p>Tutorial 1: First Prediction provides a complete introduction to the framework and walks users through the process of making their first prediction. This tutorial covers data loading, model training, and prediction generation with detailed explanations of each step.</p>
+<p>Tutorial 2: Data Validation demonstrates how to validate data quality and identify potential issues before analysis. This tutorial covers data format checking, missing value detection, and outlier identification with practical examples.</p>
+<p>Tutorial 3: Model Training shows how to train different types of models and optimize their performance. This tutorial covers model configuration, hyperparameter optimization, and performance evaluation with real-world examples.</p>
+<p>Tutorial 4: Performance Analysis demonstrates how to evaluate model performance and interpret results. This tutorial covers performance metrics, statistical analysis, and visualization techniques that help understand model behavior.</p>
+</section>
+<section id="advanced-tutorials">
+<h2>10.2. Advanced tutorials<a class="headerlink" href="#advanced-tutorials" title="Link to this heading"></a></h2>
+<p>Advanced tutorials build upon the basic tutorials and demonstrate sophisticated techniques and applications. These tutorials are designed for users who want to explore advanced capabilities and implement complex workflows.</p>
+<p>Tutorial 5: Hyperparameter Optimization demonstrates how to systematically search for optimal model parameters. This tutorial covers parameter grid definition, search strategies, and evaluation techniques with comprehensive examples.</p>
+<p>Tutorial 6: Cross-Validation Analysis shows how to evaluate model performance using multiple data splits. This tutorial covers k-fold cross-validation, performance analysis, and overfitting detection with statistical rigor.</p>
+<p>Tutorial 7: Model Comparison demonstrates how to compare different modeling approaches and select the best one. This tutorial covers performance comparison, statistical testing, and ensemble methods with practical examples.</p>
+<p>Tutorial 8: Ensemble Methods shows how to create and evaluate ensemble methods that combine multiple models. This tutorial covers voting, averaging, and stacking methods with performance analysis.</p>
+</section>
+<section id="case-studies">
+<h2>10.3. Case studies<a class="headerlink" href="#case-studies" title="Link to this heading"></a></h2>
+<p>Case studies demonstrate real-world applications of the DFT Development framework and provide practical examples of how to use the framework for specific problems and applications.</p>
+<p>Case Study 1: Vertical Well Analysis demonstrates how to use the framework for analyzing vertical gas wells. This case study covers data preparation, model training, and result interpretation for vertical well applications.</p>
+<p>Case Study 2: Horizontal Well Analysis shows how to use the framework for analyzing horizontal gas wells. This case study covers the unique challenges of horizontal wells and demonstrates appropriate modeling approaches.</p>
+<p>Case Study 3: Multi-Well Comparison demonstrates how to use the framework for comparing multiple wells and identifying performance patterns. This case study covers comparative analysis and statistical methods for multi-well studies.</p>
+<p>Case Study 4: Real-World Applications shows how the framework has been used in actual industrial applications. This case study covers production deployment, performance monitoring, and business impact assessment.</p>
+<p>—</p>
+<p>This documentation provides comprehensive information about the DFT Development framework. For additional examples and tutorials, explore the individual Jupyter notebooks in the <cite>scripts_2.0/</cite> directory, which include implementations for PySINDY, PySR, XGBoost, and QLattice approaches.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Droplet-Film Model Development" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="installation_guide.html" class="btn btn-neutral float-right" title="Installation Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Droplet-Film Model Development Project.
+      <span class="lastupdated">Last updated on 2026-03-09.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

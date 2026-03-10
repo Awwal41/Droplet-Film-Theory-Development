@@ -1,0 +1,797 @@
+Usage Examples and Tutorials
+============================
+
+Droplet-Film Model Development Project
+
+This comprehensive guide provides practical examples and tutorials for using all machine learning methods available in the DFT Development framework. Each method is demonstrated with complete code examples, function calls, and best practices.
+
+
+XGBoost Tutorial
+================
+
+
+
+XGBoost Implementation Overview
+-------------------------------
+
+
+XGBoost (Extreme Gradient Boosting) is a powerful gradient boosting framework that provides excellent performance for regression tasks. In the DFT Development framework, XGBoost is used to predict critical flow rates in gas wells with high accuracy and interpretability.
+
+
+Basic XGBoost Setup
+-------------------
+
+
+
+.. code-block:: python
+
+   # Import required modules
+   import pandas as pd
+   import numpy as np
+   from sklearn.model_selection import train_test_split
+   from sklearn.metrics import mean_squared_error, r2_score
+   import xgboost as xgb
+   import matplotlib.pyplot as plt
+   
+   # Import DFT framework components
+   from scripts_2.0.utils import ChiefBldr
+   from scripts_2.0.dft_model import DFT
+
+
+
+XGBoost Data Preparation
+------------------------
+
+
+
+.. code-block:: python
+
+   # Load and prepare data using ChiefBldr
+   data_path = "path/to/your/well_data.csv"
+   builder = ChiefBldr(
+       path=data_path,
+       includ_cols=['Dia', 'Dev(deg)', 'Area (m2)', 'z', 'GasDens', 
+                    'LiquidDens', 'g (m/s2)', 'P/T', 'friction_factor', 
+                    'critical_film_thickness'],
+       test_size=0.2,
+       scale=True  # XGBoost benefits from scaled features
+   )
+   
+   # Get training and test data
+   X_train, X_test, y_train, y_test = builder.get_data()
+
+
+
+XGBoost Model Training
+----------------------
+
+
+
+.. code-block:: python
+
+   # Create and configure XGBoost model
+   xgb_model = xgb.XGBRegressor(
+       n_estimators=1000,
+       max_depth=6,
+       learning_rate=0.1,
+       subsample=0.8,
+       colsample_bytree=0.8,
+       random_state=42,
+       early_stopping_rounds=50,
+       eval_metric='rmse'
+   )
+   
+   # Train the model
+   xgb_model.fit(
+       X_train, y_train,
+       eval_set=[(X_test, y_test)],
+       verbose=False
+   )
+   
+   # Make predictions
+   y_pred = xgb_model.predict(X_test)
+   
+   # Evaluate performance
+   mse = mean_squared_error(y_test, y_pred)
+   r2 = r2_score(y_test, y_pred)
+   print(f"XGBoost MSE: {mse:.4f}")
+   print(f"XGBoost R²: {r2:.4f}")
+
+
+
+XGBoost Hyperparameter Tuning
+-----------------------------
+
+
+
+.. code-block:: python
+
+   from sklearn.model_selection import GridSearchCV
+   
+   # Define parameter grid for hyperparameter tuning
+   param_grid = {
+       'n_estimators': [500, 1000, 1500],
+       'max_depth': [4, 6, 8],
+       'learning_rate': [0.01, 0.1, 0.2],
+       'subsample': [0.8, 0.9, 1.0]
+   }
+   
+   # Perform grid search
+   grid_search = GridSearchCV(
+       xgb.XGBRegressor(random_state=42),
+       param_grid,
+       cv=5,
+       scoring='neg_mean_squared_error',
+       n_jobs=-1
+   )
+   
+   grid_search.fit(X_train, y_train)
+   
+   # Get best parameters
+   best_params = grid_search.best_params_
+   print(f"Best XGBoost parameters: {best_params}")
+   
+   # Train final model with best parameters
+   best_xgb_model = grid_search.best_estimator_
+   y_pred_best = best_xgb_model.predict(X_test)
+
+
+
+XGBoost Feature Importance Analysis
+-----------------------------------
+
+
+
+.. code-block:: python
+
+   # Get feature importance
+   feature_importance = best_xgb_model.feature_importance_
+   feature_names = builder.get_feature_names()
+   
+   # Create feature importance plot
+   plt.figure(figsize=(10, 6))
+   plt.barh(feature_names, feature_importance)
+   plt.xlabel('Feature Importance')
+   plt.title('XGBoost Feature Importance')
+   plt.tight_layout()
+   plt.show()
+   
+   # Print feature importance
+   for name, importance in zip(feature_names, feature_importance):
+       print(f"{name}: {importance:.4f}")
+
+
+
+PySINDy Tutorial
+================
+
+
+
+PySINDy Implementation Overview
+-------------------------------
+
+
+PySINDy (Python Sparse Identification of Nonlinear Dynamics) discovers governing equations from data using sparse regression. In the DFT context, PySINDy can identify the underlying physics equations that govern liquid loading in gas wells.
+
+
+PySINDy Setup and Installation
+------------------------------
+
+
+
+.. code-block:: python
+
+   # Install PySINDy if not already installed
+   # pip install pysindy
+   
+   import numpy as np
+   import matplotlib.pyplot as plt
+   from sklearn.preprocessing import StandardScaler
+   from pysindy import SINDy
+   from pysindy.optimizers import STLSQ
+   from pysindy.feature_library import PolynomialFeatures
+
+
+
+PySINDy Data Preparation
+------------------------
+
+
+
+.. code-block:: python
+
+   # Prepare data for PySINDy (requires time series or derivative data)
+   # For DFT, we'll create synthetic time series based on well parameters
+   
+   def create_synthetic_time_series(data, n_timesteps=100):
+       """Create synthetic time series for PySINDy analysis"""
+       time_series = []
+       
+       for _, row in data.iterrows():
+           # Create time series based on well parameters
+           t = np.linspace(0, 10, n_timesteps)
+           
+           # Simulate critical flow rate evolution
+           q_crit = (row['Dia'] * row['GasDens'] * np.sqrt(row['g (m/s2)'] * row['z']) / 
+                    (row['friction_factor'] * row['critical_film_thickness']))
+           
+           # Add some dynamics
+           q_t = q_crit * (1 + 0.1 * np.sin(t) + 0.05 * np.random.normal(0, 1, n_timesteps))
+           
+           # Calculate derivatives
+           dq_dt = np.gradient(q_t, t)
+           
+           time_series.append({
+               'time': t,
+               'q_crit': q_t,
+               'dq_dt': dq_dt,
+               'well_params': row
+           })
+       
+       return time_series
+   
+   # Create synthetic time series
+   time_series_data = create_synthetic_time_series(X_train.head(10))
+
+
+
+PySINDy Model Training
+----------------------
+
+
+
+.. code-block:: python
+
+   # Prepare data for PySINDy
+   X_sindy = []
+   X_dot_sindy = []
+   
+   for ts in time_series_data:
+       # Use well parameters as features
+       features = np.array([ts['well_params'][col] for col in X_train.columns])
+       X_sindy.append(features)
+       
+       # Use derivative as target
+       X_dot_sindy.append(ts['dq_dt'].mean())
+   
+   X_sindy = np.array(X_sindy)
+   X_dot_sindy = np.array(X_dot_sindy)
+   
+   # Scale the data
+   scaler = StandardScaler()
+   X_sindy_scaled = scaler.fit_transform(X_sindy)
+   
+   # Create PySINDy model
+   optimizer = STLSQ(threshold=0.1)
+   feature_library = PolynomialFeatures(degree=2)
+   
+   sindy_model = SINDy(
+       optimizer=optimizer,
+       feature_library=feature_library,
+       feature_names=X_train.columns.tolist()
+   )
+   
+   # Fit the model
+   sindy_model.fit(X_sindy_scaled, X_dot_sindy.reshape(-1, 1))
+   
+   # Print discovered equations
+   print("PySINDy discovered equations:")
+   sindy_model.print()
+
+
+
+PySINDy Model Evaluation
+------------------------
+
+
+
+.. code-block:: python
+
+   # Make predictions
+   X_test_scaled = scaler.transform(X_test)
+   predictions = sindy_model.predict(X_test_scaled)
+   
+   # Evaluate performance
+   mse_sindy = mean_squared_error(y_test, predictions.flatten())
+   r2_sindy = r2_score(y_test, predictions.flatten())
+   
+   print(f"PySINDy MSE: {mse_sindy:.4f}")
+   print(f"PySINDy R²: {r2_sindy:.4f}")
+   
+   # Plot results
+   plt.figure(figsize=(12, 5))
+   
+   plt.subplot(1, 2, 1)
+   plt.scatter(y_test, predictions.flatten(), alpha=0.6)
+   plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--')
+   plt.xlabel('Actual Critical Flow Rate')
+   plt.ylabel('Predicted Critical Flow Rate')
+   plt.title('PySINDy Predictions vs Actual')
+   
+   plt.subplot(1, 2, 2)
+   plt.plot(y_test.values[:50], label='Actual', alpha=0.7)
+   plt.plot(predictions.flatten()[:50], label='PySINDy', alpha=0.7)
+   plt.xlabel('Sample Index')
+   plt.ylabel('Critical Flow Rate')
+   plt.title('PySINDy Time Series Prediction')
+   plt.legend()
+   
+   plt.tight_layout()
+   plt.show()
+
+
+
+PySR Tutorial
+=============
+
+
+
+PySR Implementation Overview
+----------------------------
+
+
+PySR (Python Symbolic Regression) uses genetic programming to find symbolic expressions that fit data. It's particularly useful for discovering interpretable mathematical relationships in the DFT domain.
+
+
+PySR Setup and Installation
+---------------------------
+
+
+
+.. code-block:: python
+
+   # Install PySR if not already installed
+   # pip install pysr
+   
+   import pysr
+   import numpy as np
+   from sklearn.preprocessing import StandardScaler
+
+
+
+PySR Data Preparation
+---------------------
+
+
+
+.. code-block:: python
+
+   # Prepare data for PySR
+   # PySR works best with normalized data
+   scaler_pysr = StandardScaler()
+   X_train_scaled = scaler_pysr.fit_transform(X_train)
+   X_test_scaled = scaler_pysr.transform(X_test)
+   
+   # Create feature names for PySR
+   feature_names = [f"x{i}" for i in range(X_train.shape[1])]
+
+
+
+PySR Model Training
+-------------------
+
+
+
+.. code-block:: python
+
+   # Configure PySR
+   pysr_model = pysr.PySRRegressor(
+       niterations=100,  # Number of iterations
+       binary_operators=["+", "-", "*", "/"],
+       unary_operators=["exp", "log", "abs", "sqrt"],
+       populations=30,  # Number of populations
+       ncyclesperiteration=550,  # Number of cycles per iteration
+       maxsize=20,  # Maximum size of expressions
+       maxdepth=10,  # Maximum depth of expressions
+       early_stop_condition=1e-6,  # Early stopping condition
+       timeout_in_seconds=300,  # Timeout in seconds
+       random_state=42
+   )
+   
+   # Train PySR model
+   print("Training PySR model...")
+   pysr_model.fit(X_train_scaled, y_train)
+   
+   # Print the best equation
+   print(f"PySR best equation: {pysr_model.get_best()}")
+
+
+
+PySR Model Evaluation
+---------------------
+
+
+
+.. code-block:: python
+
+   # Make predictions
+   y_pred_pysr = pysr_model.predict(X_test_scaled)
+   
+   # Evaluate performance
+   mse_pysr = mean_squared_error(y_test, y_pred_pysr)
+   r2_pysr = r2_score(y_test, y_pred_pysr)
+   
+   print(f"PySR MSE: {mse_pysr:.4f}")
+   print(f"PySR R²: {r2_pysr:.4f}")
+   
+   # Plot results
+   plt.figure(figsize=(12, 5))
+   
+   plt.subplot(1, 2, 1)
+   plt.scatter(y_test, y_pred_pysr, alpha=0.6)
+   plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--')
+   plt.xlabel('Actual Critical Flow Rate')
+   plt.ylabel('Predicted Critical Flow Rate')
+   plt.title('PySR Predictions vs Actual')
+   
+   plt.subplot(1, 2, 2)
+   plt.plot(y_test.values[:50], label='Actual', alpha=0.7)
+   plt.plot(y_pred_pysr[:50], label='PySR', alpha=0.7)
+   plt.xlabel('Sample Index')
+   plt.ylabel('Critical Flow Rate')
+   plt.title('PySR Time Series Prediction')
+   plt.legend()
+   
+   plt.tight_layout()
+   plt.show()
+
+
+
+QLattice Tutorial
+=================
+
+
+
+QLattice Implementation Overview
+--------------------------------
+
+
+QLattice is a symbolic regression tool that discovers mathematical expressions using quantum-inspired algorithms. It's particularly effective for finding interpretable models in scientific applications.
+
+
+QLattice Setup and Installation
+-------------------------------
+
+
+
+.. code-block:: python
+
+   # Install QLattice if not already installed
+   # pip install feyn
+   
+   import feyn
+   import pandas as pd
+   import numpy as np
+   from sklearn.model_selection import train_test_split
+
+
+
+QLattice Data Preparation
+-------------------------
+
+
+
+.. code-block:: python
+
+   # Prepare data for QLattice
+   # QLattice works with pandas DataFrames
+   qlattice_data = pd.DataFrame(X_train, columns=X_train.columns)
+   qlattice_data['critical_flow_rate'] = y_train
+   
+   # Split data
+   train_data, val_data = train_test_split(qlattice_data, test_size=0.2, random_state=42)
+
+
+
+QLattice Model Training
+-----------------------
+
+
+
+.. code-block:: python
+
+   # Configure QLattice
+   qlattice_model = feyn.QLattice(
+       random_seed=42,
+       workers=4  # Number of parallel workers
+   )
+   
+   # Define the problem
+   problem = feyn.Problem(
+       task_type=feyn.TaskType.REGRESSION,
+       target_column='critical_flow_rate'
+   )
+   
+   # Train the model
+   print("Training QLattice model...")
+   qlattice_model.fit(
+       train_data,
+       problem,
+       n_epochs=10,
+       max_complexity=10
+   )
+   
+   # Get the best model
+   best_model = qlattice_model.get_best()
+   print(f"QLattice best model: {best_model}")
+
+
+
+QLattice Model Evaluation
+-------------------------
+
+
+
+.. code-block:: python
+
+   # Make predictions
+   y_pred_qlattice = best_model.predict(X_test)
+   
+   # Evaluate performance
+   mse_qlattice = mean_squared_error(y_test, y_pred_qlattice)
+   r2_qlattice = r2_score(y_test, y_pred_qlattice)
+   
+   print(f"QLattice MSE: {mse_qlattice:.4f}")
+   print(f"QLattice R²: {r2_qlattice:.4f}")
+   
+   # Plot results
+   plt.figure(figsize=(12, 5))
+   
+   plt.subplot(1, 2, 1)
+   plt.scatter(y_test, y_pred_qlattice, alpha=0.6)
+   plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--')
+   plt.xlabel('Actual Critical Flow Rate')
+   plt.ylabel('Predicted Critical Flow Rate')
+   plt.title('QLattice Predictions vs Actual')
+   
+   plt.subplot(1, 2, 2)
+   plt.plot(y_test.values[:50], label='Actual', alpha=0.7)
+   plt.plot(y_pred_qlattice[:50], label='QLattice', alpha=0.7)
+   plt.xlabel('Sample Index')
+   plt.ylabel('Critical Flow Rate')
+   plt.title('QLattice Time Series Prediction')
+   plt.legend()
+   
+   plt.tight_layout()
+   plt.show()
+
+
+
+Ensemble Methods Tutorial
+=========================
+
+
+
+Ensemble Implementation Overview
+--------------------------------
+
+
+Ensemble methods combine multiple models to improve prediction accuracy and robustness. In the DFT framework, we can combine physics-based models with machine learning approaches.
+
+
+Ensemble Model Creation
+-----------------------
+
+
+
+.. code-block:: python
+
+   from sklearn.ensemble import VotingRegressor
+   from sklearn.linear_model import LinearRegression
+   import numpy as np
+   
+   # Create ensemble of different models
+   ensemble_model = VotingRegressor([
+       ('xgb', best_xgb_model),
+       ('linear', LinearRegression()),
+       ('dft', DFT(seed=42, feature_tol=1.0, dev_tol=1e-3))
+   ])
+   
+   # Train ensemble
+   ensemble_model.fit(X_train, y_train)
+   
+   # Make predictions
+   y_pred_ensemble = ensemble_model.predict(X_test)
+   
+   # Evaluate performance
+   mse_ensemble = mean_squared_error(y_test, y_pred_ensemble)
+   r2_ensemble = r2_score(y_test, y_pred_ensemble)
+   
+   print(f"Ensemble MSE: {mse_ensemble:.4f}")
+   print(f"Ensemble R²: {r2_ensemble:.4f}")
+
+
+
+Model Comparison
+----------------
+
+
+
+.. code-block:: python
+
+   # Compare all models
+   models = {
+       'XGBoost': y_pred_best,
+       'PySINDy': predictions.flatten(),
+       'PySR': y_pred_pysr,
+       'QLattice': y_pred_qlattice,
+       'Ensemble': y_pred_ensemble
+   }
+   
+   # Create comparison plot
+   plt.figure(figsize=(15, 10))
+   
+   for i, (name, predictions) in enumerate(models.items(), 1):
+       plt.subplot(2, 3, i)
+       plt.scatter(y_test, predictions, alpha=0.6)
+       plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--')
+       plt.xlabel('Actual Critical Flow Rate')
+       plt.ylabel('Predicted Critical Flow Rate')
+       plt.title(f'{name} Predictions vs Actual')
+       
+       # Calculate and display metrics
+       mse = mean_squared_error(y_test, predictions)
+       r2 = r2_score(y_test, predictions)
+       plt.text(0.05, 0.95, f'MSE: {mse:.4f}\nR²: {r2:.4f}', 
+                transform=plt.gca().transAxes, verticalalignment='top',
+                bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))
+   
+   plt.tight_layout()
+   plt.show()
+
+
+
+Advanced Usage Examples
+=======================
+
+
+
+Custom Alpha Strategy Implementation
+------------------------------------
+
+
+
+.. code-block:: python
+
+   def custom_alpha_strategy(well_data):
+       """Custom alpha strategy based on well deviation angle"""
+       alpha_values = []
+       
+       for _, row in well_data.iterrows():
+           dev_angle = row['Dev(deg)']
+           
+           if dev_angle < 30:  # Vertical wells
+               alpha = 0.3
+           elif dev_angle < 60:  # Inclined wells
+               alpha = 0.5
+           else:  # Horizontal wells
+               alpha = 0.7
+               
+           alpha_values.append(alpha)
+       
+       return np.array(alpha_values)
+   
+   # Use custom alpha strategy
+   custom_alpha = custom_alpha_strategy(X_train)
+
+
+
+Production Deployment Example
+-----------------------------
+
+
+
+.. code-block:: python
+
+   import joblib
+   from datetime import datetime
+   
+   # Save trained models for production use
+   model_artifacts = {
+       'xgb_model': best_xgb_model,
+       'sindy_model': sindy_model,
+       'pysr_model': pysr_model,
+       'qlattice_model': best_model,
+       'ensemble_model': ensemble_model,
+       'scaler': scaler,
+       'feature_names': X_train.columns.tolist(),
+       'training_date': datetime.now().isoformat()
+   }
+   
+   # Save to disk
+   joblib.dump(model_artifacts, 'dft_models.pkl')
+   
+   # Load models for prediction
+   loaded_models = joblib.load('dft_models.pkl')
+   
+   # Make predictions with loaded models
+   def predict_critical_flow_rate(well_data, model_name='ensemble'):
+       """Predict critical flow rate for new well data"""
+       model = loaded_models[f'{model_name}_model']
+       scaler = loaded_models['scaler']
+       
+       # Scale the data
+       well_data_scaled = scaler.transform(well_data)
+       
+       # Make prediction
+       prediction = model.predict(well_data_scaled)
+       
+       return prediction
+   
+   # Example usage
+   new_well_data = X_test.iloc[:1]  # Single well
+   prediction = predict_critical_flow_rate(new_well_data, 'xgb')
+   print(f"Predicted critical flow rate: {prediction[0]:.4f}")
+
+
+
+Batch Processing Example
+------------------------
+
+
+
+.. code-block:: python
+
+   def batch_predict_critical_flow_rates(well_data_batch, model_name='ensemble'):
+       """Process multiple wells in batch"""
+       predictions = []
+       
+       for well_data in well_data_batch:
+           prediction = predict_critical_flow_rate(well_data, model_name)
+           predictions.append(prediction[0])
+       
+       return np.array(predictions)
+   
+   # Process multiple wells
+   batch_wells = [X_test.iloc[i:i+1] for i in range(10)]
+   batch_predictions = batch_predict_critical_flow_rates(batch_wells, 'xgb')
+   
+   print(f"Batch predictions: {batch_predictions}")
+
+
+
+Performance Optimization
+========================
+
+
+
+Memory-Efficient Processing
+---------------------------
+
+
+
+.. code-block:: python
+
+   def process_large_dataset(data_path, chunk_size=1000):
+       """Process large datasets in chunks to manage memory"""
+       results = []
+       
+       for chunk in pd.read_csv(data_path, chunksize=chunk_size):
+           # Process chunk
+           chunk_predictions = predict_critical_flow_rate(chunk, 'xgb')
+           results.extend(chunk_predictions)
+       
+       return np.array(results)
+
+
+
+Parallel Processing
+-------------------
+
+
+
+.. code-block:: python
+
+   from joblib import Parallel, delayed
+   
+   def parallel_predict(well_data_list, model_name='xgb', n_jobs=4):
+       """Parallel prediction for multiple wells"""
+       predictions = Parallel(n_jobs=n_jobs)(
+           delayed(predict_critical_flow_rate)(well_data, model_name)
+           for well_data in well_data_list
+       )
+       
+       return np.array(predictions)
+
+
+This comprehensive tutorial provides complete examples for using all machine learning methods in the DFT Development framework, including XGBoost, PySINDy, PySR, and QLattice, with practical function calls and real-world usage scenarios.

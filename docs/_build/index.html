@@ -1,64 +1,445 @@
+
+
 <!DOCTYPE html>
-<html lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DFT Documentation - Home</title>
-    <link rel="stylesheet" href="assets/style.css">
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Droplet-Film Model Development &mdash; DFT Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=60dbed4a"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Droplet-Film Model Development Project" href="documentation.html" /> 
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Droplet-Film Theory Development</h1>
-            <p>Physics-Informed Machine Learning for Gas Well Liquid Loading Prediction</p>
-        </header>
-        
-        <main>
-            <div class="content">
-                <h2>Welcome to DFT Documentation</h2>
-                <p>This documentation provides comprehensive information about the Droplet-Film Theory Development project, which implements physics-informed machine learning models for predicting liquid loading in gas wells.</p>
-                
-                <div class="card-grid">
-                    <div class="card">
-                        <h3><a href="html/documentation.html">Main Documentation</a></h3>
-                        <p>Comprehensive overview of the project, its components, and implementation details.</p>
-                    </div>
-                    
-                    <div class="card">
-                        <h3><a href="html/installation_guide.html">Installation Guide</a></h3>
-                        <p>Step-by-step instructions for setting up the development environment.</p>
-                    </div>
-                    
-                    <div class="card">
-                        <h3><a href="html/usage_examples.html">Usage Examples</a></h3>
-                        <p>Practical examples and tutorials for using the DFT models.</p>
-                    </div>
-                    
-                    <div class="card">
-                        <h3><a href="html/api_reference.html">API Reference</a></h3>
-                        <p>Detailed documentation of all functions, classes, and methods.</p>
-                    </div>
-                    
-                    <div class="card">
-                        <h3><a href="html/troubleshooting.html">Troubleshooting</a></h3>
-                        <p>Common issues and solutions for using the DFT development tools.</p>
-                    </div>
-                </div>
-                
-                <h2>Quick Start</h2>
-                <ol>
-                    <li>Clone the repository</li>
-                    <li>Navigate to the scripts_2.0 directory</li>
-                    <li>Install dependencies: <code>pip install -r requirements.txt</code></li>
-                    <li>Run the Jupyter notebooks to explore the models</li>
-                </ol>
-            </div>
-        </main>
-        
-        <footer>
-            <p>Generated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
-            <p>Droplet-Film Theory Development Project</p>
-        </footer>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            Droplet-Film Model Development
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html">Droplet-Film Model Development Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#introduction">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#overview-of-dft-development">1.1. Overview of DFT Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#what-does-a-dft-development-version-mean">1.2. What does a DFT Development version mean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#dft-development-features">1.3. DFT Development features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#dft-development-applications">1.4. DFT Development applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#dft-development-compatibility">1.5. DFT Development compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#dft-development-open-source-license">1.6. DFT Development open-source license</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#authors-of-dft-development">1.7. Authors of DFT Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#citing-dft-development">1.8. Citing DFT Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#additional-resources">1.9. Additional resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#installation">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#system-requirements">2.1. System requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#python-environment-setup">2.2. Python environment setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#package-installation-methods">2.3. Package installation methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#verification-and-testing">2.4. Verification and testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#jupyter-notebook-setup">2.5. Jupyter notebook setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#data-preparation">2.6. Data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#common-installation-issues">2.7. Common installation issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#development-environment-setup">2.8. Development environment setup</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#quick-start">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#basic-workflow">3.1. Basic workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#your-first-prediction">3.2. Your first prediction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#understanding-the-output">3.3. Understanding the output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#next-steps">3.4. Next steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#data-format">Data Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#required-input-parameters">4.1. Required input parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#data-validation">4.2. Data validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#data-preprocessing">4.3. Data preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#common-data-issues">4.4. Common data issues</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#running-dft-development">Running DFT Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#basic-usage">5.1. Basic usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#command-line-options">5.2. Command-line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#jupyter-notebook-usage">5.3. Jupyter notebook usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#output-formats">5.4. Output formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#error-handling">5.5. Error handling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#common-issues">6.1. Common issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#installation-problems">6.2. Installation problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#data-loading-errors">6.3. Data loading errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#memory-and-performance-issues">6.4. Memory and performance issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#model-convergence-problems">6.5. Model convergence problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#getting-help">6.6. Getting help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#examples">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#basic-examples">7.1. Basic examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#advanced-examples">7.2. Advanced examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#production-deployment">7.3. Production deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#custom-implementations">7.4. Custom implementations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#performance">Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#benchmarks">8.1. Benchmarks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#performance-optimization">8.2. Performance optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#memory-management">8.3. Memory management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#parallel-processing">8.4. Parallel processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#how-to-guides">How-to Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#general-how-to">9.1. General how-to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#data-preparation-how-to">9.2. Data preparation how-to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#model-training-how-to">9.3. Model training how-to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#visualization-how-to">9.4. Visualization how-to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#deployment-how-to">9.5. Deployment how-to</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#tutorial-scripts">Tutorial Scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#basic-tutorials">10.1. Basic tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#advanced-tutorials">10.2. Advanced tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#case-studies">10.3. Case studies</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation_guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html">Usage Examples and Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#xgboost-tutorial">XGBoost Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-implementation-overview">XGBoost Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#basic-xgboost-setup">Basic XGBoost Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-data-preparation">XGBoost Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-model-training">XGBoost Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-hyperparameter-tuning">XGBoost Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-feature-importance-analysis">XGBoost Feature Importance Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#pysindy-tutorial">PySINDy Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-implementation-overview">PySINDy Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-setup-and-installation">PySINDy Setup and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-data-preparation">PySINDy Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-model-training">PySINDy Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-model-evaluation">PySINDy Model Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#pysr-tutorial">PySR Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-implementation-overview">PySR Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-setup-and-installation">PySR Setup and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-data-preparation">PySR Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-model-training">PySR Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-model-evaluation">PySR Model Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#qlattice-tutorial">QLattice Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-implementation-overview">QLattice Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-setup-and-installation">QLattice Setup and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-data-preparation">QLattice Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-model-training">QLattice Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-model-evaluation">QLattice Model Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#ensemble-methods-tutorial">Ensemble Methods Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#ensemble-implementation-overview">Ensemble Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#ensemble-model-creation">Ensemble Model Creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#model-comparison">Model Comparison</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#advanced-usage-examples">Advanced Usage Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#custom-alpha-strategy-implementation">Custom Alpha Strategy Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#production-deployment-example">Production Deployment Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#batch-processing-example">Batch Processing Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#performance-optimization">Performance Optimization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#memory-efficient-processing">Memory-Efficient Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#parallel-processing">Parallel Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#core-classes-and-modules">Core Classes and Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#dft-class-core-physics-model">DFT Class — Core Physics Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#class-definition">Class definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#constructor">Constructor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-fit">Methods — fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-predict">Methods — predict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-eq-physics-equation">Methods — _eq (physics equation)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-loss">Methods — _loss</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#chiefbldr-class-data-management">ChiefBldr Class — Data Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#id1">Class definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#id2">Constructor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-evolv-model">Methods — evolv_model</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#qlatticewrapper-class-symbolic-regression">QLatticeWrapper Class — Symbolic Regression</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#id3">Constructor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#data-format-requirements">Data Format Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#data-validation-error-handling-performance">Data Validation, Error Handling, Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#support-and-resources">Support and Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Droplet-Film Model Development</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Droplet-Film Model Development</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="droplet-film-model-development">
+<h1>Droplet-Film Model Development<a class="headerlink" href="#droplet-film-model-development" title="Link to this heading"></a></h1>
+<p><strong>Version</strong> 2.0 · Physics-Informed Machine Learning for Gas Well Liquid Loading Prediction</p>
+<p>Welcome to the DFT documentation. This site covers installation, usage, API reference, and troubleshooting for the Droplet-Film Model Development project.</p>
+<section id="contents">
+<span id="id1"></span><h2>Contents<a class="headerlink" href="#contents" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html">Droplet-Film Model Development Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#introduction">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#overview-of-dft-development">1.1. Overview of DFT Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#what-does-a-dft-development-version-mean">1.2. What does a DFT Development version mean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#dft-development-features">1.3. DFT Development features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#dft-development-applications">1.4. DFT Development applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#dft-development-compatibility">1.5. DFT Development compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#dft-development-open-source-license">1.6. DFT Development open-source license</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#authors-of-dft-development">1.7. Authors of DFT Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#citing-dft-development">1.8. Citing DFT Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#additional-resources">1.9. Additional resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#installation">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#system-requirements">2.1. System requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#python-environment-setup">2.2. Python environment setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#package-installation-methods">2.3. Package installation methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#verification-and-testing">2.4. Verification and testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#jupyter-notebook-setup">2.5. Jupyter notebook setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#data-preparation">2.6. Data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#common-installation-issues">2.7. Common installation issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#development-environment-setup">2.8. Development environment setup</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#quick-start">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#basic-workflow">3.1. Basic workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#your-first-prediction">3.2. Your first prediction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#understanding-the-output">3.3. Understanding the output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#next-steps">3.4. Next steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#data-format">Data Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#required-input-parameters">4.1. Required input parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#data-validation">4.2. Data validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#data-preprocessing">4.3. Data preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#common-data-issues">4.4. Common data issues</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#running-dft-development">Running DFT Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#basic-usage">5.1. Basic usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#command-line-options">5.2. Command-line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#jupyter-notebook-usage">5.3. Jupyter notebook usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#output-formats">5.4. Output formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#error-handling">5.5. Error handling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#common-issues">6.1. Common issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#installation-problems">6.2. Installation problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#data-loading-errors">6.3. Data loading errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#memory-and-performance-issues">6.4. Memory and performance issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#model-convergence-problems">6.5. Model convergence problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#getting-help">6.6. Getting help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#examples">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#basic-examples">7.1. Basic examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#advanced-examples">7.2. Advanced examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#production-deployment">7.3. Production deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#custom-implementations">7.4. Custom implementations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#performance">Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#benchmarks">8.1. Benchmarks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#performance-optimization">8.2. Performance optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#memory-management">8.3. Memory management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#parallel-processing">8.4. Parallel processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#how-to-guides">How-to Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#general-how-to">9.1. General how-to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#data-preparation-how-to">9.2. Data preparation how-to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#model-training-how-to">9.3. Model training how-to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#visualization-how-to">9.4. Visualization how-to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#deployment-how-to">9.5. Deployment how-to</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#tutorial-scripts">Tutorial Scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#basic-tutorials">10.1. Basic tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#advanced-tutorials">10.2. Advanced tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation.html#case-studies">10.3. Case studies</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation_guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html">Usage Examples and Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#xgboost-tutorial">XGBoost Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-implementation-overview">XGBoost Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#basic-xgboost-setup">Basic XGBoost Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-data-preparation">XGBoost Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-model-training">XGBoost Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-hyperparameter-tuning">XGBoost Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-feature-importance-analysis">XGBoost Feature Importance Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#pysindy-tutorial">PySINDy Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-implementation-overview">PySINDy Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-setup-and-installation">PySINDy Setup and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-data-preparation">PySINDy Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-model-training">PySINDy Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-model-evaluation">PySINDy Model Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#pysr-tutorial">PySR Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-implementation-overview">PySR Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-setup-and-installation">PySR Setup and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-data-preparation">PySR Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-model-training">PySR Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-model-evaluation">PySR Model Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#qlattice-tutorial">QLattice Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-implementation-overview">QLattice Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-setup-and-installation">QLattice Setup and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-data-preparation">QLattice Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-model-training">QLattice Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-model-evaluation">QLattice Model Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#ensemble-methods-tutorial">Ensemble Methods Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#ensemble-implementation-overview">Ensemble Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#ensemble-model-creation">Ensemble Model Creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#model-comparison">Model Comparison</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#advanced-usage-examples">Advanced Usage Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#custom-alpha-strategy-implementation">Custom Alpha Strategy Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#production-deployment-example">Production Deployment Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#batch-processing-example">Batch Processing Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#performance-optimization">Performance Optimization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#memory-efficient-processing">Memory-Efficient Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#parallel-processing">Parallel Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#core-classes-and-modules">Core Classes and Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#dft-class-core-physics-model">DFT Class — Core Physics Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#chiefbldr-class-data-management">ChiefBldr Class — Data Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#qlatticewrapper-class-symbolic-regression">QLatticeWrapper Class — Symbolic Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#data-format-requirements">Data Format Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#data-validation-error-handling-performance">Data Validation, Error Handling, Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#support-and-resources">Support and Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+</div>
+</section>
+<section id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+<section id="quick-links">
+<h2>Quick links<a class="headerlink" href="#quick-links" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="documentation.html"><span class="doc">Droplet-Film Model Development Project</span></a> — Project overview and user guide</p></li>
+<li><p><a class="reference internal" href="installation_guide.html"><span class="doc">Installation Guide</span></a> — Setup and installation</p></li>
+<li><p><a class="reference internal" href="usage_examples.html"><span class="doc">Usage Examples and Tutorials</span></a> — Tutorials and examples</p></li>
+<li><p><a class="reference internal" href="api_reference.html"><span class="doc">API Reference</span></a> — API reference</p></li>
+<li><p><a class="reference internal" href="troubleshooting.html"><span class="doc">Troubleshooting Guide</span></a> — Common issues and solutions</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="documentation.html" class="btn btn-neutral float-right" title="Droplet-Film Model Development Project" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Droplet-Film Model Development Project.
+      <span class="lastupdated">Last updated on 2026-03-09.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
 </body>
 </html>
