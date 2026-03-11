@@ -1,125 +1,99 @@
 #!/usr/bin/env python3
 """
 Documentation Builder for DFT Project
-Builds the complete documentation site from HTML files
+Builds the documentation site from reStructuredText (.rst) files using Sphinx.
 """
 
 import os
 import shutil
+import subprocess
+import sys
 from pathlib import Path
 from datetime import datetime
 
+
 def build_documentation():
-    """Build the complete documentation site"""
+    """Build the complete documentation site from RST sources using Sphinx."""
     print("=" * 60)
-    print("DFT Documentation Builder")
+    print("DFT Documentation Builder (RST/Sphinx)")
     print("=" * 60)
-    
-    # Ensure docs directory exists
+
     docs_dir = Path('docs')
-    docs_dir.mkdir(exist_ok=True)
-    
-    # Check if HTML files exist
-    html_dir = docs_dir / 'html'
-    if not html_dir.exists():
-        print("❌ HTML directory not found. Run convert_srt_to_html.py first.")
-        return False
-    
-    # Check for required files
-    required_files = [
-        'html/documentation.html',
-        'html/installation_guide.html', 
-        'html/usage_examples.html',
-        'html/api_reference.html',
-        'html/troubleshooting.html'
-    ]
-    
-    missing_files = []
-    for file in required_files:
-        if not (docs_dir / file).exists():
-            missing_files.append(file)
-    
-    if missing_files:
-        print(f"❌ Missing HTML files: {missing_files}")
-        return False
-    
-    print("✅ All required HTML files found")
-    
-    # Create _build directory for GitHub Pages
+    source_dir = docs_dir / 'source'
     build_dir = docs_dir / '_build'
+
+    if not source_dir.exists():
+        print("ERROR: docs/source not found. Run srt_to_rst.py first to generate RST from SRT.")
+        return False
+
+    required_rst = [
+        'installation_guide.rst',
+        'usage_examples.rst',
+        'api_reference.rst',
+        'troubleshooting.rst',
+    ]
+    missing = [f for f in required_rst if not (source_dir / f).exists()]
+    if missing:
+        print(f"ERROR: Missing RST files: {missing}")
+        return False
+
+    print("OK All required RST files found")
+
     if build_dir.exists():
         shutil.rmtree(build_dir)
-    build_dir.mkdir()
-    
-    # Copy HTML files to _build
-    html_build_dir = build_dir / 'html'
-    shutil.copytree(html_dir, html_build_dir)
-    
-    # Copy assets
-    assets_dir = docs_dir / 'assets'
-    if assets_dir.exists():
-        assets_build_dir = build_dir / 'assets'
-        shutil.copytree(assets_dir, assets_build_dir)
-    
-    # Copy main index
-    index_file = docs_dir / 'index.html'
-    if index_file.exists():
-        shutil.copy2(index_file, build_dir / 'index.html')
-    
-    # Create GitHub Pages specific files
+
+    cmd = [
+        sys.executable, '-m', 'sphinx',
+        '-b', 'html',
+        str(source_dir),
+        str(build_dir),
+    ]
+    result = subprocess.run(cmd, capture_output=False)
+    if result.returncode != 0:
+        print("ERROR: Sphinx build failed")
+        return False
+
     create_github_pages_files(build_dir)
-    
-    print("✅ Documentation build complete!")
+
+    print("OK Documentation build complete!")
     print(f"Build directory: {build_dir.absolute()}")
     print("\nFiles created:")
     for root, dirs, files in os.walk(build_dir):
         for file in files:
             rel_path = Path(root).relative_to(build_dir) / file
             print(f"  - {rel_path}")
-    
+
     return True
 
+
 def create_github_pages_files(build_dir):
-    """Create GitHub Pages specific configuration files"""
-    
-    # Create .nojekyll file to disable Jekyll processing
+    """Create GitHub Pages specific configuration files."""
     nojekyll_file = build_dir / '.nojekyll'
-    with open(nojekyll_file, 'w') as f:
-        f.write('')
-    
-    # Create README for GitHub Pages
+    nojekyll_file.write_text('')
+
     readme_content = f"""# DFT Documentation
 
-This directory contains the built documentation for the Droplet-Film Theory Development project.
+This directory contains the built documentation for the Droplet-Film Model Development project.
 
-## Generated Files
+## Source
 
-- `index.html` - Main documentation homepage
-- `html/` - Individual documentation pages
-- `assets/` - CSS and other resources
+This documentation is built from reStructuredText (.rst) files in docs/source using Sphinx.
 
 ## Last Updated
 
 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-
-## Source
-
-This documentation is automatically generated from SRT files in the repository root.
 """
-    
-    readme_file = build_dir / 'README.md'
-    with open(readme_file, 'w', encoding='utf-8') as f:
-        f.write(readme_content)
-    
-    print("✅ Created GitHub Pages configuration files")
+    (build_dir / 'README.md').write_text(readme_content, encoding='utf-8')
+    print("OK Created GitHub Pages configuration files")
+
 
 def main():
-    """Main build function"""
+    """Main build function."""
     success = build_documentation()
-    
+
     if success:
         print("\n" + "=" * 60)
-        print("🎉 Documentation build successful!")
+        print("Documentation build successful!")
         print("\nNext steps:")
         print("1. Commit and push your changes")
         print("2. Enable GitHub Pages in repository settings")
@@ -128,9 +102,11 @@ def main():
         print("=" * 60)
     else:
         print("\n" + "=" * 60)
-        print("❌ Documentation build failed!")
+        print("Documentation build failed!")
         print("Please check the errors above and try again.")
         print("=" * 60)
+        sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

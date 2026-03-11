@@ -1,28 +1,28 @@
 # DFT Documentation System
 
-This directory contains the automatically generated HTML documentation for the Droplet-Film Theory Development project.
+This directory contains the documentation source and build for the Droplet-Film Model Development project.
 
 ## How It Works
 
-1. **SRT Files**: The source documentation is written in SRT (subtitle) format for easy editing
-2. **Automatic Conversion**: GitHub Actions automatically converts SRT files to HTML when you push changes
-3. **GitHub Pages**: The HTML documentation is automatically deployed to GitHub Pages for easy access
+1. **RST Files**: The source documentation is written in reStructuredText (`.rst`) in `docs/source/`
+2. **Build**: Sphinx builds the RST files to HTML (e.g. `python build_docs.py`)
+3. **GitHub Pages**: The HTML in `docs/_build` is deployed via GitHub Actions
 
 ## File Structure
 
 ```
 docs/
-├── index.html              # Main documentation homepage
-├── html/                   # Individual documentation pages
-│   ├── main_documentation.html
-│   ├── installation_guide.html
-│   ├── usage_examples.html
-│   ├── api_reference.html
-│   └── troubleshooting.html
-├── assets/                 # CSS and other resources
-│   └── style.css
-└── _build/                 # Build output for GitHub Pages
-    └── html/
+├── source/                 # reStructuredText (.rst) source files
+│   ├── index.rst
+│   ├── documentation.rst
+│   ├── installation_guide.rst
+│   ├── usage_examples.rst
+│   ├── api_reference.rst
+│   ├── troubleshooting.rst
+│   └── conf.py             # Sphinx configuration
+├── _build/                 # Built HTML (output of build_docs.py)
+│   └── (HTML and assets)
+└── README.md               # This file
 ```
 
 ## Local Development
@@ -30,37 +30,23 @@ docs/
 To build the documentation locally:
 
 ```bash
-# Install dependencies
+# Install dependencies (including Sphinx)
 pip install -r docs_requirements.txt
 
-# Convert SRT to HTML
-python convert_srt_to_html.py
+# If you have SRT files and want to regenerate RST (optional)
+python srt_to_rst.py
 
-# Build complete site
+# Build the documentation (RST -> HTML via Sphinx)
 python build_docs.py
 ```
 
-## GitHub Pages Setup
-
-1. Go to your repository Settings
-2. Navigate to Pages section
-3. Set Source to "GitHub Actions"
-4. The workflow will automatically deploy your docs
-
-## Customization
-
-- **Styling**: Edit `build_docs.py` to modify the CSS
-- **Layout**: Modify the HTML templates in the conversion scripts
-- **Navigation**: Update the navigation structure in the build scripts
-
 ## Adding New Documentation
 
-1. Create a new `.srt` file in the root directory
-2. Add it to the conversion mapping in `convert_srt_to_html.py`
-3. Update the navigation in `build_docs.py`
-4. Push your changes - GitHub Actions will handle the rest!
+1. Create a new `.rst` file in `docs/source/`
+2. Add it to the `toctree` in `docs/source/index.rst`
+3. Run `python build_docs.py` and push; GitHub Actions will deploy
 
 ## Accessing Your Documentation
 
-Once deployed, your documentation will be available at:
+Once deployed, the documentation will be available at:
 `https://[username].github.io/[repository-name]/`

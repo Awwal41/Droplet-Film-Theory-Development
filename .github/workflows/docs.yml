@@ -31,13 +31,13 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pathlib2
-          
-      - name: Convert SRT to HTML
+          pip install -r docs_requirements.txt
+
+      - name: Generate RST from SRT (if SRT sources present)
         run: |
-          python convert_srt_to_html.py
-          
-      - name: Build documentation site
+          python srt_to_rst.py || true
+
+      - name: Build documentation site (Sphinx, RST to HTML)
         run: |
           python build_docs.py
           

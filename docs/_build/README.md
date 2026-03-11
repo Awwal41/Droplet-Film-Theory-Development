@@ -1,17 +1,11 @@
 # DFT Documentation
 
-This directory contains the built documentation for the Droplet-Film Theory Development project.
-
-## Generated Files
-
-- `index.html` - Main documentation homepage
-- `html/` - Individual documentation pages
-- `assets/` - CSS and other resources
-
-## Last Updated
-
-2025-10-16 01:23:35
+This directory contains the built documentation for the Droplet-Film Model Development project.
 
 ## Source
 
-This documentation is automatically generated from SRT files in the repository root.
+This documentation is built from reStructuredText (.rst) files in docs/source using Sphinx.
+
+## Last Updated
+
+2026-03-09 23:52:22

@@ -1,0 +1,418 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference &mdash; DFT Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=60dbed4a"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Troubleshooting Guide" href="troubleshooting.html" />
+    <link rel="prev" title="Usage Examples and Tutorials" href="usage_examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Droplet-Film Model Development
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation_guide.html">Installation Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#system-requirements">System Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#minimum">Minimum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#recommended">Recommended</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#python-environment-setup">Python Environment Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#step-1-install-python">Step 1 — Install Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#step-2-create-virtual-environment">Step 2 — Create Virtual Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#step-3-upgrade-pip">Step 3 — Upgrade pip</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#package-installation">Package Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#method-1-from-repository-recommended">Method 1: From repository (recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#method-2-manual-install">Method 2: Manual install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#method-3-requirements-file">Method 3: Requirements file</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#verification">Verification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#step-1-test-basic-imports">Step 1 — Test basic imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#step-2-test-project-modules">Step 2 — Test project modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#step-3-quick-functionality-test">Step 3 — Quick functionality test</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#jupyter-notebooks">Jupyter Notebooks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#step-1-install-jupyter">Step 1 — Install Jupyter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#step-2-launch-and-open-notebooks">Step 2 — Launch and open notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#data-preparation">Data Preparation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#required-csv-columns">Required CSV columns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#validate-your-data">Validate your data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#common-installation-issues">Common Installation Issues</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#permission-errors">Permission errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#version-conflicts">Version conflicts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#memory-errors">Memory errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#network-download-failures">Network / download failures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#compilation-errors-windows">Compilation errors (Windows)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#qlattice-connection">QLattice connection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#development-setup">Development Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#code-quality-and-tests">Code quality and tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#ide-vs-code">IDE (VS Code)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#performance-and-maintenance">Performance and Maintenance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#upgrade-packages">Upgrade packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#optional-intel-mkl">Optional: Intel MKL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation_guide.html#backup-and-cleanup">Backup and cleanup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#uninstall">Uninstall</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#installation-checklist">Installation Checklist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation_guide.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html">Usage Examples and Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#dft-model-tutorial">DFT Model Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#dft-implementation-overview">DFT Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#basic-dft-setup">Basic DFT Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#dft-data-preparation">DFT Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#dft-model-training">DFT Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#making-predictions-with-dft">Making Predictions with DFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#evaluating-dft-performance">Evaluating DFT Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#understanding-dft-output-optional">Understanding DFT Output (Optional)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#xgboost-tutorial">XGBoost Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-implementation-overview">XGBoost Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#basic-xgboost-setup">Basic XGBoost Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-data-preparation">XGBoost Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-model-training">XGBoost Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-hyperparameter-tuning">XGBoost Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-feature-importance-analysis">XGBoost Feature Importance Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#pysindy-tutorial">PySINDy Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-implementation-overview">PySINDy Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-setup-and-installation">PySINDy Setup and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-data-preparation">PySINDy Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-model-training">PySINDy Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-model-evaluation">PySINDy Model Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#pysr-tutorial">PySR Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-implementation-overview">PySR Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-setup-and-installation">PySR Setup and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-data-preparation">PySR Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-model-training">PySR Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-model-evaluation">PySR Model Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#qlattice-tutorial">QLattice Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-implementation-overview">QLattice Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-setup-and-installation">QLattice Setup and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-data-preparation">QLattice Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-model-training">QLattice Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-model-evaluation">QLattice Model Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#ensemble-methods-tutorial">Ensemble Methods Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#ensemble-implementation-overview">Ensemble Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#ensemble-model-creation">Ensemble Model Creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#model-comparison">Model Comparison</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#advanced-usage-examples">Advanced Usage Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#custom-alpha-strategy-implementation">Custom Alpha Strategy Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#production-deployment-example">Production Deployment Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#batch-processing-example">Batch Processing Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#performance-optimization">Performance Optimization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#memory-efficient-processing">Memory-Efficient Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#parallel-processing">Parallel Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#core-classes-and-modules">Core Classes and Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dft-class-core-physics-model">DFT Class — Core Physics Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#class-definition">Class definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#constructor">Constructor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#methods-fit">Methods — fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#methods-predict">Methods — predict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#methods-eq-physics-equation">Methods — _eq (physics equation)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#methods-loss">Methods — _loss</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#helm-class-data-management">Helm Class — Data Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Class definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Constructor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#methods-evolv-model">Methods — evolv_model</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#qlatticewrapper-class-symbolic-regression">QLatticeWrapper Class — Symbolic Regression</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Constructor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-format-requirements">Data Format Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-validation-error-handling-performance">Data Validation, Error Handling, Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#support-and-resources">Support and Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Droplet-Film Model Development</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api_reference.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h1>
+<p>Droplet-Film Model Development Project — Technical Documentation.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>This document provides technical documentation for classes, methods, and parameters in the DFT Development project. The API is designed to be both powerful and user-friendly, supporting research and industrial applications.</p>
+<p>The project follows object-oriented design with clear separation between physics modeling, data management, and machine learning components.</p>
+</section>
+<section id="core-classes-and-modules">
+<h2>Core Classes and Modules<a class="headerlink" href="#core-classes-and-modules" title="Link to this heading"></a></h2>
+<p>The project consists of several key modules:</p>
+<ul class="simple">
+<li><p><strong>dft_model.py</strong>: Core physics model implementation</p></li>
+<li><p><strong>utils.py</strong>: Data management and utility functions</p></li>
+<li><p>Individual Jupyter notebooks for different approaches</p></li>
+</ul>
+</section>
+<section id="dft-class-core-physics-model">
+<h2>DFT Class — Core Physics Model<a class="headerlink" href="#dft-class-core-physics-model" title="Link to this heading"></a></h2>
+<p>The DFT class implements the Droplet-Film Model for predicting critical flow rates in gas wells.</p>
+<section id="class-definition">
+<h3>Class definition<a class="headerlink" href="#class-definition" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">DFT</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Droplet-Film Model for predicting critical flow rates in gas wells.</span>
+
+<span class="sd">    This class implements a physics-informed machine learning approach that combines</span>
+<span class="sd">    fundamental fluid dynamics principles with data-driven optimization to predict</span>
+<span class="sd">    when gas wells will experience liquid loading.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="constructor">
+<h3>Constructor<a class="headerlink" href="#constructor" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">feature_tol</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">dev_tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">multiple_dev_policy</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><strong>seed</strong> (int): Random seed for reproducibility. Default: 42</p></li>
+<li><p><strong>feature_tol</strong> (float): Feature distance threshold for matching. Default: 1.0</p></li>
+<li><p><strong>dev_tol</strong> (float): Deviation tolerance for angle matching. Default: 1e-3</p></li>
+<li><p><strong>multiple_dev_policy</strong> (str): Policy for handling multiple matches. Options: “max”, “min”, “mean”, “median”. Default: “max”</p></li>
+</ul>
+<p><strong>Attributes:</strong> seed, feature_tol, dev_tol, multiple_dev_policy, opt_params (set after fitting), n_train (set after fitting).</p>
+</section>
+<section id="methods-fit">
+<h3>Methods — fit<a class="headerlink" href="#methods-fit" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Train the DFT model on provided data.</p>
+<p><strong>Parameters:</strong> X (np.ndarray) shape (n_samples, 10), y (np.ndarray) shape (n_samples,). <strong>Returns:</strong> self.</p>
+<p><strong>Features (in order):</strong> Dia, Dev(deg), Area (m2), z, GasDens, LiquidDens, g (m/s2), P/T, friction_factor, critical_film_thickness.</p>
+<p><strong>Implementation:</strong> Uses Powell optimization from scipy.optimize; optimizes 5 global parameters (p1–p5) plus alpha per sample; bounds alpha in [0, 1]; max 5000 iterations, 10000 function calls.</p>
+</section>
+<section id="methods-predict">
+<h3>Methods — predict<a class="headerlink" href="#methods-predict" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">dev_train</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha_strategy</span><span class="o">=</span><span class="s1">&#39;enhanced_dev_based&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Make predictions on new data.</p>
+<p><strong>Parameters:</strong> X (np.ndarray), optional dev_train, alpha_strategy (must be ‘enhanced_dev_based’). <strong>Returns:</strong> np.ndarray of shape (n_samples,).</p>
+<p><strong>Alpha assignment strategy (by well deviation angle):</strong></p>
+<ol class="arabic simple">
+<li><p>Dev &lt; 10°: Regular deviation-based matching</p>
+<ul class="simple">
+<li><p>Find training samples within dev_tol</p></li>
+<li><p>Apply multiple_dev_policy if multiple matches</p></li>
+<li><p>Use mean training alpha if no matches</p></li>
+</ul>
+</li>
+<li><p>10° ≤ Dev &lt; 20°: Minimum alpha strategy</p>
+<ul class="simple">
+<li><p>Find training samples within dev_tol</p></li>
+<li><p>Use minimum alpha among matches</p></li>
+<li><p>Use mean training alpha if no matches</p></li>
+</ul>
+</li>
+<li><p>Dev ≥ 20°: Full-feature matching</p>
+<ul class="simple">
+<li><p>Compute Euclidean distance to all training samples</p></li>
+<li><p>Use closest sample’s alpha if distance &lt; feature_tol</p></li>
+<li><p>Use mean training alpha otherwise</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="methods-eq-physics-equation">
+<h3>Methods — _eq (physics equation)<a class="headerlink" href="#methods-eq-physics-equation" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">_eq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Compute predicted values using the physics equation.</p>
+<p><strong>Physics equation:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}Q_{cr} = p_1 \\sqrt{\\left| \\mathrm{term}_1 \\cdot \\alpha + (1-\\alpha) \\cdot \\mathrm{term}_2 \\right| \\cdot (1/z) \\cdot (P/T) }\end{split}\]</div>
+<p>Where:</p>
+<ul class="simple">
+<li><p>term1 involves <span class="math notranslate nohighlight">\(2 g \\, \\mathrm{Dia}\)</span>, <span class="math notranslate nohighlight">\((\\rho_l - \\rho_g)\)</span>, <span class="math notranslate nohighlight">\(\\cos(\\mathrm{Dev})\)</span>, and parameters p4.</p></li>
+<li><p>term2 involves <span class="math notranslate nohighlight">\(|\\sin(p_5 \\cdot \\mathrm{Dev})|^{p_3}\)</span> and <span class="math notranslate nohighlight">\((\\rho_l - \\rho_g)^{p_2} / \\rho_g^2\)</span>.</p></li>
+</ul>
+</section>
+<section id="methods-loss">
+<h3>Methods — _loss<a class="headerlink" href="#methods-loss" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Compute loss function for optimization. <strong>Returns:</strong> float (MSE).</p>
+</section>
+</section>
+<section id="helm-class-data-management">
+<h2>Helm Class — Data Management<a class="headerlink" href="#helm-class-data-management" title="Link to this heading"></a></h2>
+<p>The <strong>Helm</strong> class (in <code class="docutils literal notranslate"><span class="pre">models.utils</span></code>) handles dataset loading, train/test splitting, scaling, and model training/evaluation. The CSV must include the feature columns, plus <strong>Qcr</strong> (target), <strong>Gasflowrate</strong>, and <strong>Test status</strong>.</p>
+<section id="id1">
+<h3>Class definition<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">models.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">Helm</span>
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h3>Constructor<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">drop_cols</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">includ_cols</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.20</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Parameters:</strong> path (str), seed (int), drop_cols, includ_cols (lists), test_size (float, default 0.20), scale (bool, default True).</p>
+<p><strong>Attributes (set after initialization):</strong> X_train, X_test, y_train, y_test (numpy arrays). If scale=True, use X_train_rdy, X_test_rdy (and optionally y_train_rdy, y_test_rdy) for scaled data. Also: feature_names, scaler_X, scaler_y (when scale=True).</p>
+</section>
+<section id="methods-evolv-model">
+<h3>Methods — evolv_model<a class="headerlink" href="#methods-evolv-model" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">evolv_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_model</span><span class="p">,</span> <span class="n">hparam_grid</span><span class="p">,</span> <span class="n">k_folds</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Train model with hyperparameter optimization. <strong>Returns:</strong> best trained model. Performs grid search and k-fold cross-validation; stores predictions and metrics.</p>
+</section>
+</section>
+<section id="qlatticewrapper-class-symbolic-regression">
+<h2>QLatticeWrapper Class — Symbolic Regression<a class="headerlink" href="#qlatticewrapper-class-symbolic-regression" title="Link to this heading"></a></h2>
+<p>Wrapper for Feyn QLattice for automated symbolic regression with a scikit-learn compatible interface.</p>
+<section id="id3">
+<h3>Constructor<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature_tags</span><span class="p">,</span> <span class="n">output_tag</span><span class="o">=</span><span class="s2">&quot;Qcr&quot;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">max_complexity</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s2">&quot;bic&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Parameters:</strong> feature_tags (List[str]), output_tag, seed, max_complexity, n_epochs, criterion (“bic”, “aic”, “r2”).</p>
+<p><strong>Methods:</strong> fit(X, y), predict(X), express() (returns SymPy expression).</p>
+</section>
+</section>
+<section id="data-format-requirements">
+<h2>Data Format Requirements<a class="headerlink" href="#data-format-requirements" title="Link to this heading"></a></h2>
+<p>Input CSV must contain the 10 features (Dia, Dev(deg), Area (m2), z, GasDens, LiquidDens, g (m/s2), P/T, friction_factor, critical_film_thickness) plus <strong>Qcr</strong>, <strong>Gasflowrate</strong>, and <strong>Test status</strong> for Helm.</p>
+</section>
+<section id="data-validation-error-handling-performance">
+<h2>Data Validation, Error Handling, Performance<a class="headerlink" href="#data-validation-error-handling-performance" title="Link to this heading"></a></h2>
+<p>Helm loads CSV and splits by stratify=loading (Test status). The API includes error handling for invalid inputs, missing columns, optimization failures, and (for QLattice) network issues.</p>
+</section>
+<section id="support-and-resources">
+<h2>Support and Resources<a class="headerlink" href="#support-and-resources" title="Link to this heading"></a></h2>
+<p>GitHub repository, documentation, community forums, issue tracker, and research papers. For examples, see Usage Examples and the Jupyter notebooks.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage_examples.html" class="btn btn-neutral float-left" title="Usage Examples and Tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="troubleshooting.html" class="btn btn-neutral float-right" title="Troubleshooting Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Droplet-Film Model Development Project.
+      <span class="lastupdated">Last updated on 2026-03-09.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

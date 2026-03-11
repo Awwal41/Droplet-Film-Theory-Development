@@ -1,0 +1,566 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installation Guide &mdash; DFT Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=60dbed4a"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage Examples and Tutorials" href="usage_examples.html" />
+    <link rel="prev" title="Droplet-Film Model Development" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Droplet-Film Model Development
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#system-requirements">System Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#minimum">Minimum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recommended">Recommended</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#python-environment-setup">Python Environment Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-install-python">Step 1 — Install Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-create-virtual-environment">Step 2 — Create Virtual Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-3-upgrade-pip">Step 3 — Upgrade pip</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#package-installation">Package Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#method-1-from-repository-recommended">Method 1: From repository (recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#method-2-manual-install">Method 2: Manual install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#method-3-requirements-file">Method 3: Requirements file</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#verification">Verification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-test-basic-imports">Step 1 — Test basic imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-test-project-modules">Step 2 — Test project modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-3-quick-functionality-test">Step 3 — Quick functionality test</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#jupyter-notebooks">Jupyter Notebooks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-install-jupyter">Step 1 — Install Jupyter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-launch-and-open-notebooks">Step 2 — Launch and open notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-preparation">Data Preparation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#required-csv-columns">Required CSV columns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#validate-your-data">Validate your data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#common-installation-issues">Common Installation Issues</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#permission-errors">Permission errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#version-conflicts">Version conflicts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-errors">Memory errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#network-download-failures">Network / download failures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compilation-errors-windows">Compilation errors (Windows)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#qlattice-connection">QLattice connection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#development-setup">Development Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#code-quality-and-tests">Code quality and tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ide-vs-code">IDE (VS Code)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-and-maintenance">Performance and Maintenance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#upgrade-packages">Upgrade packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#optional-intel-mkl">Optional: Intel MKL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#backup-and-cleanup">Backup and cleanup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#uninstall">Uninstall</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-checklist">Installation Checklist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html">Usage Examples and Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#dft-model-tutorial">DFT Model Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#dft-implementation-overview">DFT Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#basic-dft-setup">Basic DFT Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#dft-data-preparation">DFT Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#dft-model-training">DFT Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#making-predictions-with-dft">Making Predictions with DFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#evaluating-dft-performance">Evaluating DFT Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#understanding-dft-output-optional">Understanding DFT Output (Optional)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#xgboost-tutorial">XGBoost Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-implementation-overview">XGBoost Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#basic-xgboost-setup">Basic XGBoost Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-data-preparation">XGBoost Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-model-training">XGBoost Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-hyperparameter-tuning">XGBoost Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#xgboost-feature-importance-analysis">XGBoost Feature Importance Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#pysindy-tutorial">PySINDy Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-implementation-overview">PySINDy Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-setup-and-installation">PySINDy Setup and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-data-preparation">PySINDy Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-model-training">PySINDy Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysindy-model-evaluation">PySINDy Model Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#pysr-tutorial">PySR Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-implementation-overview">PySR Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-setup-and-installation">PySR Setup and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-data-preparation">PySR Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-model-training">PySR Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#pysr-model-evaluation">PySR Model Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#qlattice-tutorial">QLattice Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-implementation-overview">QLattice Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-setup-and-installation">QLattice Setup and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-data-preparation">QLattice Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-model-training">QLattice Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#qlattice-model-evaluation">QLattice Model Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#ensemble-methods-tutorial">Ensemble Methods Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#ensemble-implementation-overview">Ensemble Implementation Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#ensemble-model-creation">Ensemble Model Creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#model-comparison">Model Comparison</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#advanced-usage-examples">Advanced Usage Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#custom-alpha-strategy-implementation">Custom Alpha Strategy Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#production-deployment-example">Production Deployment Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#batch-processing-example">Batch Processing Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_examples.html#performance-optimization">Performance Optimization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#memory-efficient-processing">Memory-Efficient Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage_examples.html#parallel-processing">Parallel Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#core-classes-and-modules">Core Classes and Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#dft-class-core-physics-model">DFT Class — Core Physics Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#class-definition">Class definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#constructor">Constructor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-fit">Methods — fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-predict">Methods — predict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-eq-physics-equation">Methods — _eq (physics equation)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-loss">Methods — _loss</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#helm-class-data-management">Helm Class — Data Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#id1">Class definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#id2">Constructor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#methods-evolv-model">Methods — evolv_model</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#qlatticewrapper-class-symbolic-regression">QLatticeWrapper Class — Symbolic Regression</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_reference.html#id3">Constructor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#data-format-requirements">Data Format Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#data-validation-error-handling-performance">Data Validation, Error Handling, Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#support-and-resources">Support and Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Droplet-Film Model Development</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Installation Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/installation_guide.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installation-guide">
+<h1>Installation Guide<a class="headerlink" href="#installation-guide" title="Link to this heading"></a></h1>
+<p>Droplet-Film Model Development Project — Complete Setup Instructions.</p>
+<section id="system-requirements">
+<h2>System Requirements<a class="headerlink" href="#system-requirements" title="Link to this heading"></a></h2>
+<p>Before installing, ensure your system meets the following requirements.</p>
+<section id="minimum">
+<h3>Minimum<a class="headerlink" href="#minimum" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Python 3.7 or higher (3.9+ recommended)</p></li>
+<li><p>8 GB RAM (16 GB recommended for large datasets)</p></li>
+<li><p>2 GB free disk space</p></li>
+<li><p>Internet connection for package installation</p></li>
+<li><p>OS: Windows 10/11, macOS 10.14+, or Ubuntu 18.04+</p></li>
+</ul>
+</section>
+<section id="recommended">
+<h3>Recommended<a class="headerlink" href="#recommended" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Python 3.9 or 3.10</p></li>
+<li><p>16 GB RAM or more</p></li>
+<li><p>5 GB free disk space</p></li>
+<li><p>SSD storage</p></li>
+<li><p>Multi-core processor</p></li>
+</ul>
+</section>
+</section>
+<section id="python-environment-setup">
+<h2>Python Environment Setup<a class="headerlink" href="#python-environment-setup" title="Link to this heading"></a></h2>
+<p>Use a virtual environment to avoid conflicts with other projects.</p>
+<section id="step-1-install-python">
+<h3>Step 1 — Install Python<a class="headerlink" href="#step-1-install-python" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Download from <a class="reference external" href="https://www.python.org/">https://www.python.org/</a></p></li>
+<li><p>Choose Python 3.9 or 3.10 for best compatibility</p></li>
+<li><p>During installation, check <strong>Add Python to PATH</strong></p></li>
+<li><p>Verify: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">--version</span></code> (or <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">--version</span></code> on macOS/Linux)</p></li>
+</ul>
+</section>
+<section id="step-2-create-virtual-environment">
+<h3>Step 2 — Create Virtual Environment<a class="headerlink" href="#step-2-create-virtual-environment" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Windows</span>
+python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>dft_env
+dft_env<span class="se">\S</span>cripts<span class="se">\a</span>ctivate
+
+<span class="c1"># macOS/Linux</span>
+python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>dft_env
+<span class="nb">source</span><span class="w"> </span>dft_env/bin/activate
+</pre></div>
+</div>
+</section>
+<section id="step-3-upgrade-pip">
+<h3>Step 3 — Upgrade pip<a class="headerlink" href="#step-3-upgrade-pip" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+</pre></div>
+</div>
+</section>
+</section>
+<section id="package-installation">
+<h2>Package Installation<a class="headerlink" href="#package-installation" title="Link to this heading"></a></h2>
+<p>Choose one of the following methods.</p>
+<section id="method-1-from-repository-recommended">
+<h3>Method 1: From repository (recommended)<a class="headerlink" href="#method-1-from-repository-recommended" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/your-username/Droplet-Film-Model-Development.git
+<span class="nb">cd</span><span class="w"> </span>Droplet-Film-Model-Development
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+<section id="method-2-manual-install">
+<h3>Method 2: Manual install<a class="headerlink" href="#method-2-manual-install" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>numpy<span class="w"> </span>pandas<span class="w"> </span>scipy<span class="w"> </span>scikit-learn
+pip<span class="w"> </span>install<span class="w"> </span>matplotlib<span class="w"> </span>seaborn<span class="w"> </span>plotly
+pip<span class="w"> </span>install<span class="w"> </span>jupyter<span class="w"> </span>notebook<span class="w"> </span>ipywidgets
+pip<span class="w"> </span>install<span class="w"> </span>feyn<span class="w"> </span>pysindy<span class="w"> </span>xgboost
+</pre></div>
+</div>
+</section>
+<section id="method-3-requirements-file">
+<h3>Method 3: Requirements file<a class="headerlink" href="#method-3-requirements-file" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</section>
+</section>
+<section id="verification">
+<h2>Verification<a class="headerlink" href="#verification" title="Link to this heading"></a></h2>
+<section id="step-1-test-basic-imports">
+<h3>Step 1 — Test basic imports<a class="headerlink" href="#step-1-test-basic-imports" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import numpy; print(&#39;NumPy:&#39;, numpy.__version__)&quot;</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import pandas; print(&#39;Pandas:&#39;, pandas.__version__)&quot;</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import scipy; print(&#39;SciPy:&#39;, scipy.__version__)&quot;</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import sklearn; print(&#39;Scikit-learn:&#39;, sklearn.__version__)&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="step-2-test-project-modules">
+<h3>Step 2 — Test project modules<a class="headerlink" href="#step-2-test-project-modules" title="Link to this heading"></a></h3>
+<p>Run from the <strong>project root</strong> so <code class="docutils literal notranslate"><span class="pre">src</span></code> and <code class="docutils literal notranslate"><span class="pre">models</span></code> are on the path:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from src.dfm_src import DFT; print(&#39;DFT OK&#39;)&quot;</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from models.utils import Helm; print(&#39;Helm OK&#39;)&quot;</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from models.utils import QLatticeWrapper; print(&#39;QLatticeWrapper OK&#39;)&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="step-3-quick-functionality-test">
+<h3>Step 3 — Quick functionality test<a class="headerlink" href="#step-3-quick-functionality-test" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src.dfm_src</span><span class="w"> </span><span class="kn">import</span> <span class="n">DFT</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">DFT</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DFT model test successful&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="jupyter-notebooks">
+<h2>Jupyter Notebooks<a class="headerlink" href="#jupyter-notebooks" title="Link to this heading"></a></h2>
+<section id="step-1-install-jupyter">
+<h3>Step 1 — Install Jupyter<a class="headerlink" href="#step-1-install-jupyter" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>jupyter<span class="w"> </span>notebook<span class="w"> </span>ipywidgets
+</pre></div>
+</div>
+</section>
+<section id="step-2-launch-and-open-notebooks">
+<h3>Step 2 — Launch and open notebooks<a class="headerlink" href="#step-2-launch-and-open-notebooks" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jupyter<span class="w"> </span>notebook
+</pre></div>
+</div>
+<p>Then open the project root or <code class="docutils literal notranslate"><span class="pre">models/</span></code> and run:</p>
+<ul class="simple">
+<li><p><strong>DFT-PISR.ipynb</strong> — physics-informed DFM</p></li>
+<li><p><strong>xgboost.ipynb</strong> — gradient boosting</p></li>
+<li><p><strong>sindy.ipynb</strong> — symbolic regression (PySINDy)</p></li>
+<li><p><strong>QLattice.ipynb</strong> — QLattice symbolic regression</p></li>
+</ul>
+</section>
+</section>
+<section id="data-preparation">
+<h2>Data Preparation<a class="headerlink" href="#data-preparation" title="Link to this heading"></a></h2>
+<section id="required-csv-columns">
+<h3>Required CSV columns<a class="headerlink" href="#required-csv-columns" title="Link to this heading"></a></h3>
+<p>Your CSV must include these 10 feature columns (and for <strong>Helm</strong>, also <strong>Qcr</strong>, <strong>Gasflowrate</strong>, <strong>Test status</strong>):</p>
+<ul class="simple">
+<li><p><strong>Dia</strong> — well diameter (m)</p></li>
+<li><p><strong>Dev(deg)</strong> — well deviation angle (degrees)</p></li>
+<li><p><strong>Area (m2)</strong> — cross-sectional area (m²)</p></li>
+<li><p><strong>z</strong> — elevation change (m)</p></li>
+<li><p><strong>GasDens</strong> — gas density (kg/m³)</p></li>
+<li><p><strong>LiquidDens</strong> — liquid density (kg/m³)</p></li>
+<li><p><strong>g (m/s2)</strong> — gravitational acceleration (m/s²)</p></li>
+<li><p><strong>P/T</strong> — pressure/temperature ratio (Pa/K)</p></li>
+<li><p><strong>friction_factor</strong> — dimensionless</p></li>
+<li><p><strong>critical_film_thickness</strong> — critical film thickness (m)</p></li>
+</ul>
+</section>
+<section id="validate-your-data">
+<h3>Validate your data<a class="headerlink" href="#validate-your-data" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">validate_data</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+    <span class="n">required</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;Dia&#39;</span><span class="p">,</span> <span class="s1">&#39;Dev(deg)&#39;</span><span class="p">,</span> <span class="s1">&#39;Area (m2)&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;GasDens&#39;</span><span class="p">,</span> <span class="s1">&#39;LiquidDens&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;g (m/s2)&#39;</span><span class="p">,</span> <span class="s1">&#39;P/T&#39;</span><span class="p">,</span> <span class="s1">&#39;friction_factor&#39;</span><span class="p">,</span> <span class="s1">&#39;critical_film_thickness&#39;</span>
+    <span class="p">]</span>
+    <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">required</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Missing columns:&quot;</span><span class="p">,</span> <span class="n">missing</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All required columns present. Shape:&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+<span class="n">validate_data</span><span class="p">(</span><span class="s2">&quot;your_data.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="common-installation-issues">
+<h2>Common Installation Issues<a class="headerlink" href="#common-installation-issues" title="Link to this heading"></a></h2>
+<section id="permission-errors">
+<h3>Permission errors<a class="headerlink" href="#permission-errors" title="Link to this heading"></a></h3>
+<p>Use a virtual environment, or: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">--user</span> <span class="pre">package_name</span></code></p>
+</section>
+<section id="version-conflicts">
+<h3>Version conflicts<a class="headerlink" href="#version-conflicts" title="Link to this heading"></a></h3>
+<p>Use a fresh virtual environment and reinstall:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>fresh_env
+<span class="c1"># Windows: fresh_env\Scripts\activate</span>
+<span class="c1"># macOS/Linux: source fresh_env/bin/activate</span>
+pip<span class="w"> </span>install<span class="w"> </span>package_name
+</pre></div>
+</div>
+</section>
+<section id="memory-errors">
+<h3>Memory errors<a class="headerlink" href="#memory-errors" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Close other applications</p></li>
+<li><p>Use: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">--no-cache-dir</span> <span class="pre">package_name</span></code></p></li>
+<li><p>Restart and try again</p></li>
+</ul>
+</section>
+<section id="network-download-failures">
+<h3>Network / download failures<a class="headerlink" href="#network-download-failures" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-i<span class="w"> </span>https://pypi.org/simple/<span class="w"> </span>package_name
+pip<span class="w"> </span>install<span class="w"> </span>--trusted-host<span class="w"> </span>pypi.org<span class="w"> </span>--trusted-host<span class="w"> </span>files.pythonhosted.org<span class="w"> </span>package_name
+</pre></div>
+</div>
+</section>
+<section id="compilation-errors-windows">
+<h3>Compilation errors (Windows)<a class="headerlink" href="#compilation-errors-windows" title="Link to this heading"></a></h3>
+<p>Install <strong>Microsoft Visual C++ Build Tools</strong> (include “Desktop development with C++” or “C++ build tools”), then restart the terminal.</p>
+</section>
+<section id="qlattice-connection">
+<h3>QLattice connection<a class="headerlink" href="#qlattice-connection" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Check internet and firewall</p></li>
+<li><p>Verify Feyn account and API setup</p></li>
+<li><p>Use PySINDy or other methods if QLattice is unavailable</p></li>
+</ul>
+</section>
+</section>
+<section id="development-setup">
+<h2>Development Setup<a class="headerlink" href="#development-setup" title="Link to this heading"></a></h2>
+<section id="code-quality-and-tests">
+<h3>Code quality and tests<a class="headerlink" href="#code-quality-and-tests" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>black<span class="w"> </span>flake8<span class="w"> </span>pytest<span class="w"> </span>mypy
+black<span class="w"> </span>src/*.py<span class="w"> </span>models/*.py
+flake8<span class="w"> </span>src/*.py<span class="w"> </span>models/*.py
+mypy<span class="w"> </span>src/*.py<span class="w"> </span>models/*.py
+pytest<span class="w"> </span>tests/
+</pre></div>
+</div>
+</section>
+<section id="ide-vs-code">
+<h3>IDE (VS Code)<a class="headerlink" href="#ide-vs-code" title="Link to this heading"></a></h3>
+<p>Add to <code class="docutils literal notranslate"><span class="pre">.vscode/settings.json</span></code> or user settings:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;python.defaultInterpreterPath&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${workspaceFolder}/dft_env/Scripts/python.exe&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;python.linting.enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;python.linting.flake8Enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;python.formatting.provider&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;black&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>On macOS/Linux, use <code class="docutils literal notranslate"><span class="pre">dft_env/bin/python</span></code> instead of <code class="docutils literal notranslate"><span class="pre">Scripts/python.exe</span></code>.</p>
+<p>PyCharm: set the project interpreter to the virtual environment and enable PEP 8 inspection.</p>
+</section>
+</section>
+<section id="performance-and-maintenance">
+<h2>Performance and Maintenance<a class="headerlink" href="#performance-and-maintenance" title="Link to this heading"></a></h2>
+<section id="upgrade-packages">
+<h3>Upgrade packages<a class="headerlink" href="#upgrade-packages" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>package_name
+pip<span class="w"> </span>list<span class="w"> </span>--outdated
+pip<span class="w"> </span>audit
+</pre></div>
+</div>
+</section>
+<section id="optional-intel-mkl">
+<h3>Optional: Intel MKL<a class="headerlink" href="#optional-intel-mkl" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>mkl
+</pre></div>
+</div>
+</section>
+<section id="backup-and-cleanup">
+<h3>Backup and cleanup<a class="headerlink" href="#backup-and-cleanup" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>freeze<span class="w"> </span>&gt;<span class="w"> </span>requirements_backup.txt
+pip<span class="w"> </span>cache<span class="w"> </span>purge
+</pre></div>
+</div>
+</section>
+</section>
+<section id="uninstall">
+<h2>Uninstall<a class="headerlink" href="#uninstall" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove virtual environment</span>
+<span class="c1"># Windows: rmdir /s dft_env</span>
+<span class="c1"># macOS/Linux: rm -rf dft_env</span>
+
+pip<span class="w"> </span>uninstall<span class="w"> </span>package_name
+pip<span class="w"> </span>cache<span class="w"> </span>purge
+</pre></div>
+</div>
+</section>
+<section id="installation-checklist">
+<h2>Installation Checklist<a class="headerlink" href="#installation-checklist" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>[ ] Python 3.7+ installed and on PATH</p></li>
+<li><p>[ ] Virtual environment created and activated</p></li>
+<li><p>[ ] Core packages installed (numpy, pandas, scipy, scikit-learn)</p></li>
+<li><p>[ ] Optional: matplotlib, seaborn, jupyter</p></li>
+<li><p>[ ] Project imports work (<code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">src.dfm_src</span> <span class="pre">import</span> <span class="pre">DFT</span></code>, <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">models.utils</span> <span class="pre">import</span> <span class="pre">Helm</span></code>)</p></li>
+<li><p>[ ] Quick DFT test runs successfully</p></li>
+<li><p>[ ] CSV data has required columns (and Qcr, Gasflowrate, Test status for Helm)</p></li>
+</ul>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>See <strong>Usage examples</strong> for the DFT and other model tutorials.</p></li>
+<li><p>See <strong>API reference</strong> for classes and parameters.</p></li>
+<li><p>See <strong>Troubleshooting</strong> if you run into errors.</p></li>
+<li><p>Open <strong>DFT-PISR.ipynb</strong> and run the workflow end-to-end.</p></li>
+</ol>
+<p>For more help: check the troubleshooting guide, search GitHub issues, or contact the development team.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Droplet-Film Model Development" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="usage_examples.html" class="btn btn-neutral float-right" title="Usage Examples and Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Droplet-Film Model Development Project.
+      <span class="lastupdated">Last updated on 2026-03-09.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
