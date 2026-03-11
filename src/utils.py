@@ -198,10 +198,13 @@ class Helm:
         loading: np.ndarray,
         interval: float = 0.01,
     ):
+        lower_bound = gsflow * (1 - interval)
+        upper_bound = gsflow * (1 + interval)
+
         loading_pred = np.where(
-            y_pred > gsflow + interval,
+            y_pred > upper_bound,
             1,
-            np.where(y_pred < gsflow - interval, -1, 0),
+            np.where(y_pred < lower_bound, -1, 0),
         )
 
         self.acc = accuracy_score(loading, loading_pred)
@@ -230,7 +233,9 @@ class Helm:
                 sy = StandardScaler()
                 X_tr = sx.fit_transform(X_tr)
                 X_val = sx.transform(X_val)
-                y_tr_rdy = sy.fit_transform(y_tr.reshape(-1, 1))
+                y_tr_scaled = sy.fit_transform(y_tr.reshape(-1, 1))
+                # SINDy accepts 2D x_dot, but most sklearn models prefer 1D
+                y_tr_rdy = y_tr_scaled if isinstance(model, SINDy) else y_tr_scaled.flatten()
             else:
                 y_tr_rdy = y_tr
 
@@ -396,6 +401,20 @@ class Helm:
 
         print(
             f"Test Classification Accuracy = {test_class_acc:.4f}",
+            file=sys.stderr,
+        )
+
+        # Per-class accuracy from confusion matrix (recall per class)
+        class_labels = ["Unloaded (-1)", "Near L.U. (0)", "Loaded (1)"]
+        cm = self.cm
+        row_sums = cm.sum(axis=1)
+        per_class_acc = np.where(row_sums > 0, cm.diagonal() / row_sums, 0.0)
+        per_class_str = ", ".join(
+            f"{label}: {acc:.4f}"
+            for label, acc in zip(class_labels, per_class_acc)
+        )
+        print(
+            f"Per-Class Accuracy — {per_class_str}",
             file=sys.stderr,
         )
 
