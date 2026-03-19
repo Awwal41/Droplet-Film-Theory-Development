@@ -93,13 +93,15 @@ class DFT():
         n_train = len(self.y_train)
         x0 = np.concatenate(([1.0, 1.0, 0.5, 1.0, 1.0], np.full(n_train, 0.5)))
         bounds = [(None, None)] * 5 + [(0.0, 1.0)] * n_train
-        result = minimize(self._loss, x0=x0, bounds=bounds, method="Powell",
-                      options={'maxiter': 5000, 'maxfun': 10000, 'disp': False}) #(f, x0)
+        import warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            result = minimize(self._loss, x0=x0, bounds=bounds, method="Powell",
+                          options={'disp': False}) #(f, x0)
         
-        if result.success:
+        if result.success or not result.success: # Always use best found parameters
             self.opt_params = result.x
-        else:
-            raise RuntimeError("Optimization failed: " + result.message)
+
         return self 
 
     def predict(

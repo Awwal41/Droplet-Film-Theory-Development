@@ -198,8 +198,8 @@ class Helm:
         loading: np.ndarray,
         interval: float = 0.01,
     ):
-        lower_bound = gsflow * (1 - interval)
-        upper_bound = gsflow * (1 + interval)
+        lower_bound = gsflow - interval
+        upper_bound = gsflow + interval
 
         loading_pred = np.where(
             y_pred > upper_bound,
@@ -221,6 +221,7 @@ class Helm:
         )
 
         acc_scores = []
+        cm_total = np.zeros((3, 3), dtype=int)
 
         for tr_idx, val_idx in kf.split(self.X_train, self.loading_train):
             X_tr, X_val = self.X_train[tr_idx], self.X_train[val_idx]
@@ -258,8 +259,12 @@ class Helm:
                     interval=interval,
                 )
             )
+            cm_total += self.cm
 
-        return float(np.mean(acc_scores)), float(np.std(acc_scores))
+        row_sums = cm_total.sum(axis=1)
+        per_class_acc = np.where(row_sums > 0, cm_total.diagonal() / row_sums, 0.0)
+
+        return float(np.mean(acc_scores)), float(np.std(acc_scores)), per_class_acc
 
     # =====================================================
     # TRAIN + EVALUATE MODEL
@@ -275,42 +280,43 @@ class Helm:
         # =========================
         # HYPERPARAMETER SEARCH
         # =========================
-        if k_folds > 0:
-            self.best_score = -np.inf
-            self.best_params = None
-            self.best_search_params = None
-            self.k_folds = k_folds
+        self.best_score = -np.inf
+        self.best_params = None
+        self.best_search_params = None
+        self.k_folds = k_folds
 
-            print(
-                "Training model and optimizing hyperparameters via k-fold CV...",
-                file=sys.stderr,
-            )
+        print(
+            "Training model and optimizing hyperparameters via k-fold CV...",
+            file=sys.stderr,
+        )
 
-            keys = list(hparam_grid.keys())
-            values = [hparam_grid[k] for k in keys]
+        keys = list(hparam_grid.keys())
+        values = [hparam_grid[k] for k in keys]
 
-            for combo in itertools.product(*values):
-                search_hparams = dict(zip(keys, combo))
-                interval = float(search_hparams.get("interval", 0.01))
-                model_hparams = {
-                    k: v for k, v in search_hparams.items() if k != "interval"
-                }
+        for combo in itertools.product(*values):
+            search_hparams = dict(zip(keys, combo))
+            interval = float(search_hparams.get("interval", 0.01))
+            model_hparams = {
+                k: v for k, v in search_hparams.items() if k != "interval"
+            }
 
-                model = build_model(hparams=model_hparams)
-                score, score_std = self._cross_val(model, interval=interval)
+            model = build_model(hparams=model_hparams)
+            score, score_std, per_class_acc = self._cross_val(model, interval=interval)
 
-                if score > self.best_score:
-                    self.best_score = score
-                    self.best_score_std = score_std
-                    self.best_params = model_hparams
-                    self.best_search_params = search_hparams
-                    self.best_interval = interval
+            if score > self.best_score:
+                self.best_score = score
+                self.best_score_std = score_std
+                self.best_cv_per_class_acc = per_class_acc
+                self.best_params = model_hparams
+                self.best_search_params = search_hparams
+                self.best_interval = interval
 
-            print(
-                "Retraining optimized model on full training set",
-                file=sys.stderr,
-            )
-            self.model = build_model(hparams=self.best_params)
+        print(
+            "Retraining optimized model on full training set...",
+            file=sys.stderr,
+        )
+        self.model = build_model(hparams=self.best_params)
+        """
         else:
             if isinstance(hparam_grid.get("interval"), (list, tuple, np.ndarray)):
                 interval_values = hparam_grid["interval"]
@@ -322,18 +328,26 @@ class Helm:
             else:
                 self.best_interval = float(hparam_grid.get("interval", 0.01))
 
-            self.best_params = {
-                k: v for k, v in hparam_grid.items() if k != "interval"
-            }
+            self.best_params = {}
+            for k, v in hparam_grid.items():
+                if k == "interval":
+                    continue
+                if isinstance(v, (list, tuple, np.ndarray)):
+                    if len(v) != 1:
+                        raise ValueError(f"For k_folds=0, provide a single value for {k}.")
+                    self.best_params[k] = v[0]
+                else:
+                    self.best_params[k] = v
             self.model = build_model(hparams=self.best_params)
-
+            score, score_std, per_class_acc = self._cross_val(model, interval=interval)
+        """
         # =========================
         # FINAL TRAINING
         # =========================
         if isinstance(self.model, SINDy):
             self.model.fit(self.X_train_rdy, x_dot=self.y_train_rdy)
         else:
-            self.model.fit(self.X_train_rdy, self.y_train_rdy)
+            self.model.fit(self.X_train_rdy, self.y_train_rdy.flatten())
 
         # =========================
         # PREDICTIONS
@@ -356,35 +370,63 @@ class Helm:
         train_reg = self.regression_scores(self.y_train, self.y_train_pred)
         test_reg = self.regression_scores(self.y_test, self.y_test_pred)
 
-        test_class_acc = self.classification_scores(
-            self.y_test_pred,
-            self.gsflow_test,
-            self.loading_test,
-            interval=self.best_interval,
-        )
-
         # =========================
         # OUTPUT
         # =========================
         if k_folds > 0:
             print(
-                f"Best CV Classification Accuracy = {self.best_score:.4f} ± {self.best_score_std:.4f}",
+                f"\nBest CV Classification Accuracy: \n>>> {self.best_score:.4f} ± {self.best_score_std:.4f}",
+                file=sys.stderr,
+            )
+            class_labels = ["Unloaded (-1)", "Near L.U. (0)", "Loaded (1)"]
+            per_class_str = ", ".join(
+                f"{label}: {acc:.4f}"
+                for label, acc in zip(class_labels, self.best_cv_per_class_acc)
+            )
+            print(
+                f"\nBest CV Per-Class Accuracy:\n>>> {per_class_str}",
                 file=sys.stderr,
             )
             print(
-                "Best Hyperparameters:",
+                "\nBest Hyperparameters:\n>>>",
                 self.best_search_params,
                 file=sys.stderr,
             )
         else:
             print(
-                "Hyperparameters:",
+                "\nHyperparameters:\n>>>",
                 {**self.best_params, "interval": self.best_interval},
                 file=sys.stderr,
             )
 
+        train_class_acc = self.classification_scores(
+            self.y_train_pred,
+            self.gsflow_train,
+            self.loading_train,
+            interval=self.best_interval,
+        )
+
         print(
-            "Training Regression Metrics: "
+            f"\nTraining Classification Accuracy:\n>>> {train_class_acc:.4f}",
+            file=sys.stderr,
+        )
+
+         # Per-class accuracy from confusion matrix (recall per class)
+        class_labels = ["Unloaded (-1)", "Near L.U. (0)", "Loaded (1)"]
+        cm = self.cm
+        row_sums = cm.sum(axis=1)
+        per_class_acc = np.where(row_sums > 0, cm.diagonal() / row_sums, 0.0)
+        per_class_str = ", ".join(
+            f"{label}: {acc:.4f}"
+            for label, acc in zip(class_labels, per_class_acc)
+        )
+        print(
+            f"\nPer-Class Training Accuracy:\n>>> {per_class_str}",
+            file=sys.stderr,
+        )
+
+        print(
+            "\nTraining Regression Metrics:\n>>> "
             f"RMSE={train_reg['RMSE']:.4f}, "
             f"MAE={train_reg['MAE']:.4f}, "
             f"R2={train_reg['R2']:.4f}",
@@ -392,15 +434,24 @@ class Helm:
         )
 
         print(
-            "Test Regression Metrics: "
+            "\nTest Regression Metrics:\n>>> "
             f"RMSE={test_reg['RMSE']:.4f}, "
             f"MAE={test_reg['MAE']:.4f}, "
             f"R2={test_reg['R2']:.4f}",
             file=sys.stderr,
         )
 
+
+        
+        test_class_acc = self.classification_scores(
+            self.y_test_pred,
+            self.gsflow_test,
+            self.loading_test,
+            interval=self.best_interval,
+        )
+
         print(
-            f"Test Classification Accuracy = {test_class_acc:.4f}",
+            f"\nTest Classification Accuracy:\n>>> {test_class_acc:.4f}",
             file=sys.stderr,
         )
 
@@ -414,7 +465,7 @@ class Helm:
             for label, acc in zip(class_labels, per_class_acc)
         )
         print(
-            f"Per-Class Accuracy — {per_class_str}",
+            f"\nPer-Class Test Accuracy:\n>>> {per_class_str}",
             file=sys.stderr,
         )
 
