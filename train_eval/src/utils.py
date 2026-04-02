@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import sys
 
-from sklearn.metrics import accuracy_score, confusion_matrix, r2_score, mean_squared_error, mean_absolute_error
+from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.model_selection import train_test_split, StratifiedKFold 
 from sklearn.preprocessing import StandardScaler
 from typing import Optional, List, Callable, Dict, Any, List
@@ -19,7 +19,7 @@ class QLatticeWrapper():
     def __init__(
             self, 
             feature_tags: List,
-            output_tag: int="Qcr",
+            output_tag: int="loading",
             seed: int=42, 
             max_complexity: int=10, 
             n_epochs: int=10,
@@ -80,11 +80,12 @@ class QLatticeWrapper():
 
 
 
+
 class Helm:
     """
     Handles dataset splitting, scaling, k-fold CV,
-    hyperparameter tuning, regression modeling,
-    and physics-based well-status classification.
+    hyperparameter tuning, and direct classification
+    of well loading status (-1 = Unloaded, 0 = Near L.U., 1 = Loaded).
     """
 
     def __init__(
@@ -113,13 +114,13 @@ class Helm:
 
         self.feature_names = self.X.columns.tolist()
 
-        self.y = df["Qcr"]
         self.gsflow = df["Gasflowrate"]
         self.df = df
 
-        # Encode loading state
+        # Encode loading state — this is now the classification target
+        # 0 = Unloaded, 1 = Near L.U., 2 = Loaded
         self.loading = df["Test status"].apply(
-            lambda x: -1 if x == "Unloaded" else (0 if x == "Near L.U" else 1)
+            lambda x: 0 if x == "Unloaded" else (1 if x == "Near L.U" else 2)
         ).to_numpy()
 
         # =========================
@@ -128,15 +129,12 @@ class Helm:
         (
             self.X_train,
             self.X_test,
-            self.y_train,
-            self.y_test,
             self.gsflow_train,
             self.gsflow_test,
             self.loading_train,
             self.loading_test,
         ) = train_test_split(
             self.X,
-            self.y,
             self.gsflow,
             self.loading,
             test_size=test_size,
@@ -144,49 +142,24 @@ class Helm:
             stratify=self.loading,
         )
 
-        df_test = pd.DataFrame(self.y_test)
-        df_test.to_csv("test_set.csv")
         # =========================
-        # SCALING
+        # SCALING (features only)
         # =========================
         if self.scale:
             self.scaler_X = StandardScaler()
-            self.scaler_y = StandardScaler()
-
             self.X_train_rdy = self.scaler_X.fit_transform(self.X_train)
             self.X_test_rdy = self.scaler_X.transform(self.X_test)
-
-            self.y_train_rdy = self.scaler_y.fit_transform(
-                self.y_train.values.reshape(-1, 1)
-            )
-            self.y_test_rdy = self.scaler_y.transform(
-                self.y_test.values.reshape(-1, 1)
-            )
         else:
             self.X_train_rdy = np.array(self.X_train)
             self.X_test_rdy = np.array(self.X_test)
-            self.y_train_rdy = self.y_train.values
-            self.y_test_rdy = self.y_test.values
 
         # Convert to numpy
         self.X_train = np.array(self.X_train)
         self.X_test = np.array(self.X_test)
-        self.y_train = np.array(self.y_train).flatten()
-        self.y_test = np.array(self.y_test).flatten()
         self.loading_train = np.array(self.loading_train)
         self.loading_test = np.array(self.loading_test)
         self.gsflow_train = np.array(self.gsflow_train)
         self.gsflow_test = np.array(self.gsflow_test)
-
-    # =====================================================
-    # REGRESSION METRICS
-    # =====================================================
-    def regression_scores(self, y_true: np.ndarray, y_pred: np.ndarray):
-        return {
-            "RMSE": np.sqrt(mean_squared_error(y_true, y_pred)),
-            "MAE": mean_absolute_error(y_true, y_pred),
-            "R2": r2_score(y_true, y_pred),
-        }
 
     # =====================================================
     # CLASSIFICATION METRICS
@@ -194,28 +167,17 @@ class Helm:
     def classification_scores(
         self,
         y_pred: np.ndarray,
-        gsflow: np.ndarray,
         loading: np.ndarray,
-        interval: float = 0.01,
     ):
-        lower_bound = gsflow - interval
-        upper_bound = gsflow + interval
-
-        loading_pred = np.where(
-            y_pred > upper_bound,
-            1,
-            np.where(y_pred < lower_bound, -1, 0),
-        )
-
-        self.acc = accuracy_score(loading, loading_pred)
-        self.cm = confusion_matrix(loading, loading_pred, labels=[-1, 0, 1])
-
+        """Compute accuracy and confusion matrix for direct loading-status classification."""
+        self.acc = accuracy_score(loading, y_pred)
+        self.cm = confusion_matrix(loading, y_pred, labels=[0, 1, 2])
         return self.acc
 
     # =====================================================
     # CROSS VALIDATION
     # =====================================================
-    def _cross_val(self, model, interval: float = 0.01):
+    def _cross_val(self, model):
         kf = StratifiedKFold(
             n_splits=self.k_folds, shuffle=True, random_state=42
         )
@@ -225,39 +187,19 @@ class Helm:
 
         for tr_idx, val_idx in kf.split(self.X_train, self.loading_train):
             X_tr, X_val = self.X_train[tr_idx], self.X_train[val_idx]
-            y_tr, y_val = self.y_train[tr_idx], self.y_train[val_idx]
-            gs_val = self.gsflow_train[val_idx]
+            load_tr = self.loading_train[tr_idx]
             load_val = self.loading_train[val_idx]
 
             if self.scale:
                 sx = StandardScaler()
-                sy = StandardScaler()
                 X_tr = sx.fit_transform(X_tr)
                 X_val = sx.transform(X_val)
-                y_tr_scaled = sy.fit_transform(y_tr.reshape(-1, 1))
-                # SINDy accepts 2D x_dot, but most sklearn models prefer 1D
-                y_tr_rdy = y_tr_scaled if isinstance(model, SINDy) else y_tr_scaled.flatten()
-            else:
-                y_tr_rdy = y_tr
 
-            if isinstance(model, SINDy):
-                model.fit(X_tr, x_dot=y_tr_rdy)
-            else:
-                model.fit(X_tr, y_tr_rdy)
-
-            y_val_pred = model.predict(X_val)
-            if self.scale:
-                y_val_pred = sy.inverse_transform(
-                    y_val_pred.reshape(-1, 1)
-                ).flatten()
+            model.fit(X_tr, load_tr)
+            load_val_pred = model.predict(X_val)
 
             acc_scores.append(
-                self.classification_scores(
-                    y_val_pred,
-                    gs_val,
-                    load_val,
-                    interval=interval,
-                )
+                self.classification_scores(load_val_pred, load_val)
             )
             cm_total += self.cm
 
@@ -275,8 +217,6 @@ class Helm:
         hparam_grid: Dict[str, List[Any]],
         k_folds: int = 5,
     ):
-        self.best_interval = 0.01
-
         # =========================
         # HYPERPARAMETER SEARCH
         # =========================
@@ -295,13 +235,10 @@ class Helm:
 
         for combo in itertools.product(*values):
             search_hparams = dict(zip(keys, combo))
-            interval = float(search_hparams.get("interval", 0.01))
-            model_hparams = {
-                k: v for k, v in search_hparams.items() if k != "interval"
-            }
+            model_hparams = dict(search_hparams)
 
             model = build_model(hparams=model_hparams)
-            score, score_std, per_class_acc = self._cross_val(model, interval=interval)
+            score, score_std, per_class_acc = self._cross_val(model)
 
             if score > self.best_score:
                 self.best_score = score
@@ -309,76 +246,34 @@ class Helm:
                 self.best_cv_per_class_acc = per_class_acc
                 self.best_params = model_hparams
                 self.best_search_params = search_hparams
-                self.best_interval = interval
 
         print(
             "Retraining optimized model on full training set...",
             file=sys.stderr,
         )
         self.model = build_model(hparams=self.best_params)
-        """
-        else:
-            if isinstance(hparam_grid.get("interval"), (list, tuple, np.ndarray)):
-                interval_values = hparam_grid["interval"]
-                if len(interval_values) != 1:
-                    raise ValueError(
-                        "For k_folds=0, provide a single interval value."
-                    )
-                self.best_interval = float(interval_values[0])
-            else:
-                self.best_interval = float(hparam_grid.get("interval", 0.01))
 
-            self.best_params = {}
-            for k, v in hparam_grid.items():
-                if k == "interval":
-                    continue
-                if isinstance(v, (list, tuple, np.ndarray)):
-                    if len(v) != 1:
-                        raise ValueError(f"For k_folds=0, provide a single value for {k}.")
-                    self.best_params[k] = v[0]
-                else:
-                    self.best_params[k] = v
-            self.model = build_model(hparams=self.best_params)
-            score, score_std, per_class_acc = self._cross_val(model, interval=interval)
-        """
         # =========================
         # FINAL TRAINING
         # =========================
-        if isinstance(self.model, SINDy):
-            self.model.fit(self.X_train_rdy, x_dot=self.y_train_rdy)
-        else:
-            self.model.fit(self.X_train_rdy, self.y_train_rdy.flatten())
+        self.model.fit(self.X_train_rdy, self.loading_train)
 
         # =========================
         # PREDICTIONS
         # =========================
-        self.y_train_pred = self.model.predict(self.X_train_rdy)
-        self.y_test_pred = self.model.predict(self.X_test_rdy)
-
-        if self.scale:
-            self.y_train_pred = self.scaler_y.inverse_transform(
-                self.y_train_pred.reshape(-1, 1)
-            ).flatten()
-
-            self.y_test_pred = self.scaler_y.inverse_transform(
-                self.y_test_pred.reshape(-1, 1)
-            ).flatten()
-
-        # =========================
-        # METRICS
-        # =========================
-        train_reg = self.regression_scores(self.y_train, self.y_train_pred)
-        test_reg = self.regression_scores(self.y_test, self.y_test_pred)
+        self.loading_train_pred = self.model.predict(self.X_train_rdy)
+        self.loading_test_pred = self.model.predict(self.X_test_rdy)
 
         # =========================
         # OUTPUT
         # =========================
+        class_labels = ["Unloaded (0)", "Near L.U. (1)", "Loaded (2)"]
+
         if k_folds > 0:
             print(
                 f"\nBest CV Classification Accuracy: \n>>> {self.best_score:.4f} ± {self.best_score_std:.4f}",
                 file=sys.stderr,
             )
-            class_labels = ["Unloaded (-1)", "Near L.U. (0)", "Loaded (1)"]
             per_class_str = ", ".join(
                 f"{label}: {acc:.4f}"
                 for label, acc in zip(class_labels, self.best_cv_per_class_acc)
@@ -392,27 +287,13 @@ class Helm:
                 self.best_search_params,
                 file=sys.stderr,
             )
-        else:
-            print(
-                "\nHyperparameters:\n>>>",
-                {**self.best_params, "interval": self.best_interval},
-                file=sys.stderr,
-            )
 
-        train_class_acc = self.classification_scores(
-            self.y_train_pred,
-            self.gsflow_train,
-            self.loading_train,
-            interval=self.best_interval,
-        )
-
+        # Training accuracy
+        train_acc = self.classification_scores(self.loading_train_pred, self.loading_train)
         print(
-            f"\nTraining Classification Accuracy:\n>>> {train_class_acc:.4f}",
+            f"\nTraining Classification Accuracy:\n>>> {train_acc:.4f}",
             file=sys.stderr,
         )
-
-         # Per-class accuracy from confusion matrix (recall per class)
-        class_labels = ["Unloaded (-1)", "Near L.U. (0)", "Loaded (1)"]
         cm = self.cm
         row_sums = cm.sum(axis=1)
         per_class_acc = np.where(row_sums > 0, cm.diagonal() / row_sums, 0.0)
@@ -425,40 +306,180 @@ class Helm:
             file=sys.stderr,
         )
 
+        # Test accuracy
+        test_acc = self.classification_scores(self.loading_test_pred, self.loading_test)
         print(
-            "\nTraining Regression Metrics:\n>>> "
-            f"RMSE={train_reg['RMSE']:.4f}, "
-            f"MAE={train_reg['MAE']:.4f}, "
-            f"R2={train_reg['R2']:.4f}",
+            f"\nTest Classification Accuracy:\n>>> {test_acc:.4f}",
             file=sys.stderr,
         )
-
-        print(
-            "\nTest Regression Metrics:\n>>> "
-            f"RMSE={test_reg['RMSE']:.4f}, "
-            f"MAE={test_reg['MAE']:.4f}, "
-            f"R2={test_reg['R2']:.4f}",
-            file=sys.stderr,
-        )
-
-
-        
-        test_class_acc = self.classification_scores(
-            self.y_test_pred,
-            self.gsflow_test,
-            self.loading_test,
-            interval=self.best_interval,
-        )
-
-        print(
-            f"\nTest Classification Accuracy:\n>>> {test_class_acc:.4f}",
-            file=sys.stderr,
-        )
-
-        # Per-class accuracy from confusion matrix (recall per class)
-        class_labels = ["Unloaded (-1)", "Near L.U. (0)", "Loaded (1)"]
         cm = self.cm
         row_sums = cm.sum(axis=1)
+        per_class_acc = np.where(row_sums > 0, cm.diagonal() / row_sums, 0.0)
+        per_class_str = ", ".join(
+            f"{label}: {acc:.4f}"
+            for label, acc in zip(class_labels, per_class_acc)
+        )
+        print(
+            f"\nPer-Class Test Accuracy:\n>>> {per_class_str}",
+            file=sys.stderr,
+        )
+
+        return self.model
+
+    # =====================================================
+    # DFM-SPECIFIC CROSS VALIDATION
+    # =====================================================
+    def _cross_val_dfm(self, model):
+        """
+        K-fold CV for DFT models whose interface is:
+            fit(X, gsflow, loading)
+            predict(X, gsflow)
+
+        Features are NOT scaled here — DFT operates on raw physical
+        units and its own internal parameter bounds handle scale.
+        """
+        kf = StratifiedKFold(
+            n_splits=self.k_folds, shuffle=True, random_state=42
+        )
+
+        acc_scores = []
+        cm_total   = np.zeros((3, 3), dtype=int)
+
+        for tr_idx, val_idx in kf.split(self.X_train, self.loading_train):
+            X_tr,   X_val   = self.X_train[tr_idx],    self.X_train[val_idx]
+            gs_tr,  gs_val  = self.gsflow_train[tr_idx], self.gsflow_train[val_idx]
+            load_tr         = self.loading_train[tr_idx]
+            load_val        = self.loading_train[val_idx]
+
+            model.fit(X_tr, gs_tr, load_tr)
+            load_val_pred = model.predict(X_val, gs_val)
+
+            acc_scores.append(
+                self.classification_scores(load_val_pred, load_val)
+            )
+            cm_total += self.cm
+
+        row_sums      = cm_total.sum(axis=1)
+        per_class_acc = np.where(row_sums > 0, cm_total.diagonal() / row_sums, 0.0)
+
+        return float(np.mean(acc_scores)), float(np.std(acc_scores)), per_class_acc
+
+    # =====================================================
+    # DFM TRAIN + EVALUATE
+    # =====================================================
+    def evolv_dfm_model(
+        self,
+        build_model: Callable[[Dict[str, Any]], Any],
+        hparam_grid: Dict[str, List[Any]],
+        k_folds: int = 5,
+    ):
+        """
+        Hyperparameter search + evaluation for DFT-style models.
+
+        Mirrors evolv_model but passes gsflow to fit() and predict()
+        at every stage. No sklearn scaling is applied to X — the DFT
+        equation uses raw physical feature values.
+
+        Parameters
+        ----------
+        build_model : callable  (hparams) -> DFT instance
+        hparam_grid : dict of hyperparameter lists
+        k_folds     : number of stratified CV folds
+        """
+        self.best_score        = -np.inf
+        self.best_params       = None
+        self.best_search_params = None
+        self.k_folds           = k_folds
+
+        print(
+            "Training DFM model and optimising hyperparameters via k-fold CV...",
+            file=sys.stderr,
+        )
+
+        keys   = list(hparam_grid.keys())
+        values = [hparam_grid[k] for k in keys]
+
+        for combo in itertools.product(*values):
+            search_hparams = dict(zip(keys, combo))
+            model_hparams  = dict(search_hparams)
+
+            model = build_model(hparams=model_hparams)
+            score, score_std, per_class_acc = self._cross_val_dfm(model)
+
+            if score > self.best_score:
+                self.best_score          = score
+                self.best_score_std      = score_std
+                self.best_cv_per_class_acc = per_class_acc
+                self.best_params         = model_hparams
+                self.best_search_params  = search_hparams
+
+        print(
+            "Retraining optimised DFM model on full training set...",
+            file=sys.stderr,
+        )
+        self.model = build_model(hparams=self.best_params)
+
+        # =========================
+        # FINAL TRAINING  (raw X — no scaling)
+        # =========================
+        self.model.fit(self.X_train, self.gsflow_train, self.loading_train)
+
+        # =========================
+        # PREDICTIONS
+        # =========================
+        self.loading_train_pred = self.model.predict(self.X_train, self.gsflow_train)
+        self.loading_test_pred  = self.model.predict(self.X_test,  self.gsflow_test)
+
+        # =========================
+        # OUTPUT
+        # =========================
+        class_labels = ["Unloaded (0)", "Near L.U. (1)", "Loaded (2)"]
+
+        if k_folds > 0:
+            print(
+                f"\nBest CV Classification Accuracy: \n>>> {self.best_score:.4f} ± {self.best_score_std:.4f}",
+                file=sys.stderr,
+            )
+            per_class_str = ", ".join(
+                f"{label}: {acc:.4f}"
+                for label, acc in zip(class_labels, self.best_cv_per_class_acc)
+            )
+            print(
+                f"\nBest CV Per-Class Accuracy:\n>>> {per_class_str}",
+                file=sys.stderr,
+            )
+            print(
+                "\nBest Hyperparameters:\n>>>",
+                self.best_search_params,
+                file=sys.stderr,
+            )
+
+        # Training accuracy
+        train_acc = self.classification_scores(self.loading_train_pred, self.loading_train)
+        print(
+            f"\nTraining Classification Accuracy:\n>>> {train_acc:.4f}",
+            file=sys.stderr,
+        )
+        cm            = self.cm
+        row_sums      = cm.sum(axis=1)
+        per_class_acc = np.where(row_sums > 0, cm.diagonal() / row_sums, 0.0)
+        per_class_str = ", ".join(
+            f"{label}: {acc:.4f}"
+            for label, acc in zip(class_labels, per_class_acc)
+        )
+        print(
+            f"\nPer-Class Training Accuracy:\n>>> {per_class_str}",
+            file=sys.stderr,
+        )
+
+        # Test accuracy
+        test_acc = self.classification_scores(self.loading_test_pred, self.loading_test)
+        print(
+            f"\nTest Classification Accuracy:\n>>> {test_acc:.4f}",
+            file=sys.stderr,
+        )
+        cm            = self.cm
+        row_sums      = cm.sum(axis=1)
         per_class_acc = np.where(row_sums > 0, cm.diagonal() / row_sums, 0.0)
         per_class_str = ", ".join(
             f"{label}: {acc:.4f}"
@@ -481,7 +502,7 @@ class Helm:
         model_name="Model",
         output_file="scatter_plot.pdf"):
         """
-        Plot predicted vs. measured well flow rates with categorical coloring.
+        Plot predicted loading class vs. actual loading class with categorical coloring.
 
         Parameters
         ----------
@@ -500,41 +521,43 @@ class Helm:
         """
 
         color_map = {
-            'Loaded': '#FF6363',  # Light red
-            'Unloaded': '#3674B5',  # Light purple
-            'Questionable': '#D3D3D3',  # Light orange
-            'Near L.U': '#FFCC99'  # Light blue
+            'Loaded': '#FF6363',      # Light red
+            'Unloaded': '#3674B5',    # Light blue
+            'Questionable': '#D3D3D3',# Light gray
+            'Near L.U': '#FFCC99'     # Light orange
         }
 
-        # Get gasflow data from the dataframe
-        gasflow_subset = df['Gasflowrate']
-
-        # Predictions
+        # Predictions (class labels: -1, 0, 1)
         y_pred_subset = trained_model.predict(X_scaled)
 
-        # Color assignment
-        colors = df[status_col].map(color_map).fillna('#D3D3D3')  # Light gray fallback
+        # Color assignment from actual status
+        colors = df[status_col].map(color_map).fillna('#D3D3D3')
+
+        # Actual class labels for x-axis
+        actual_loading = df["Test status"].apply(
+            lambda x: 0 if x == "Unloaded" else (1 if x == "Near L.U" else 2)
+        )
 
         # Plot setup
         plt.figure(figsize=(8, 6), dpi=300)
         sns.set_theme(style="whitegrid", context="paper", font_scale=1.3, font='Arial')
 
-        # Scatter plot
-        plt.scatter(gasflow_subset, y_pred_subset, c=colors, alpha=1, s=100,
+        # Scatter plot: actual class vs. predicted class
+        plt.scatter(actual_loading, y_pred_subset, c=colors, alpha=1, s=100,
                     edgecolors="gray", linewidth=0.5)
 
-        # Reference line
-        plt.plot([0, 350000], [0, 350000], '--', color='#FF6666', linewidth=1.5)
+        # Perfect-prediction reference line
+        plt.plot([0, 1, 2], [0, 1, 2], '--', color='#FF6666', linewidth=1.5)
 
         # Labels & Title
         plt.title(f"{model_name} Results", fontsize=16, fontweight='bold', pad=15)
-        plt.xlabel("Measured Well Flow Rate (m³/day)", fontsize=14, fontweight='bold')
-        plt.ylabel("Predicted Critical Rate (m³/day)", fontsize=14, fontweight='bold')
+        plt.xlabel("Actual Loading Status", fontsize=14, fontweight='bold')
+        plt.ylabel("Predicted Loading Status", fontsize=14, fontweight='bold')
+        plt.xticks([0, 1, 2], ["Unloaded\n(0)", "Near L.U.\n(1)", "Loaded\n(2)"])
+        plt.yticks([0, 1, 2], ["Unloaded\n(0)", "Near L.U.\n(1)", "Loaded\n(2)"])
 
         # Grid & Limits
         plt.grid(True, linestyle='--', alpha=0.7)
-        plt.xlim(0, 350000)
-        plt.ylim(0, 350000)
 
         # Legend
         legend_patches = [mpatches.Patch(color=color, label=status) 
