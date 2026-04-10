@@ -14,7 +14,6 @@ This directory contains the documentation source and build for the Droplet-Film 
 docs/
 ├── source/                 # reStructuredText (.rst) source files
 │   ├── index.rst
-│   ├── documentation.rst
 │   ├── installation_guide.rst
 │   ├── usage_examples.rst
 │   ├── api_reference.rst

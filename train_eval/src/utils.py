@@ -1,84 +1,182 @@
 import pandas as pd
 import numpy as np
 import sys
+from pathlib import Path
 
 from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.model_selection import train_test_split, StratifiedKFold 
 from sklearn.preprocessing import StandardScaler
-from typing import Optional, List, Callable, Dict, Any, List
+from typing import Optional, List, Callable, Dict, Any
+import importlib
 import itertools
 import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib.patches as mpatches
 from pysindy import SINDy
-import feyn
-import pandas as pd
 
-        
-class QLatticeWrapper():
+
+class QLatticeWrapper:
+    """
+    Feyn QLattice for symbolic **gas** or **Q_critical**, evaluated with **dynamic operational
+    margins**: *(Q_pred − Q_meas)* vs flow-dependent bands (see ``qlattice_pipeline``).
+
+    Use :meth:`fit_dynamic_bounds` (not sklearn-style ``fit(X, y)`` on loading classes).
+    """
+
     def __init__(
-            self, 
-            feature_tags: List,
-            output_tag: int="loading",
-            seed: int=42, 
-            max_complexity: int=10, 
-            n_epochs: int=10,
-            criterion: str="bic"
-    ): 
-        super().__init__()
-
+        self,
+        *,
+        mode: str = "qcr_labels",
+        seed: int = 42,
+        max_complexity: int = 12,
+        n_epochs: int = 32,
+        select_by: str = "turner_lu",
+        loss: str = "absolute_error",
+        val_frac: float = 0.2,
+        top_models: int = 15,
+        qcr_proxy_margin_scale: float = 1.0,
+        linear_gas: bool = False,
+        no_val_select: bool = False,
+        qcr_use_measured_gas: bool = False,
+    ) -> None:
+        self.mode = mode
         self.seed = seed
-        self.feature_tags = feature_tags
-        self.output_tag = output_tag
         self.max_complexity = max_complexity
         self.n_epochs = n_epochs
-        self.criterion = criterion
-
-        # connect QLattice
-        self.ql = feyn.connect_qlattice()
+        self.select_by = select_by
+        self.loss = loss
+        self.val_frac = val_frac
+        self.top_models = top_models
+        self.qcr_proxy_margin_scale = qcr_proxy_margin_scale
+        self.linear_gas = linear_gas
+        self.no_val_select = no_val_select
+        self.qcr_use_measured_gas = qcr_use_measured_gas
         self.opt_model = None
-        self.y_pred = None
+        self.pred_train: Optional[np.ndarray] = None
+        self.pred_test: Optional[np.ndarray] = None
+        self.dynamic_bounds_metrics: Optional[Dict[str, Any]] = None
 
-    def fit(
-            self, 
-            X: np.ndarray, 
-            y: np.ndarray,
-    ) -> None:
-        
-        # QLattice requires python dataframes 
-        data = pd.DataFrame(X, columns=self.feature_tags)
-        data[self.output_tag] = y
+    def _args_like(self) -> Any:
+        from argparse import Namespace
 
-        models = self.ql.auto_run(
-            data=data, 
-            output_name=self.output_tag,
-            criterion=self.criterion, 
+        return Namespace(
+            epochs=self.n_epochs,
             max_complexity=self.max_complexity,
-            n_epochs=self.n_epochs,
+            select_by=self.select_by,
+            loss=self.loss,
+            val_frac=self.val_frac,
+            top_models=self.top_models,
+            no_val_select=self.no_val_select,
+            linear_gas=self.linear_gas,
+            qcr_use_measured_gas=self.qcr_use_measured_gas,
         )
 
-        self.opt_model = models[0]
+    def fit_dynamic_bounds(
+        self,
+        train_X_df: pd.DataFrame,
+        test_X_df: pd.DataFrame,
+        gs_train: np.ndarray,
+        gs_test: np.ndarray,
+        load_train: np.ndarray,
+        load_test: np.ndarray,
+        *,
+        y_train_teacher: Optional[np.ndarray] = None,
+    ) -> "QLatticeWrapper":
+        import feyn
 
+        from . import qlattice_pipeline as qp
+
+        args = self._args_like()
+        tr = train_X_df.copy()
+        te = test_X_df.copy()
+        tr, te = qp.append_measured_gas_feature(tr, te, gs_train, gs_test, self.qcr_use_measured_gas)
+
+        if self.mode == "gas":
+            out = qp.train_predict_gas_qlattice(
+                tr,
+                te,
+                gs_train,
+                gs_test,
+                load_train,
+                load_test,
+                args,
+                feyn,
+                self.seed,
+                verbose=False,
+            )
+            self.opt_model = out["best_g"]
+            self.pred_train = out["pred_tr"]
+            self.pred_test = out["pred_te"]
+            self.dynamic_bounds_metrics = {
+                "f1_lu": float(out["f1_lu"]),
+                "f1_macro": float(out["f1_macro"]),
+                "acc": float(out["acc"]),
+                "mae_test": float(out["mae"]),
+                "rmse": float(out["rmse"]),
+            }
+            return self
+
+        if self.mode == "qcr_labels":
+            y_t = qp.q_critical_label_proxy_targets(
+                gs_train, load_train, margin_scale=self.qcr_proxy_margin_scale
+            )
+        elif self.mode == "qcr_custom":
+            if y_train_teacher is None:
+                raise ValueError("qcr_custom requires y_train_teacher (physics-model Q_critical per train row).")
+            y_t = y_train_teacher
+        else:
+            raise ValueError(f"Unknown mode {self.mode!r}; use 'gas', 'qcr_labels', or 'qcr_custom'.")
+
+        best, pred_tr, pred_te, _, _, _ = qp.feyn_run_qcritical_fit(
+            tr,
+            te,
+            gs_train,
+            load_train,
+            y_t,
+            args,
+            feyn,
+            self.seed + 7,
+        )
+        self.opt_model = best
+        self.pred_train = pred_tr
+        self.pred_test = pred_te
+        ev = qp.eval_turner_train_test_metrics(
+            pred_tr, gs_train, load_train, pred_te, gs_test, load_test
+        )
+        self.dynamic_bounds_metrics = {
+            "f1_lu": float(ev["f1_lu"]),
+            "f1_macro": float(ev["f1_macro"]),
+            "acc": float(ev["acc"]),
+            "acc_train": float(ev["acc_train"]),
+        }
         return self
-    
-    def predict(
-            self, 
-            X: np.ndarray, 
-    ) -> np.ndarray:
-        # QLattice requires python dataframes 
-        data = pd.DataFrame(X, columns=self.feature_tags)
 
-        self.y_pred = self.opt_model.predict(data[self.feature_tags])
-
-        return self.y_pred
-    
-    def express(
-            self,
-    ):
-        return self.opt_model.sympify()
-    
+    def express(self, signif: int = 4) -> Any:
+        if self.opt_model is None:
+            raise RuntimeError("Call fit_dynamic_bounds(...) first.")
+        return self.opt_model.sympify(signif=signif)
 
 
+def _run_pipeline_cli(submodule: str, argv: Optional[List[str]] = None) -> None:
+    mod = importlib.import_module(f".{submodule}", package=__package__)
+    mod.main(mod.parse_args(argv))
+
+
+def run_qlattice_from_argv(argv: Optional[List[str]] = None) -> None:
+    """Run ``qlattice_pipeline`` (same as ``qlattice_standalone.py``)."""
+    _run_pipeline_cli("qlattice_pipeline", argv)
+
+
+def default_qlattice_csv_path() -> Path:
+    """Default ``datasets/processed_well_data.csv`` under the repo root."""
+    from .qlattice_pipeline import default_processed_well_csv
+
+    return default_processed_well_csv()
+
+
+def run_tabpfn_from_argv(argv: Optional[List[str]] = None) -> None:
+    """Run ``tabpfn_pipeline`` (same as ``tabpfn_standalone.py``)."""
+    _run_pipeline_cli("tabpfn_pipeline", argv)
 
 
 class Helm:
@@ -160,6 +258,45 @@ class Helm:
         self.loading_test = np.array(self.loading_test)
         self.gsflow_train = np.array(self.gsflow_train)
         self.gsflow_test = np.array(self.gsflow_test)
+
+    @classmethod
+    def from_dynamic_bounds_csv(
+        cls,
+        path: str | Path,
+        seed: int = 42,
+        test_size: float = 0.2,
+    ) -> "Helm":
+        """
+        Load the same filtered CSV + stratified split as ``qlattice_pipeline.load_and_split``
+        (operational labels: Loaded=1, Near L.U=0, Unloaded=-1). Use with :meth:`evolv_dynamic_bounds_qlattice`.
+        """
+        from . import qlattice_pipeline as qp
+
+        data = qp.load_and_split(Path(path), seed, test_size)
+        fc = data["feature_cols"]
+        train_X_df = pd.DataFrame(data["scaler"].inverse_transform(data["X_train"]), columns=fc)
+        test_X_df = pd.DataFrame(data["scaler"].inverse_transform(data["X_test"]), columns=fc)
+        obj = object.__new__(cls)
+        obj.path = str(Path(path).resolve())
+        obj.seed = seed
+        obj.scale = True
+        obj._dynamic_bounds_split = True
+        obj.feature_names = fc
+        obj.train_X_df = train_X_df
+        obj.test_X_df = test_X_df
+        obj.gsflow_train = np.asarray(data["gs_train"], dtype=float)
+        obj.gsflow_test = np.asarray(data["gs_test"], dtype=float)
+        obj.loading_train = np.asarray(data["load_train"])
+        obj.loading_test = np.asarray(data["load_test"])
+        obj.scaler = data["scaler"]
+        obj.X_train = np.asarray(train_X_df.values, dtype=float)
+        obj.X_test = np.asarray(test_X_df.values, dtype=float)
+        obj.df = pd.read_csv(path)
+        obj.gsflow = obj.df["Gasflowrate"]
+        obj.loading = obj.df["Test status"].apply(
+            lambda x: 0 if x == "Unloaded" else (1 if x == "Near L.U" else 2)
+        ).to_numpy()
+        return obj
 
     # =====================================================
     # CLASSIFICATION METRICS
@@ -325,6 +462,84 @@ class Helm:
         )
 
         return self.model
+
+    def evolv_dynamic_bounds_qlattice(
+        self,
+        hparam_grid: Dict[str, List[Any]],
+        mode: str = "qcr_labels",
+        *,
+        qcr_npz: Optional[str | Path] = None,
+        score_by: str = "f1_lu",
+        y_train_teacher: Optional[np.ndarray] = None,
+    ) -> QLatticeWrapper:
+        """
+        Grid search over ``QLatticeWrapper`` hyperparameters using the **test**-set dynamic-bounds metric
+        (same spirit as :meth:`evolv_model`, but for symbolic regression + margin-based loading).
+
+        Requires :meth:`from_dynamic_bounds_csv`. ``score_by``: ``f1_lu``, ``f1_macro``, ``acc``, or
+        ``neg_mae`` (gas mode; higher is better).
+        """
+        if not getattr(self, "_dynamic_bounds_split", False):
+            raise ValueError("evolv_dynamic_bounds_qlattice requires Helm.from_dynamic_bounds_csv(...).")
+
+        from . import qlattice_pipeline as qp
+
+        keys = list(hparam_grid.keys())
+        values = [hparam_grid[k] for k in keys]
+
+        if mode == "qcr_custom" and y_train_teacher is None and qcr_npz is not None:
+            z = np.load(Path(qcr_npz), allow_pickle=False)
+            y_train_teacher, _ = qp.load_qcr_train_test_from_npz(z)
+
+        best_model: Optional[QLatticeWrapper] = None
+        best_score = -np.inf
+        best_params: Optional[Dict[str, Any]] = None
+
+        for combo in itertools.product(*values):
+            params = dict(zip(keys, combo))
+            m = QLatticeWrapper(mode=mode, seed=self.seed, **params)
+            kwargs_fit: Dict[str, Any] = {}
+            if mode == "qcr_custom":
+                kwargs_fit["y_train_teacher"] = y_train_teacher
+            m.fit_dynamic_bounds(
+                self.train_X_df,
+                self.test_X_df,
+                self.gsflow_train,
+                self.gsflow_test,
+                self.loading_train,
+                self.loading_test,
+                **kwargs_fit,
+            )
+            tm = m.dynamic_bounds_metrics or {}
+            if score_by == "f1_lu":
+                sc = float(tm.get("f1_lu", float("nan")))
+            elif score_by == "f1_macro":
+                sc = float(tm.get("f1_macro", float("nan")))
+            elif score_by == "acc":
+                sc = float(tm.get("acc", float("nan")))
+            elif score_by == "neg_mae":
+                sc = -float(tm.get("mae_test", float("nan")))
+            else:
+                raise ValueError(f"Unknown score_by {score_by!r}")
+
+            if sc > best_score:
+                best_score = sc
+                best_model = m
+                best_params = params
+
+        self.dynamic_bounds_best_qlattice = best_model
+        self.dynamic_bounds_best_params = best_params
+        self.dynamic_bounds_best_score = best_score
+
+        print(
+            f"\nBest dynamic-bounds score ({score_by} on test): {best_score:.4f}",
+            file=sys.stderr,
+        )
+        print(f"Best params: {best_params}", file=sys.stderr)
+
+        if best_model is None:
+            raise RuntimeError("evolv_dynamic_bounds_qlattice: empty grid or all fits failed.")
+        return best_model
 
     # =====================================================
     # DFM-SPECIFIC CROSS VALIDATION
@@ -594,4 +809,3 @@ class Helm:
                 model_name=model_name,
                 output_file=output_file
             )
-    

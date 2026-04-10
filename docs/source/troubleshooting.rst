@@ -15,7 +15,7 @@ Issue 1: Python Import Errors
 Problem: ModuleNotFoundError when importing project modules
 
 Symptoms:
-- "ModuleNotFoundError: No module named 'src'" or "No module named 'models'"
+- "ModuleNotFoundError: No module named 'src'" (run from ``train_eval`` or set ``PYTHONPATH``)
 - "ImportError: cannot import name 'DFT'"
 - "ModuleNotFoundError: No module named 'feyn'"
 

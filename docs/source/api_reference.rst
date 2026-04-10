@@ -1,185 +1,80 @@
 API Reference
 =============
 
-Droplet-Film Model Development Project — Technical Documentation.
+Technical overview of the Python package under ``train_eval/src/``. Import paths assume the
+``train_eval`` directory is on ``sys.path`` (e.g. run code from ``train_eval`` or install the
+project in editable mode with that layout).
 
-Overview
---------
-This document provides technical documentation for classes, methods, and parameters in the DFT Development project. The API is designed to be both powerful and user-friendly, supporting research and industrial applications.
+Module layout
+-------------
 
-The project follows object-oriented design with clear separation between physics modeling, data management, and machine learning components.
+.. list-table::
+   :widths: 30 70
+   :header-rows: 0
 
-Core Classes and Modules
+   * - ``src/dfm_src.py``
+     - ``DFT`` — droplet-film ordinal model (``fit``, ``predict``, ``predict_proba``).
+   * - ``src/utils.py``
+     - ``Helm`` — load CSV, stratified split, scaling, CV, and helpers; ``QLatticeWrapper`` — Feyn QLattice for gas / Q_cr modes with dynamic-bounds evaluation; CLI helpers ``run_qlattice_from_argv``, ``run_tabpfn_from_argv``, ``default_qlattice_csv_path``.
+   * - ``src/qlattice_pipeline.py``
+     - Standalone QLattice script: data load/split, Turner-style metrics, plotting helpers ``plot_turner_qmeas_vs_qrate``, ``plot_residual_qminus_qmeas``.
+   * - ``src/tabpfn_pipeline.py``
+     - TabPFN regression with the same split and metrics as ``qlattice_pipeline``.
+
+``DFT`` (``src.dfm_src``)
 -------------------------
-The project consists of several key modules:
 
-- **dft_model.py**: Core physics model implementation
-- **utils.py**: Data management and utility functions
-- Individual Jupyter notebooks for different approaches
+Ordinal classifier: fits physics parameters :math:`p_1,\ldots,p_5`, thresholds :math:`\tau_1,\tau_2`,
+and per-sample :math:`\alpha` by minimizing ordinal cross-entropy on log-ratio
+:math:`\log(Q_{\mathrm{cr,pred}}/Q_{\mathrm{meas}})`.
 
-DFT Class — Core Physics Model
-------------------------------
-The DFT class implements the Droplet-Film Model for predicting critical flow rates in gas wells.
+**Constructor**
 
-Class definition
-~~~~~~~~~~~~~~~~
+.. code-block:: text
 
-.. code-block:: python
+   DFT(seed=42, feature_tol=1.0, dev_tol=1e-3, multiple_dev_policy="max")
 
-   class DFT:
-       """
-       Droplet-Film Model for predicting critical flow rates in gas wells.
+**Main methods**
 
-       This class implements a physics-informed machine learning approach that combines
-       fundamental fluid dynamics principles with data-driven optimization to predict
-       when gas wells will experience liquid loading.
-       """
+- ``fit(X, gsflow, loading)`` — ``X`` shape ``(n, 10)``, ``loading`` integers ``{0,1,2}``.
+- ``predict(X, gsflow)``, ``predict_proba(X, gsflow)`` — gas flow required for the ratio.
 
-Constructor
-~~~~~~~~~~~
+Feature column order matches ``DFT._eq`` (Dia, Dev(deg), Area (m2), z, GasDens, LiquidDens,
+g (m/s2), P/T, friction_factor, critical_film_thickness).
 
-.. code-block:: python
-
-   __init__(self, seed=42, feature_tol=1.0, dev_tol=1e-3, multiple_dev_policy="max")
-
-**Parameters:**
-
-- **seed** (int): Random seed for reproducibility. Default: 42
-- **feature_tol** (float): Feature distance threshold for matching. Default: 1.0
-- **dev_tol** (float): Deviation tolerance for angle matching. Default: 1e-3
-- **multiple_dev_policy** (str): Policy for handling multiple matches. Options: "max", "min", "mean", "median". Default: "max"
-
-**Attributes:** seed, feature_tol, dev_tol, multiple_dev_policy, opt_params (set after fitting), n_train (set after fitting).
-
-Methods — fit
-~~~~~~~~~~~~~
-
-.. code-block:: python
-
-   fit(self, X, y)
-
-Train the DFT model on provided data.
-
-**Parameters:** X (np.ndarray) shape (n_samples, 10), y (np.ndarray) shape (n_samples,). **Returns:** self.
-
-**Features (in order):** Dia, Dev(deg), Area (m2), z, GasDens, LiquidDens, g (m/s2), P/T, friction_factor, critical_film_thickness.
-
-**Implementation:** Uses Powell optimization from scipy.optimize; optimizes 5 global parameters (p1–p5) plus alpha per sample; bounds alpha in [0, 1]; max 5000 iterations, 10000 function calls.
-
-Methods — predict
-~~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-   predict(self, X, dev_train=None, alpha_strategy='enhanced_dev_based')
-
-Make predictions on new data.
-
-**Parameters:** X (np.ndarray), optional dev_train, alpha_strategy (must be 'enhanced_dev_based'). **Returns:** np.ndarray of shape (n_samples,).
-
-**Alpha assignment strategy (by well deviation angle):**
-
-1. Dev < 10°: Regular deviation-based matching
-
-   - Find training samples within dev_tol
-   - Apply multiple_dev_policy if multiple matches
-   - Use mean training alpha if no matches
-
-2. 10° ≤ Dev < 20°: Minimum alpha strategy
-
-   - Find training samples within dev_tol
-   - Use minimum alpha among matches
-   - Use mean training alpha if no matches
-
-3. Dev ≥ 20°: Full-feature matching
-
-   - Compute Euclidean distance to all training samples
-   - Use closest sample's alpha if distance < feature_tol
-   - Use mean training alpha otherwise
-
-Methods — _eq (physics equation)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-   _eq(self, params, X)
-
-Compute predicted values using the physics equation.
-
-**Physics equation:**
-
-.. math::
-
-   Q_{cr} = p_1 \\sqrt{\\left| \\mathrm{term}_1 \\cdot \\alpha + (1-\\alpha) \\cdot \\mathrm{term}_2 \\right| \\cdot (1/z) \\cdot (P/T) }
-
-Where:
-
-- term1 involves :math:`2 g \\, \\mathrm{Dia}`, :math:`(\\rho_l - \\rho_g)`, :math:`\\cos(\\mathrm{Dev})`, and parameters p4.
-- term2 involves :math:`|\\sin(p_5 \\cdot \\mathrm{Dev})|^{p_3}` and :math:`(\\rho_l - \\rho_g)^{p_2} / \\rho_g^2`.
-
-Methods — _loss
-~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-   _loss(self, params)
-
-Compute loss function for optimization. **Returns:** float (MSE).
-
-Helm Class — Data Management
------------------------------
-The **Helm** class (in ``models.utils``) handles dataset loading, train/test splitting, scaling, and model training/evaluation. The CSV must include the feature columns, plus **Qcr** (target), **Gasflowrate**, and **Test status**.
-
-Class definition
-~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-   from models.utils import Helm
-
-Constructor
-~~~~~~~~~~~
-
-.. code-block:: python
-
-   __init__(self, path, seed=42, drop_cols=None, includ_cols=None, test_size=0.20, scale=True)
-
-**Parameters:** path (str), seed (int), drop_cols, includ_cols (lists), test_size (float, default 0.20), scale (bool, default True).
-
-**Attributes (set after initialization):** X_train, X_test, y_train, y_test (numpy arrays). If scale=True, use X_train_rdy, X_test_rdy (and optionally y_train_rdy, y_test_rdy) for scaled data. Also: feature_names, scaler_X, scaler_y (when scale=True).
-
-Methods — evolv_model
-~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-   evolv_model(self, build_model, hparam_grid, k_folds=5)
-
-Train model with hyperparameter optimization. **Returns:** best trained model. Performs grid search and k-fold cross-validation; stores predictions and metrics.
-
-QLatticeWrapper Class — Symbolic Regression
--------------------------------------------
-Wrapper for Feyn QLattice for automated symbolic regression with a scikit-learn compatible interface.
-
-Constructor
-~~~~~~~~~~~
-
-.. code-block:: python
-
-   __init__(self, feature_tags, output_tag="Qcr", seed=42, max_complexity=10, n_epochs=10, criterion="bic")
-
-**Parameters:** feature_tags (List[str]), output_tag, seed, max_complexity, n_epochs, criterion ("bic", "aic", "r2").
-
-**Methods:** fit(X, y), predict(X), express() (returns SymPy expression).
-
-Data Format Requirements
+``Helm`` (``src.utils``)
 ------------------------
-Input CSV must contain the 10 features (Dia, Dev(deg), Area (m2), z, GasDens, LiquidDens, g (m/s2), P/T, friction_factor, critical_film_thickness) plus **Qcr**, **Gasflowrate**, and **Test status** for Helm.
 
-Data Validation, Error Handling, Performance
----------------------------------------------
-Helm loads CSV and splits by stratify=loading (Test status). The API includes error handling for invalid inputs, missing columns, optimization failures, and (for QLattice) network issues.
+Loads a CSV, stratifies on loading labels derived from **Test status**, and exposes
+``X_train``, ``X_test``, ``gsflow_train``, ``gsflow_test``, ``loading_train``, ``loading_test``,
+and scaled copies ``X_train_rdy``, ``X_test_rdy`` when ``scale=True``.
 
-Support and Resources
----------------------
-GitHub repository, documentation, community forums, issue tracker, and research papers. For examples, see Usage Examples and the Jupyter notebooks.
+**Factory:** ``Helm.from_dynamic_bounds_csv(path, seed=42, test_size=0.2)`` returns an instance
+aligned with ``qlattice_pipeline.load_and_split`` (labels ``-1/0/1`` for Unloaded / Near / Loaded).
+
+``QLatticeWrapper`` (``src.utils``)
+------------------------------------
+
+Configured for ``mode`` in ``gas`` | ``qcr_labels`` | ``qcr_custom``. For operational loading
+metrics, use ``QLatticeWrapper.fit_dynamic_bounds`` (not sklearn ``fit(X, y)`` on raw classes).
+
+Plotting (``src.qlattice_pipeline``)
+--------------------------------------
+
+- ``plot_turner_qmeas_vs_qrate(...)`` — cross-plot of measured gas rate vs predicted rate with
+  dynamic margin bands; skips cleanly if arrays are empty or all non-finite.
+- ``plot_residual_qminus_qmeas(...)`` — residual vs :math:`Q_{\mathrm{meas}}` with the same bands.
+- ``plot_qcr_x_qmeas_y_multimethod(...)`` — **x** = predicted :math:`Q_{\mathrm{cr}}` for each of
+  several methods, **y** = :math:`Q_{\mathrm{meas}}`; optional status shading, 1:1 line, and
+  near-diagonal highlights.
+
+Data columns
+------------
+
+Processed well CSVs should include the ten physics features above, **Gasflowrate**, and **Test
+status** (or the filtered columns expected by ``qlattice_pipeline`` — see ``TURNER_FEATURE_COLS``).
+
+Support
+-------
+
+For runnable examples see :doc:`usage_examples` and notebooks under ``train_eval/``.

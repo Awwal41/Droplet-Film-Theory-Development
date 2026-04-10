@@ -4,11 +4,28 @@ from scipy.optimize import minimize
 from typing import Optional, List, Callable, Dict, Any
 
 
+def loading_dynamic_bounds_to_ordinal(loading: np.ndarray) -> np.ndarray:
+    """
+    Map **dynamic-bounds** loading codes (Loaded=1, Near L.U=0, Unloaded=-1) to ``DFT``'s
+    ordinal labels (0=Unloaded, 1=Near L.U., 2=Loaded). Use when fitting :class:`DFT` on the
+    same CSV split as :meth:`Helm.from_dynamic_bounds_csv` in ``utils``.
+    """
+    L = np.asarray(loading)
+    out = np.empty(len(L), dtype=int)
+    out[L == -1] = 0
+    out[L == 0] = 1
+    out[L == 1] = 2
+    return out
+
+
 class DFT():
     """
     Droplet-Film Model (DFM) cast as an ordinal classifier.
 
-    Instead of regressing on Qcr_true (which may be unavailable), this model:
+    This implementation is a **single** physics + log-ratio + ordinal-threshold fit (no separate
+    “stage-2” meta-classifier on top of Q_cr).
+
+    Instead of regressing on Qcr_true (which is unavailable), this model:
       1. Predicts Qcr via the physics equation (_eq).
       2. Computes a log-ratio score:  ratio = log(Qcr_pred / Qg)
          • ratio >> 0  →  well is loaded   (Qcr >> Qg)

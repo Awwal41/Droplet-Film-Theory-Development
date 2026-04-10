@@ -109,13 +109,13 @@ Step 1 — Test basic imports
 Step 2 — Test project modules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Run from the **project root** so ``src`` and ``models`` are on the path:
+Run from **train_eval** (or put ``train_eval`` on ``PYTHONPATH``) so ``src`` resolves:
 
 .. code-block:: bash
 
+   cd train_eval
    python -c "from src.dfm_src import DFT; print('DFT OK')"
-   python -c "from models.utils import Helm; print('Helm OK')"
-   python -c "from models.utils import QLatticeWrapper; print('QLatticeWrapper OK')"
+   python -c "from src.utils import Helm, QLatticeWrapper; print('Helm OK')"
 
 Step 3 — Quick functionality test
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -150,12 +150,11 @@ Step 2 — Launch and open notebooks
 
    jupyter notebook
 
-Then open the project root or ``models/`` and run:
+Then open ``train_eval/`` and run:
 
-- **DFT-PISR.ipynb** — physics-informed DFM
-- **xgboost.ipynb** — gradient boosting
-- **sindy.ipynb** — symbolic regression (PySINDy)
-- **QLattice.ipynb** — QLattice symbolic regression
+- **DFM.ipynb** — droplet-film ordinal model
+- **QLattice.ipynb** / **TabPFN.ipynb** — pipelines shared with ``qlattice_standalone.py`` / ``tabpfn_standalone.py``
+- **XGBoost.ipynb** — gradient boosting (if present)
 
 
 Data Preparation
@@ -164,7 +163,7 @@ Data Preparation
 Required CSV columns
 ~~~~~~~~~~~~~~~~~~~~
 
-Your CSV must include these 10 feature columns (and for **Helm**, also **Qcr**, **Gasflowrate**, **Test status**):
+Your CSV must include these 10 feature columns, **Gasflowrate**, and **Test status** (for **Helm** classic split). The DFM ``DFT`` model uses measured gas and loading labels, not a separate **Qcr** regression target.
 
 - **Dia** — well diameter (m)
 - **Dev(deg)** — well deviation angle (degrees)
@@ -257,9 +256,9 @@ Code quality and tests
 .. code-block:: bash
 
    pip install black flake8 pytest mypy
-   black src/*.py models/*.py
-   flake8 src/*.py models/*.py
-   mypy src/*.py models/*.py
+   black train_eval/src/*.py
+   flake8 train_eval/src/*.py
+   mypy train_eval/src/*.py
    pytest tests/
 
 IDE (VS Code)
@@ -329,9 +328,9 @@ Installation Checklist
 - [ ] Virtual environment created and activated
 - [ ] Core packages installed (numpy, pandas, scipy, scikit-learn)
 - [ ] Optional: matplotlib, seaborn, jupyter
-- [ ] Project imports work (``from src.dfm_src import DFT``, ``from models.utils import Helm``)
+- [ ] Project imports work (``from src.dfm_src import DFT``, ``from src.utils import Helm``)
 - [ ] Quick DFT test runs successfully
-- [ ] CSV data has required columns (and Qcr, Gasflowrate, Test status for Helm)
+- [ ] CSV data has required columns (Gasflowrate, Test status for Helm)
 
 
 Next Steps
@@ -340,6 +339,6 @@ Next Steps
 1. See **Usage examples** for the DFT and other model tutorials.
 2. See **API reference** for classes and parameters.
 3. See **Troubleshooting** if you run into errors.
-4. Open **DFT-PISR.ipynb** and run the workflow end-to-end.
+4. Open **train_eval/DFM.ipynb** (or **QLattice.ipynb**) and run the workflow end-to-end.
 
 For more help: check the troubleshooting guide, search GitHub issues, or contact the development team.
