@@ -1,0 +1,895 @@
+%% intro
+@article{kaplan2020scaling,
+  title     = {Scaling Laws for Neural Language Models},
+  author    = {Kaplan, Jared and McCandlish, Sam and Henighan, Tom and Brown, Tom B. and Chess, Benjamin and Child, Rewon and Gray, Scott and Radford, Alec and Wu, Jeffrey and Amodei, Dario},
+  journal   = {arXiv preprint arXiv:2001.08361},
+  year      = {2020},
+  archivePrefix = {arXiv},
+  eprint    = {2001.08361},
+  primaryClass = {cs.LG}
+}
+
+@misc{feyn2021,
+  title={feyn: An interface to the QLattice symbolic regression engine},
+  author={{Abzu ApS}},
+  year={2021},
+  howpublished={\url{https://docs.abzu.ai/}},
+  note={Version 2.0}
+}
+@article{lundberg2020simple,
+  title={A simple and interpretable model for non-linear regression},
+  author={Lundberg, Kasper and Abzu ApS},
+  journal={arXiv preprint arXiv:2005.04147},
+  year={2020}
+}
+
+@article{cranmer2020pysr,
+  title={Discovering Symbolic Models from Deep Learning with Inductive Biases},
+  author={Cranmer, Miles and Sanchez-Gonzalez, Alvaro and Battaglia, Peter and Xu, Rui and Cranmer, Kyle and Ho, Shirley and Spergel, David},
+  journal={arXiv preprint arXiv:2006.11287},
+  year={2020},
+  url={https://github.com/MilesCranmer/PySR}
+}
+
+@article{riza_pragmatic_2016,
+	title = {A {Pragmatic} {Approach} {To} {Understanding} {Liquid} {Loading} in {Gas} {Wells}},
+	volume = {31},
+	issn = {1930-1855},
+	url = {https://doi.org/10.2118/170583-PA},
+	doi = {10.2118/170583-PA},
+	abstract = {Liquid loading is the inability of a producing gas well to remove its coproduced liquids from the wellbore. The liquid flowing as droplets or film accumulates at the well bottom, thereby imposing backpressure at the sandface and triggering increasingly higher pressure loss in the wellbore. The problem initiated by liquid loading is manifested in terms of loss in well deliverability, causing the wellhead pressure to decline significantly, which, in turn, leads to the cessation of gas production. Accordingly, the liquid-loading issue reduces the ultimate recovery of a gas well.Both the droplet-flow reversal and liquid-film-flow reversal have been postulated to be the underlying mechanism for liquid loading. Both mechanisms are predominantly premised on diagnosing the problem at the wellhead-flow conditions. This study explores the deliquefication issue in a gas well by fluid- and heat-flow modeling of the entire wellbore for a variety of flow situations in gas and gas/condensate reservoirs.We observed that when a well experiences annular two-phase flow throughout the wellbore, no liquid loading occurs. The transition from annular flow to churn or slug flow initiates the liquid-film-flow or droplet-flow reversal, thereby triggering liquid loading. Most often, the flow condition at the well bottom controls the onset of liquid loading. By use of three published data sets, we show that the understanding of liquid loading improves when the entire wellbore-flow modeling is used. Forward modeling suggests that the tubing inside diameter and the well productivity index are the most important independent variables in determining the critical liquid-loading rate and the onset of liquid loading.},
+	number = {03},
+	journal = {SPE Production \& Operations},
+	author = {Riza, M. F. and Hasan, A. R. and Kabir, C. S.},
+	month = aug,
+	year = {2016},
+	note = {\_eprint: https://onepetro.org/PO/article-pdf/31/03/185/2356162/spe-170583-pa.pdf},
+	pages = {185--196},
+}
+
+@misc{TabPFN-2.5,
+  title = {TabPFN-2.5: Advancing the State of the Art in Tabular Foundation Models},
+  author = {Léo Grinsztajn and Klemens Flöge and Oscar Key and Felix Birkel and Brendan Roof and Phil Jund and Benjamin Jäger and Adrian Hayler and Dominik Safaric and Simone Alessi and Felix Jablonski and Mihir Manium and Rosen Yu and Anurag Garg and Jake Robertson and Shi Bin (Liam) Hoo and Vladyslav Moroshan and Magnus Bühler and Lennart Purucker and Clara Cornu and Lilly Charlotte Wehrhahn and Alessandro Bonetto and Sauraj Gambhir and Noah Hollmann and Frank Hutter},
+  year = {2025}
+}
+
+
+
+
+@article{Abhulimen,
+	title = {Modelling of liquid loading in gas wells using a software-based approach},
+	volume = {13},
+	url = {https://doi.org/10.1007/s13202-022-01525-x},
+	journal = {J Petrol Explor Prod Technol},
+	author = {Abhulimen, K.E. and Abhulimen, K.E. and Oladipupo, A.D.},
+	year = {2023},
+	pages = {1–17},
+}
+
+
+@article{CHEN2024205394,
+title = {Gas well production optimization: Classifying liquid loading severity in shale gas wells using semi-supervised learning},
+journal = {Gas Science and Engineering},
+volume = {128},
+pages = {205394},
+year = {2024},
+issn = {2949-9089},
+doi = {https://doi.org/10.1016/j.jgsce.2024.205394},
+url = {https://www.sciencedirect.com/science/article/pii/S2949908924001900},
+author = {Peng Chen and Yan Chen and Chunyi Yang and Yibo Xu and Gaocheng Feng},
+keywords = {Liquid loading, Anomaly detection, Severity classification, Data-driven, Semi-supervised learning},
+abstract = {The liquid loading of shale gas wells presents significant challenges, including a reduction in production capacity, an increase in production costs, and environmental degradation. It is of paramount importance to provide accurate and timely warnings of liquid loading in order to ensure the efficient production operations. Existing physical models often rely on assumptions regarding material properties and fluid behaviors. However, the establishment of precise physical models in complex real-world scenarios represents a significant challenge. Most existing data-driven methods rely on either supervised or unsupervised learning strategies. The former causes a considerable investment of time and human resources to generate labels, while the latter demands exceptionally high standards for data quality. These are challenging to achieve in actual production. Most studies on liquid loading adopt a dichotomous approach, whereby the presence or absence of liquid loading is determined. A paucity of studies has attempted to classify the severity of liquid loading. In this paper, a semi-supervised learning-based liquid loading severity classification model is proposed. The model integrates the benefits of supervised and unsupervised learning, enabling the utilization of the entire dataset with a minimal number of labels. The paper also presents a Dynamic Time Relationship Self-Attention (DTRSA) module, which enhances the model’s anti-interference ability against other anomalies and improves the accuracy of liquid loading severity classification. In order to assess the effectiveness of the proposed model, experiments are conducted on a dataset of 219 shale gas wells in the southwestern region of Sichuan Province, China, within an oil and gas field. The model exhibits an overall classification accuracy of 98.46% in detecting liquid loading, with an earlier warning time than existing physical models.}
+}
+
+@article{Yang2014,
+  author    = {Yang, S. and Xu, D. and Liu, L. and Duan, C. and Xiu, L.},
+  title     = {Research of drainage gas recovery technology in gas wells},
+  journal   = {Open Journal of Fluid Dynamics},
+  volume    = {4},
+  number    = {2},
+  pages     = {154--162},
+  year      = {2014},
+  doi       = {10.4236/ojfd.2014.42014}
+}
+
+
+@article{CHEN2016178,
+title = {A new model for predicting liquid loading in deviated gas wells},
+journal = {Journal of Natural Gas Science and Engineering},
+volume = {34},
+pages = {178-184},
+year = {2016},
+issn = {1875-5100},
+doi = {https://doi.org/10.1016/j.jngse.2016.06.063},
+url = {https://www.sciencedirect.com/science/article/pii/S1875510016304462},
+author = {Dechun Chen and Ya Yao and Gang Fu and Hongxia Meng and Shuangxi Xie},
+keywords = {Liquid loading, Deviated gas wells, Predicting, Critical liquid-carrying flow velocity, Turner model, Correction term},
+abstract = {Liquid loading, which can reduce the gas rate and even kill the gas well, is one of the most serious issues in maturing gas wells. Accurate prediction of the inception of liquid loading will help operators choose the countermeasure in time to prevent such conditions happening. However, the modeling of liquid loading behavior still remains controversial and the predicted critical gas rate is not very reliable, especially for deviated gas wells. This paper presents a new model to predict liquid loading in deviated gas wells. The new model divides the fluid in the wellbore into the gas core in the center of tube and the liquid film near the tubing wall, and constructs the force balance of the liquid film and the whole fluid to calculate the critical liquid-carrying gas velocity. Then a correction term equation is developed to compare the new model with the Turner model (Turner et al., 1969) that is the most popular model in predicting liquid loading in gas wells. Subsequently the sensitivity of the correction term for different well parameters including inclination degree and tubing diameter are discussed. Based on the current work, a correction term reference table is given for field application. Well data from Gao (2012) and Belfroid et al. (2008) were employed in this paper to validate the new model. The prediction results from the new model show a great improvement over the Turner model and are even better than Belfroid model in matching the Belfroid data. The new model is accurate and can be used easily to predict liquid loading in deviated gas wells.}
+}
+
+
+@article{OKORO20192443,
+title = {Application of non-uniform film thickness concept in predicting deviated gas wells liquid loading},
+journal = {MethodsX},
+volume = {6},
+pages = {2443-2454},
+year = {2019},
+issn = {2215-0161},
+doi = {https://doi.org/10.1016/j.mex.2019.10.002},
+url = {https://www.sciencedirect.com/science/article/pii/S2215016119302675},
+author = {Emeka Emmanuel Okoro and Cynthia I. Bassey and Samuel E. Sanni and Muhammad Gul Bahar Ashiq and Angela O. Mamudu},
+keywords = {Liquid film reversal and uniform film concepts. Application of the concept of non-uniform film thickness in predicting liquid loading in deviated gas wells, Liquid loading, Non-uniform film thickness, Model, Gas well},
+abstract = {Liquid loading causes undesirable occurrences such as premature death of wells, as well as significant reduction in production. However, most available models consider vertical wells and only a few focus on deviated gas wells. In order to reduce the impact of liquid loading on gas production, gas well load-up should be diagnosed at its early stage so as to proffer adequate solution. Unfortunately, most gas wells will experience liquid loading at some stage or point in their production life. Therefore, it is of utmost importance to predict liquid loading at the early life of such wells in order to develop apt liquid management strategies as corrective measures. Liquid film flow reversal concept has been identified as one of the major concepts responsible for the occurrence of liquid loading in deviated gas wells. This study develops an improvement on Chen’s liquid loading model. The model specifically introduces the concept of non-uniform film thickness around the pipe wall, as against previous works which considered uniform film thickness. A modified friction factor is also introduced to account for large film thicknesses around the pipe wall. Results from the model were compared with those of previous models, and data from published literature was used to validate the new model. The new model gave accurate predictions for 11 of 12 unloaded wells while for the loaded wells, the estimated data gave accuracies for 29 out of 30 loaded wells. This then implies that the new model is accurate for predicting liquid loading in deviated gas wells. •Predictions from the new model show a good improvement over existing models.•The uniform film assumption made in Chen liquid loading model was modified, and a different interfacial friction factor was applied.•The method proposed in this study introduces the concept of non-uniform film thickness around the pipe wall as against previous works which considered uniform film thickness.}
+}
+
+@techreport{osti_4769511,
+  author       = {Hewitt, G F and Nicholls, B},
+  title        = {FILM THICKNESS MEASUREMENT IN ANNULAR TWO-PHASE FLOW USING A FLUORESCENCE SPECTROMETER TECHNIQUE.   PART II.  STUDIES OF THE SHAPE OF DISTURBANCE WAVES.},
+  institution  = {Atomic Energy Research Establishment, Harwell (England)},
+  annote       = {},
+  url          = {https://www.osti.gov/biblio/4769511},
+  place        = {United Kingdom},
+  year         = {1969},
+  month        = {01}}
+
+
+
+@article{https://doi.org/10.1002/aic.690220105,
+author = {Taitel, Yemada and Dukler, A. E.},
+title = {A model for predicting flow regime transitions in horizontal and near horizontal gas-liquid flow},
+journal = {AIChE Journal},
+volume = {22},
+number = {1},
+pages = {47-55},
+doi = {https://doi.org/10.1002/aic.690220105},
+url = {https://aiche.onlinelibrary.wiley.com/doi/abs/10.1002/aic.690220105},
+eprint = {https://aiche.onlinelibrary.wiley.com/doi/pdf/10.1002/aic.690220105},
+abstract = {Abstract Models are presented for determining flow regime transitions in two-phase gas-liquid flow. The mechanisms for transition are based on physical concepts and are fully predictive in that no flow regime transitions are used in their development. A generalized flow regime map based on this theory is presented.},
+year = {1976}
+}
+
+@article{shi2016,
+  author = {Shi, Juntai and Sun, Zheng and Li, Xiangfang},
+  title = {Analytical Models for Liquid Loading in Multifractured Horizontal Gas Wells},
+  journal = {SPE Journal},
+  volume = {21},
+  number = {2},
+  pages = {471--487},
+  year = {2016},
+  doi = {10.2118/2014-1922861-PA}
+}
+
+@misc{Adriana2019,
+  author = {Adriana H.},
+  title = {Understanding liquid loading},
+  year = {2019},
+  note = {Posted May 8, 2017},
+  url = {https://ihsmarkit.com/index.html}
+}
+
+@article{Alam2016,
+  author = {Alam, M. N.},
+  title = {Particle swarm optimization: algorithm and its codes in {MATLAB}},
+  journal = {Algoritm Codes MATLAB},
+  year = {2016},
+  doi = {10.13140/RG.2.1.4985.3206}
+}
+
+@article{Awoleke2011,
+  author = {Awoleke, O. O. and Lane, R. H.},
+  title = {Analysis of data from the Barnett shale using conventional statistical and virtual intelligence techniques},
+  journal = {SPE Reservoir Eval Eng},
+  volume = {14},
+  number = {5},
+  pages = {544--556},
+  year = {2011},
+  doi = {10.2118/127919-PA}
+}
+
+@article{Aydilek2018,
+  author = {Aydilek, I. B.},
+  title = {A hybrid firefly and particle swarm optimization algorithm for computationally expensive numerical problems},
+  journal = {Appl Soft Comput},
+  volume = {66},
+  pages = {232--249},
+  year = {2018},
+  doi = {10.1016/j.asoc.2018.02.025}
+}
+
+@book{Babuska2010,
+  author = {Babuska, R. and Busoniu, L. and Schutter, B. D. and Ernst, D.},
+  title = {Reinforcement Learning and Dynamic Programming Using Function Approximators},
+  year = {2010},
+  publisher = {CRC Press},
+  address = {Boca Raton},
+  doi = {10.1201/9781439821091}
+}
+
+@article{BalasDey2018,
+  author = {Balas, V. E. and Dey, Ram Kumar Nilanjan},
+  title = {Quality factor optimization of spiral inductor using firefly algorithm and its application in amplifier},
+  year = {2018},
+  doi = {10.1504/IJAIP.2018.10016456}
+}
+
+@article{Barnea1986,
+  author = {Barnea, D.},
+  title = {Transition from annular flow and from dispersed bubble flow: unified models for the whole range of pipe inclinations},
+  journal = {Int J Multiphase Flow},
+  volume = {12},
+  pages = {733--744},
+  year = {1986}
+}
+
+@article{Barnea1987,
+  author = {Barnea, D.},
+  title = {A unified model for predicting flow-pattern transitions for the whole range of pipe inclinations},
+  journal = {Int J Multiphase Flow},
+  volume = {13},
+  pages = {1--12},
+  year = {1987}
+}
+
+@article{Barnea1980,
+  author = {Barnea, D. and Shoham, O. and Tatitel, Y. and Dukler, A. E.},
+  title = {Flow pattern transition for gas-liquid flow in horizontal and inclined pipes},
+  journal = {Int J Multiphase Flow},
+  volume = {6},
+  pages = {217--225},
+  year = {1980}
+}
+
+@article{Chen2016,
+  author = {Chen, D. and Yao, Y. and Fu, G. and Meng, H. and Xie, S.},
+  title = {A new model for predicting liquid loading in deviated gas wells},
+  journal = {J Nat Gas Sci Eng},
+  volume = {34},
+  pages = {178--184},
+  year = {2016},
+  doi = {10.1016/j.jngse.2016.06.063}
+}
+
+@article{Coleman1991a,
+  author = {Coleman, S. B. and Clay, H. B. and McCurdy, D. G. and others},
+  title = {A new look at predicting gas-well load-up},
+  journal = {J Pet Technol},
+  volume = {43},
+  number = {3},
+  pages = {329--333},
+  year = {1991},
+  doi = {10.2118/20280-PA}
+}
+
+@article{Coleman1991b,
+  author = {Coleman, S. B. and Clay, H. B. and McCurdy, D. G. and Norris, H. L. III},
+  title = {Understanding gas-well load-up behaviour},
+  journal = {J Pet Technol},
+  volume = {43},
+  number = {3},
+  pages = {334--338},
+  year = {1991}
+}
+
+@article{Coleman1991c,
+  author = {Coleman, S. B. and Clay, H. B. and McCurdy, D. G. and others},
+  title = {Understanding gas well loadup behavior},
+  journal = {J Pet Technol},
+  volume = {43},
+  number = {3},
+  pages = {334--338},
+  year = {1991},
+  doi = {10.2118/20281-PA}
+}
+
+@article{Doroody2018,
+  author = {Doroody, C. and Kiong, T. S.},
+  title = {Performance Comparison of FA, PSO and CS application in SINR optimisation for LCMV beam forming technique},
+  journal = {Wireless Pers Commun},
+  year = {2018},
+  doi = {10.1007/s11277-018-5903-2}
+}
+
+@article{Dukler1960,
+  author = {Dukler, A. E.},
+  title = {Fluid Mechanics and Heat Transfer in Vertical Falling Film System},
+  journal = {Chem Eng Prog},
+  volume = {56},
+  number = {30},
+  year = {1960}
+}
+
+@article{Ebrahimi2021,
+  author = {Ebrahimi, A. and Tamnanloo, J. and Mousavi, S. H. and Miandoab, E. S. and Hosseini, E. and Ghasemi, H. and Mozaffari, S.},
+  title = {Discrete-continuous genetic algorithm for designing a mixed refrigerant cryogenic process},
+  journal = {Ind Eng Chem Res},
+  year = {2021},
+  doi = {10.1021/acs.iecr.1c01191}
+}
+
+@article{Adaze2018,
+  author = {Ernest Adaze, A. and Al-Sarkhi, H. M. and Badr, E. E.},
+  title = {Current status of CFD modelling of liquid loading phenomena in gas wells: a literature review},
+  journal = {J Pet Explor Prod Technol},
+  year = {2018},
+  doi = {10.1007/s13202-018-0534-4}
+}
+
+@article{Faidairo2014,
+  author = {Faidairo, A. and others},
+  title = {A new model for predicting liquid loading in a gas well},
+  journal = {J Nat Gas Sci Eng},
+  year = {2014},
+  doi = {10.1016/j.jngse.2014.09.003}
+}
+
+@misc{Falcone2014,
+  author = {Falcone, G.},
+  title = {Liquid loading in gas wells: mechanism, prediction and reservoir response},
+  year = {2014},
+  note = {Details missing}
+}
+
+@article{GhadamKamali2015,
+  author = {Ghadam, A. G. J. and Kamali, V.},
+  title = {Prediction of Gas Critical Flow Rate for Continuous Lifting of Liquids from Gas Wells Using Comparative Neural Fuzzy Inference System},
+  journal = {J Appl Environ Biological Sci},
+  volume = {5},
+  pages = {196--202},
+  year = {2015}
+}
+
+@article{Ghasemi2020,
+  author = {Ghasemi, H. and Darjani, S. and Mazloomi, H. and Mozaffari, S.},
+  title = {Preparation of stable multiple emulsions using food-grade emulsifiers: evaluating the effects of emulsifier concentration, W/O phase ratio, and emulsification process},
+  journal = {SN Appl Sci},
+  volume = {2},
+  number = {12},
+  pages = {2002},
+  year = {2020},
+  doi = {10.1007/s42452-020-03879-5}
+}
+
+@article{Ghorbani2017,
+  author = {Ghorbani, H. and Moghadasi, J. and Wood, D. A.},
+  title = {Prediction of gas flow rates from gas condensate reservoirs through wellhead chokes using a firefly optimization algorithm},
+  journal = {J Nat Gas Sci Eng},
+  year = {2017},
+  doi = {10.1016/j.jngse.2017.04.034}
+}
+
+@article{Gool2008,
+  author = {Gool, V. F. and Currie, P. K.},
+  title = {An improved model for liquid loading process in gas wells},
+  journal = {SPE Prod Oper},
+  year = {2008},
+  doi = {10.2118/106699-PA}
+}
+
+@article{Guo2006,
+  author = {Guo, B. and Ghalambor, A. and Xu, C.},
+  title = {A systematic approach to predicting liquid loading in gas wells},
+  journal = {SPE Prod Oper},
+  volume = {21},
+  number = {1},
+  pages = {81--88},
+  year = {2006},
+  doi = {10.2118/94081-PA}
+}
+
+@article{Ikpeka2018,
+  author = {Ikpeka, M. P. and Onyinyechukwu, M. O.},
+  title = {Li and Turner modified model for predicting liquid loading in gas wells},
+  journal = {J Pet Explor Prod Technol},
+  volume = {9},
+  pages = {1971--1993},
+  year = {2018},
+  doi = {10.1007/s13202-018-0585-6}
+}
+
+@article{Ikpeka2019,
+  author = {Ikpeka, M. P. and Onyinyechukwu, M. O.},
+  title = {Li and Turner Modified model for Predicting Liquid Loading in Gas Wells},
+  journal = {Journal of Petroleum Exploration and Production Technology},
+  volume = {9},
+  pages = {1971--1993},
+  year = {2019},
+  doi = {10.1007/s13202-018-0585-6}
+}
+
+@article{Joseph2018,
+  author = {Joseph, A. and Hicks, P. D.},
+  title = {Modelling mist flow for investigating liquid loading in gas wells},
+  journal = {Journal},
+  year = {2018},
+  doi = {10.1016/j.petrol.2018.06.023}
+}
+
+@misc{Jospin2020,
+  author = {Jospin, L. V. and Buntine, W. and Boussaid, F. and Laga, H. and Bennamoun, M.},
+  title = {Hands-on Bayesian Neural Networks -- a Tutorial for Deep Learning Users},
+  year = {2020},
+  note = {Unpublished tutorial or report}
+}
+
+@article{Khamehchi2014,
+  author = {Khamehchi, E. and Yasrebi, S. V. and Ebrahimi, A.},
+  title = {Prediction of the influence of liquid loading on wellhead parameters},
+  journal = {Pet Sci Technol},
+  volume = {32},
+  number = {14},
+  pages = {1680--1689},
+  year = {2014},
+  doi = {10.1080/10916466.2011.603003}
+}
+
+@article{Lea2004,
+  author = {Lea, J. F. and Nickens, H. V.},
+  title = {Solving gas well liquid loading problems},
+  journal = {Journal of Petroleum Technology (SPE-72092-JPT)},
+  year = {2004}
+}
+
+@article{Li2021,
+  author = {Li, W. and Taylor, M. G. and Bayerl, D. and Mozaffari, S. and Dixit, M. and Ivanov, S. and Seifert, S. and Lee, B. and Shanaiah, N. and Yubing, L. and Kovarik, L. and Mpourmpakis, G. and Karim, A. M.},
+  title = {Solvent manipulation of the pre-reduction metal–ligand complex and particle-ligand binding for controlled synthesis of Pd nanoparticles},
+  journal = {Nanoscale},
+  volume = {13},
+  number = {1},
+  pages = {206--217},
+  year = {2021},
+  doi = {10.1039/D0NR06078J}
+}
+
+@inproceedings{Li2001,
+  author = {Li, M. and Li, S. L. and Sun, L. T.},
+  title = {New view on continuous-removal liquids from gas wells},
+  booktitle = {Paper SPE 75455, Permian basin oil and gas recovery conference},
+  year = {2001},
+  address = {Midland, Texas},
+  note = {May 15–16},
+  doi = {10.2118/75455-PA}
+}
+
+@article{Liu2017,
+  author = {Liu, Y. and Luo, C. and Zhang, L. and Liu, Z. and Xie, C. and Wu, P.},
+  title = {Experimental and modeling studies on the prediction of liquid loading onset in gas wells},
+  journal = {J Nat Gas Sci Eng},
+  volume = {57},
+  pages = {349--358},
+  year = {2017}
+}
+
+@article{Liu2018,
+  author = {Liu, Y. and Luo, C. and Zhang, L. and Liu, Z. and Xie, C. and Wu, P.},
+  title = {Experimental and modelling studies on the prediction of liquid loading onset in gas wells},
+  journal = {J Nat Gas Sci Eng},
+  volume = {57},
+  pages = {349--358},
+  year = {2018}
+}
+
+@article{Luan2012,
+  author = {Luan, G. and He, Shunli},
+  title = {A new model for the accurate prediction of liquid loading in low pressure wells},
+  journal = {J Can Pet Technol},
+  year = {2012},
+  doi = {10.2118/158385-PA}
+}
+
+@misc{Luo2013,
+  author = {Luo, S.},
+  title = {New Comprehensive equation to predict liquid loading},
+  year = {2013},
+  note = {Details missing}
+}
+
+@article{Makinde2013,
+  author = {Makinde, F. A. and Joledo, A. and Ako, C. T.},
+  title = {Liquid loading and gas well deliverability: the production approach},
+  journal = {Pet Sci Technol},
+  volume = {31},
+  number = {6},
+  pages = {603--615},
+  year = {2013},
+  doi = {10.1080/10916466.2010.529549}
+}
+
+@misc{Kelly2020,
+  author = {Kelly, Matthew},
+  title = {Particle Swarm Optimization},
+  year = {2020},
+  note = {GitHub repository, Retrieved August 17, 2020},
+  url = {https://github.com/MatthewPeterKelly/ParticleSwarmOptimization}
+}
+
+@article{Mohamed2019,
+  author = {Mohamed, H. M. and Al-Sarkhi, A. and Badr, H. M. and Habib, M. A.},
+  title = {CFD modelling of liquid film reversal of two-phase flow in vertical Pipes},
+  journal = {J Pet Explor Prod Technol},
+  number = {9},
+  pages = {3039--3070},
+  year = {2019},
+  doi = {10.1007/s13202-019-0702-1}
+}
+
+@article{Mozaffari2021,
+  author = {Mozaffari, S. and Ghasemi, H. and Tchoukov, P. and Czarnecki, J. and Nazemifard, N.},
+  title = {Lab-on-a-chip systems in asphaltene characterization: a review of recent advances},
+  journal = {Energy Fuels},
+  year = {2021},
+  doi = {10.1021/acs.energyfuels.1c00717}
+}
+
+@inproceedings{Nallaparaju2012,
+  author = {Nallaparaju, Y. D. and Deendayal, P.},
+  title = {Prediction of liquid loading in gas wells},
+  booktitle = {Paper SPE 155356, SPE annual technical conference and exhibition},
+  year = {2012},
+  address = {San Antonio, Texas, USA},
+  month = {October},
+  pages = {8--10},
+  doi = {10.2118/155356-MS}
+}
+
+@article{Nosseir2000,
+  author = {Nosseir, M. A. and Darwich, T. A. and Sayyouh, M. H. and El Sallaly, M.},
+  title = {A new approach for accurate prediction of loading in gas wells under different flowing conditions},
+  journal = {SPE Prod Fac},
+  volume = {15},
+  number = {4},
+  pages = {241--246},
+  year = {2000},
+  doi = {10.2118/120580-PA}
+}
+
+@misc{Osman2002,
+  author = {Osman, E. A. and Fahd, K. and Arabia, S.},
+  title = {SPE 78568 prediction of critical gas flow rate for gas wells unloading},
+  year = {2002},
+  note = {Conference paper, details missing}
+}
+
+@article{Oudeman1990,
+  author = {Oudeman, P.},
+  title = {Improved prediction of wet-gas-well performance},
+  journal = {SPE Prod Eng},
+  year = {1990},
+  doi = {10.2118/19103-PA}
+}
+
+@article{Park2009,
+  author = {Park, H.-Y. and Gioia, F. and Teodoriu, C.},
+  title = {Decision matrix for liquid loading in gas wells for cost/benefit analyses of lifting options},
+  journal = {J Nat Gas Sci Eng},
+  volume = {1},
+  pages = {72--83},
+  year = {2009},
+  doi = {10.1016/j.jngse.2009.03.009}
+}
+
+@inproceedings{Skopich2013,
+  author = {Skopich, A. and Pereyra, E. and Sarica, C. and Kelkar, M.},
+  title = {Pipe diameter effect on liquid loading in vertical gas wells},
+  booktitle = {SPE production and operation symposium},
+  year = {2013},
+  address = {Oklahoma City, Oklahoma, USA},
+  month = {March},
+  pages = {23--26},
+  doi = {10.2118/164477-MS}
+}
+
+@article{SankarS2019,
+  author = {SankarS, Arul Karthi S.},
+  title = {Study of identifying liquid loading in gas wells and deliquification techniques},
+  journal = {International Journal of Engineering Research \& Technology (IJERT)},
+  volume = {8},
+  number = {06},
+  year = {2019},
+  note = {Prepared for presentation at the SPE International Student Paper Contest at the SPE Annual Technical Conference and Exhibition, New Orleans, USA, 30 September–2 October 2013},
+  doi = {10.2118/167636-STU}
+}
+
+@inproceedings{Tan2014,
+  author = {Tan, XHa and Li, X-P and Zhoo, J-H and Zhang, J-Q},
+  title = {A new model for the accurate prediction of critical liquid removal based on energy balance},
+  booktitle = {Offshore Technology Conference Asia},
+  year = {2014},
+  address = {Kuala Lumpur, Malaysia},
+  month = {March},
+  note = {OTC-24799-MS}
+}
+
+@article{KUMAR2017117,
+title = {Void fraction and pressure drop in gas-liquid downflow through narrow vertical conduits-experiments and analysis},
+journal = {Chemical Engineering Science},
+volume = {171},
+pages = {117-130},
+year = {2017},
+issn = {0009-2509},
+doi = {https://doi.org/10.1016/j.ces.2017.05.027},
+url = {https://www.sciencedirect.com/science/article/pii/S0009250917303408},
+author = {Amit Kumar and Gargi Das and Subhabrata Ray},
+keywords = {Void fraction, Co-current downflow, Pressure drop, Mechanistic model},
+abstract = {The present paper investigates void fraction and pressure drop characteristics of vertical air-water downflow through millichannels (0.83≤Eotvos Number≤20.6). Experiments have revealed the hydrodynamics to be a function of tube diameter and phase velocities with the functional form being different for different flow patterns. Accordingly, separate mechanistic models have been proposed to predict the aforementioned parameters for bubbly, slug, falling film and annular flow distributions. The proposed analysis have been validated with experimental results of the present study and those reported in literature.}
+}
+
+@book{Tarek2019,
+  author = {Tarek, A.},
+  title = {Reservoir Engineering Handbook (Fifth Edition): Gas Well Performance},
+  year = {2019},
+  note = {Fifth edition}
+}
+
+@article{Turner1969,
+  author = {Turner, R. G. and Hubbard, M. G. and Dukler, A. E.},
+  title = {Analysis and prediction of minimum low rate for the continuous removal of liquids from gas wells},
+  journal = {J Petrol Technol},
+  year = {1969},
+  doi = {10.2118/2198-PA}
+}
+
+@techreport{USEPA2011,
+  author = {{United States Environmental Protection Agency Air and Radiation}},
+  title = {Options for Removing Accumulated Fluid and Improving Flow in Gas Wells},
+  year = {2011},
+  institution = {United States Environmental Protection Agency},
+  address = {Washington, DC}
+}
+
+@article{Veeken2011,
+  author = {Veeken, C. A. M. and Belfroid, S. P. C.},
+  title = {New perspective on gas well liquid loading and unloading},
+  journal = {J Prod Ope},
+  year = {2011},
+  doi = {10.2118/134483-PA}
+}
+
+@article{Waltrich2015,
+  author = {Waltrich, P. J. and Posada, C. and Martinez, J. and Falcone, G. and Barbosa, J. R.},
+  title = {Experimental investigation on the prediction of liquid loading initiation in gas wells using a long vertical tube},
+  journal = {J Nat Gas Sci Eng},
+  volume = {26},
+  pages = {1515--1529},
+  year = {2015},
+  doi = {10.1016/j.jngse.2015.06.023}
+}
+
+@article{WangY2010,
+  author = {Wang, Y. and Zhang, S.},
+  title = {A new calculation method for gas-well liquid loading capacity},
+  journal = {Sci Direct J Hydrodynam},
+  year = {2010},
+  doi = {10.1016/S1001-6058(09)60122-0}
+}
+
+@article{WangD2018,
+  author = {Wang, D. and Tan, D. and Liu, L.},
+  title = {Particle swarm optimization algorithm: an overview},
+  journal = {Soft Comput},
+  volume = {22},
+  number = {2},
+  pages = {387--408},
+  year = {2018},
+  doi = {10.1007/s00500-016-2474-6}
+}
+
+@article{WangX2021,
+  author = {Wang, X. and Zhang, R. and Mozaffari, A. and de Pablo, J. J. and Abbott, N. L.},
+  title = {Active motion of multiphase oil droplets: emergent dynamics of squirmers with evolving internal structure},
+  journal = {Soft Matter},
+  year = {2021},
+  doi = {10.1039/d0sm01873b}
+}
+
+@article{WangS2021,
+  author = {Wang, S. and Qin, C. and Feng, Q. and Javadpour, F. and Rui, Z.},
+  title = {A framework for predicting the production performance of unconventional resources using deep learning},
+  journal = {Appl Energy},
+  volume = {295},
+  pages = {117016},
+  year = {2021},
+  doi = {10.1016/j.apenergy.2021.117016}
+}
+
+
+@book{belfroid_prediction_2008,
+	series = {{SPE} {Annual} {Technical} {Conference} and {Exhibition}},
+	title = {Prediction {Onset} and {Dynamic} {Behaviour} of {Liquid} {Loading} {Gas} {Wells}},
+	volume = {SPE Annual Technical Conference and Exhibition},
+	url = {https://doi.org/10.2118/115567-MS},
+	abstract = {As reservoir pressures decrease in maturing gas wells, liquid drop-out forms an increasing restriction on gas production. Even though virtually all of the world's gas wells are either at risk of or suffering from liquid loading, the modeling of liquid loading behavior is still quite immature and the prediction of the minimum stable gas rate not very reliable. Many wells start liquid loading at gas rates well above the values predicted by classic steady state prediction models such as Turner. The loading point is strongly dependent on inclination angle, flow regime transitions and the interaction between tubing outflow behavior and the reservoir IPR. In the paper, the behavior of different natural gas wells and of an air-water test setup are analyzed. Simulations were performed using both commercially available software and dedicated dynamic models. The onset of liquid loading and the dynamic behavior of a flooded well during a restart were predicted. These were then compared to actual production data. The influence of the reservoir parameters and of the tube inclination were of special interest.The influence of dynamic disturbances on the stability are not taken into account by the classic prediction models. Systems with high permeable reservoirs are less able to cope with disturbances. This leads to higher critical rates for those systems. This corresponds to data from field observations. A maximum in the critical velocity is observed around an inclination of 50° with a critical rate 40\% higher than for a vertical well. To solve this, relations found from flooding experiments are used to modify the current prediction models. Based on the current work an adaptation to the Turner equation, which takes the inclination effects into account, is proposed. For the observed natural gas wells and for the air-water experiments the modified Turner equation predicts the observed loading points within 20\% accuracy.},
+	author = {Belfroid, S. P. C. and Schiferli, W. and Alberts, G. J. N. and Veeken, C. A. M. and Biezen, E.},
+	month = sep,
+	year = {2008},
+	doi = {10.2118/115567-MS},
+	note = {\_eprint: https://onepetro.org/SPEATCE/proceedings-pdf/08ATCE/08ATCE/SPE-115567-MS/3870021/spe-115567-ms.pdf},
+}
+
+@article{Xiaolei2017,
+  author = {Xiaolei, L. and Gioia, F. and Catalin, T.},
+  title = {Liquid loading in gas wells: from core-scale transient measurements to coupled field-scale simulations},
+  journal = {J Pet Sci Eng},
+  year = {2017},
+  doi = {10.1016/j.petrol.2017.08.025}
+}
+
+@article{YangJ2007,
+  author = {Yang, J. and Jovancicevic, V. and Ramachandran, S.},
+  title = {Foam for gas well deliquification},
+  journal = {Colloids Surf A},
+  volume = {309},
+  pages = {177--181},
+  year = {2007},
+  doi = {10.1016/j.colsurfa.2006.10.011}
+}
+
+@article{YangS2014,
+  author = {Yang, S. and Xu, D. and Liu, L. and Duan, C. and Xiu, L.},
+  title = {Research of drainage gas recovery technology in gas wells},
+  journal = {Open J Fluid Dynam},
+  volume = {4},
+  number = {2},
+  pages = {154--162},
+  year = {2014},
+  doi = {10.4236/ojfd.2014.42014}
+}
+
+@article{kHAM,
+author = {Khamehchi, Ehsan and Khishvand, M. and Abdolhosseini, Hassan},
+year = {2016},
+month = {02},
+pages = {},
+title = {A case study to optimum selection of deliquification method for gas condensate well design: South Pars gas field},
+volume = {7},
+journal = {Ain Shams Engineering Journal},
+doi = {10.1016/j.asej.2015.12.011}
+}
+
+@article{Shekhar,
+  author    = {Shekhar, S. and Kelkar, M. and Hearn, W. J. and Hain, L. L.},
+  title     = {Improved Prediction of Liquid Loading In Gas Wells},
+  journal   = {SPE Production \& Operations},
+  volume    = {32},
+  year      = {2017},
+  pages     = {539--550},
+  doi       = {10.2118/186088-PA},
+  url       = {https://doi.org/10.2118/186088-PA}
+}
+
+@article{desilva2020,
+doi = {10.21105/joss.02104},
+url = {https://doi.org/10.21105/joss.02104},
+year = {2020},
+publisher = {The Open Journal},
+volume = {5},
+number = {49},
+pages = {2104},
+author = {Brian de Silva and Kathleen Champion and Markus Quade and Jean-Christophe Loiseau and J. Kutz and Steven Brunton},
+title = {PySINDy: A Python package for the sparse identification of nonlinear dynamical systems from data},
+journal = {Journal of Open Source Software}
+}
+
+@article{Kaptanoglu2022,
+doi = {10.21105/joss.03994},
+url = {https://doi.org/10.21105/joss.03994},
+year = {2022},
+publisher = {The Open Journal},
+volume = {7},
+number = {69},
+pages = {3994},
+author = {Alan A. Kaptanoglu and Brian M. de Silva and Urban Fasel and Kadierdan Kaheman and Andy J. Goldschmidt and Jared Callaham and Charles B. Delahunt and Zachary G. Nicolaou and Kathleen Champion and Jean-Christophe Loiseau and J. Nathan Kutz and Steven L. Brunton},
+title = {PySINDy: A comprehensive Python package for robust sparse system identification},
+journal = {Journal of Open Source Software}
+}
+
+@article{LANDJOBOPAGOU2020103641,
+title = {Liquid loading prediction and identification model for vertical and inclined gas wells},
+journal = {Journal of Natural Gas Science and Engineering},
+volume = {84},
+pages = {103641},
+year = {2020},
+issn = {1875-5100},
+doi = {https://doi.org/10.1016/j.jngse.2020.103641},
+url = {https://www.sciencedirect.com/science/article/pii/S1875510020304959},
+author = {Arnold {Landjobo Pagou} and Guoqing Han and Long Peng and Oumaima Dehdah and Virginie {Gueyap Kamdem} and Fatai Abimbola and Seth Anom Mccarthy and Hippolyte Fritz Tchomche and Iryna Harmash and Zhuldyz Kanturina},
+keywords = {Liquid loading, Critical liquid film thickness, Liquid film reversal, Gas void fraction, Critical gas flow rate},
+abstract = {Defined as the backflow of a liquid film into a wellbore, liquid loading is a severe issue for gas wells because it decreases the production rate of gas. If the rate of liquid accumulation in the wellbore is extremely high, the production rate will significantly decrease, and, under extreme cases of accumulation, the operating company will abandon the well, leading to substantial financial losses. Consequently, to avoid this, it is appropriate for the operating company to predict and identify the liquid loading status of the gas wells and use practical tools and pathways to prevent such a loading. This paper introduces a model based on a liquid film reversal to predict liquid loading. It adopts the momentum balance equation of each phase as a basis and transcends the limits of earlier models. The proposed model relies on the theory, which assumes that the loading phenomenon initiates when the transition from an annular flow (liquid film surrounding the gas core) into a slug or churn flow takes place. Furthermore, the developed model considers the influences of the deviation angle, the tubing diameter, and the void fraction. The efficiency of the proposed model is evaluated by comparing it with few renowned existing models using vertical, inclined, and near-horizontal published gas field datasets, newly acquired ones, as well as laboratory datasets from published papers. As a result, the proposed model provides both the highest prediction accuracy and the least average errors. Further results show that the tubing diameter and the inclination angle are the leading influential parameters of the critical gas flow velocity/rate. Consequently, as the proposed model outperforms the earlier published models, it is the most suitable model for identifying and predicting the liquid loading in vertical, inclined, and near-horizontal gas wells.}
+}
+
+@inproceedings{Yuan2013,
+  author = {Yuan, G. and Pereyra, E. and Sarica, C. and Sutton, R. P.},
+  title = {An experimental study on liquid loading of vertical and deviated gas wells},
+  booktitle = {SPE production and operations symposium},
+  year = {2013},
+  address = {Oklahoma},
+  month = {March}
+}
+
+@inproceedings{Yusuf2010,
+  author = {Yusuf, R. and Veeken, C. A. M. and Hu, B.},
+  title = {Investigation of gas well liquid loading with a transient multiphase flow model},
+  booktitle = {SPE Oil and Gas India Conference and Exhibition},
+  year = {2010},
+  address = {Mumbai, India}
+}
+
+@inproceedings{Zhou2009,
+  author = {Zhou, D. and Yuan, H.},
+  title = {New model for gas well loading prediction},
+  booktitle = {Paper SPE 120580, SPE production and operations symposium},
+  year = {2009},
+  address = {Oklahoma City, Oklahoma, USA},
+  month = {April},
+  doi = {10.2118/120580-MS}
+}
+
+
+@article{Cranmer2023PySR,
+  author       = {Cranmer, Miles},
+  title        = {Interpretable Machine Learning for Science with {PySR} and SymbolicRegression.jl},
+  journal      = {arXiv},
+  year         = {2023},
+  eprint       = {2305.01582},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.LG},
+  url          = {https://arxiv.org/abs/2305.01582}
+}
+
+@article{deSilva2020PySINDy,
+  author  = {de Silva, Brian M. and Champion, Kathleen and Quade, Markus and Loiseau, Jean-Christophe and Kutz, J. Nathan and Brunton, Steven L.},
+  title   = {{PySINDy}: A Python package for the sparse identification of nonlinear dynamical systems from data},
+  journal = {Journal of Open Source Software},
+  year    = {2020},
+  volume  = {5},
+  number  = {49},
+  pages   = {2104},
+  doi     = {10.21105/joss.02104}
+}
+
+@article{Kaptanoglu2022PySINDy,
+  author  = {Kaptanoglu, Alan A. and de Silva, Brian M. and Fasel, Urban and Kaheman, Kadierdan and Goldschmidt, Andy J. and Callaham, Jared and Delahunt, Charles B. and Nicolaou, Zachary G. and Champion, Kathleen and Loiseau, Jean-Christophe and Kutz, J. Nathan and Brunton, Steven L.},
+  title   = {{PySINDy}: A comprehensive Python package for robust sparse system identification},
+  journal = {Journal of Open Source Software},
+  year    = {2022},
+  volume  = {7},
+  number  = {69},
+  pages   = {3994},
+  doi     = {10.21105/joss.03994}
+}
+
+@article{Christensen2022QLattice,
+  author  = {Christensen, Niels Johan and Demharter, Samuel and Machado, Meera and Pedersen, Lykke and Salvatore, Marco and Stentoft-Hansen, Valdemar and Triana Iglesias, Miquel},
+  title   = {Identifying interactions in omics data for clinical biomarker discovery using symbolic regression},
+  journal = {Bioinformatics},
+  year    = {2022},
+  volume  = {38},
+  number  = {15},
+  pages   = {3749--3758},
+  doi     = {10.1093/bioinformatics/btac405}
+}
+
+@inproceedings{Chen2016XGBoost,
+  author    = {Chen, Tianqi and Guestrin, Carlos},
+  title     = {{XGBoost}: A Scalable Tree Boosting System},
+  booktitle = {Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining},
+  year      = {2016},
+  pages     = {785--794},
+  doi       = {10.1145/2939672.2939785},
+  publisher = {ACM}
+}
+
+
+%%============================================================================%%
+%% while using chicago reference style, both abbreviated and expanded form of %%
+%% author name format is acceptable. Refer below example for expanded form    %%
+%%============================================================================%%
+
+%%  author		= "{Cameron, Deborah}", - single author
+%%  author		= "{Saito, Yukio} and {Hyuga, Hiroyuki}", - double author 
+
+%%======================================%%
+%% Example for author names with suffix %%
+%%======================================%%
+
+%%  author		= "{Price, R. A. Jr} and {Curry, N. {III}} and McCann, K. E. and 
+%%					Fielding, J. L. and {Abercrombie, E. Jr}",

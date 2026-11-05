@@ -1,0 +1,14 @@
+{
+  "dfm_residual_weights": {
+    "log Dia": 2.2449,
+    "log z": 0.3485,
+    "log GasDens": -0.0732,
+    "log LiqDens": 0.5893,
+    "log P/T": 0.5627,
+    "log ff": 0.2904,
+    "log film": 2.286,
+    "cos dev": 0.3294,
+    "sin dev": 1.05
+  },
+  "qlattice_formula": "logreg(0.22*logQ - 1.22*log(-65.2*ff + 4300.0*film + 0.02) - 4.92)"
+}
