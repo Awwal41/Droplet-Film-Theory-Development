@@ -4,6 +4,10 @@ Usage
 -----
 python evaluate.py              # scores from results/*.csv (no fitting)
 python evaluate.py --refit      # refit DFM, LDM, LFM, QLattice, and TabPFN
+
+Literature models (Turner, Li, Chen, Shekhar, Liu, Abhulimen) are always
+scored on the same 44 withheld wells. Abhulimen β1, β2 are fit on the
+training wells only.
 """
 from pathlib import Path
 import argparse
@@ -14,6 +18,7 @@ from sklearn.model_selection import train_test_split, StratifiedKFold
 from dfm_model import (
     FEATURES, LABEL, NAMES, NEAR_BAND, SEED, DFM, classify, as_loaded, film_share,
 )
+from literature_models import literature_qcr, fit_abhulimen, MODELS as LIT_MODELS
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data" / "project_dataset.csv"
@@ -53,7 +58,7 @@ def report(name, true, pred, cv_mean=None, cv_std=None):
     ln = true.isin(["Loaded", "Near L.U"])
     row = {
         "Model": name,
-        "CV": None if cv_mean is None else f"{100*cv_mean:.1f} ± {100*cv_std:.1f}",
+        "CV": "-" if cv_mean is None else f"{100*cv_mean:.1f} +/- {100*cv_std:.1f}",
         "Test": 100 * score(true, pred),
         "Unloaded (23)": 100 * score(true[u], pred[u]),
         "Loaded (21)": 100 * score(true[ln], pred[ln]),
@@ -139,15 +144,53 @@ def evaluate_refit():
     return pd.DataFrame([by_name[k] for k in order if k in by_name])
 
 
+def evaluate_literature():
+    """Score published Qcr models on the same 44 withheld wells as DFM/QL/TabPFN."""
+    df, X, Q, y, idx_tr, idx_te = load_wells()
+    b1, b2 = fit_abhulimen(df.iloc[idx_tr], Q[idx_tr], y[idx_tr])
+    print(f"Abhulimen beta (train only): beta1={b1:.3f}  beta2={b2:.3f}")
+    qcr = literature_qcr(df, abhulimen_beta=(b1, b2))
+    te = df.iloc[idx_te]
+    true = te["Test status"].values
+    Qte = Q[idx_te]
+    rows, recs = [], []
+    for name, _ in LIT_MODELS:
+        pred = predict_from_qcr(Qte, qcr.iloc[idx_te][name].values)
+        rows.append(report(name, true, pred))
+        recs.append(pd.DataFrame({
+            "Well no": te["Well no"].values,
+            "Well status": true,
+            "Test flow rate": Qte,
+            "Model": name,
+            "Qcr": qcr.iloc[idx_te][name].values,
+        }))
+    table = pd.DataFrame(rows)
+    out = pd.concat(recs, ignore_index=True)
+    out.to_csv(RES / "literature_test44.csv", index=False)
+    return table, (b1, b2)
+
+
+def _fmt(table):
+    return table.to_string(index=False, formatters={
+        "Test": "{:.1f}".format, "Unloaded (23)": "{:.1f}".format, "Loaded (21)": "{:.1f}".format,
+    })
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--refit", action="store_true",
                    help="refit DFM, LDM, LFM, QLattice, and TabPFN (several minutes)")
     args = p.parse_args()
     table = evaluate_refit() if args.refit else evaluate_cache()
-    print(table.to_string(index=False, formatters={
-        "Test": "{:.1f}".format, "Unloaded (23)": "{:.1f}".format, "Loaded (21)": "{:.1f}".format,
-    }))
+    print("This study (44 withheld wells)")
+    print(_fmt(table))
+    print()
+    lit, _ = evaluate_literature()
+    ours = table[table.Model.isin(["DFM", "QLattice", "TabPFN"])].copy()
+    fair = pd.concat([lit, ours], ignore_index=True)
+    fair.to_csv(RES / "fair_comparison.csv", index=False)
+    print("Fair comparison on the same 44 withheld wells")
+    print(_fmt(fair))
 
 
 if __name__ == "__main__":
