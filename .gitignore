@@ -1,3 +1,4 @@
-# Folders
 __pycache__/
-*.pptx
+*.pyc
+.venv/
+.DS_Store

@@ -1,5 +1,46 @@
-# Physics-informed machine learning based droplet-film model (DFM) for liquid loading prediction
+# DFM reproduction
 
-Liquid loading is a challenge in gas well production where gas velocity drops below a critical level, causing the liquid to accumulate in the tubing or casing. Under normal conditions, gas flows faster than liquid due to gravity and density differences, pushing the liquid upward. However, as reservoir pressure declines over time, gas velocity may fall below the critical threshold, leading to liquid buildup, increased back pressure, and reduced gas flow, which can halt production and require costly interventions. The two main approaches to modeling liquid loading are the liquid droplet model and the liquid film model. Both face challenges due to the complexity of droplet and film behavior. Droplets in multiphase flow are rarely uniform—they vary in shape and size and dynamically change as they merge or break apart. Similarly, liquid films develop waves and disturbances, creating uneven flow patterns that introduce energy loss and instability, which are difficult to capture accurately with traditional models.
-In this study, we developed new models using symbolic regression with and without physics encoding based on the features that define liquid film reversal and liquid droplet. The developed physics-encoded model outperforms the existing models,  and shows that both the liquid droplet and liquid film effects are important for the accurate prediction of liquid loading.  We observed that the liquid droplet effect is dominant in vertical wells, whereas the liquid film reversal is dominant in horizontal wells; there are only very few cases where one of the phenomena is negligible, which shows that more studies are required to better understand how the different theories interact.
-**[View workflow diagram (PDF)](./workflow_combined_v2.pdf)**
+Code and numerical results for the Droplet-Film Model. The true critical rate is never observed. Models are trained on well status; \(\hat Q_{\mathrm{crit}}\) is then evaluated from the fitted expression.
+
+## Layout
+
+| Path | What it is |
+|---|---|
+| `dfm_model.py` | DFM / LDM / LFM (physics + residual), fit by logistic loss on \(\ln(Q/Q_{\mathrm{crit}})\) |
+| `evaluate.py` | Scores from cached predictions, or `--refit` the DFM family |
+| `data/project_dataset.csv` | Wells used in the paper |
+| `results/` | Saved out-of-fold and test predictions |
+
+Near-loaded wells are withheld from training and counted as Loaded in every accuracy.
+
+## Evaluate the saved results
+
+```bash
+pip install -r requirements.txt
+python evaluate.py
+```
+
+Expected test-set table:
+
+| Model | CV | Test (44) | Unloaded (23) | Loaded (21) |
+|---|---|---|---|---|
+| DFM | 85.8 ± 3.5 | 90.9 | 91.3 | 90.5 |
+| QLattice | 82.4 ± 5.2 | 88.6 | 87.0 | 90.5 |
+| TabPFN | 91.8 ± 4.7 | 84.1 | 82.6 | 85.7 |
+| LDM | 85.1 ± 3.6 | 88.6 | 91.3 | 85.7 |
+| LFM | 81.1 ± 4.6 | 86.4 | 91.3 | 81.0 |
+
+## Refit DFM, LDM, LFM
+
+```bash
+python evaluate.py --refit
+```
+
+This re-estimates the physics parameters (differential evolution) and the residual. QLattice and TabPFN are not refit here; their probabilities are stored in `results/qlattice_tabpfn_probabilities.csv`.
+
+## How Qcrit is obtained
+
+1. Physics expression (droplet + film, mixed by a global \(\alpha\)) gives \(Q_{\mathrm{phys}}(X)\).
+2. Residual: \(\hat Q_{\mathrm{crit}}(X) = Q_{\mathrm{phys}}(X)\,\exp(b + \mathbf{w}^\top\tilde{\mathbf{x}})\).
+3. Parameters are chosen so unloaded wells have \(\ln(Q_{\mathrm{operating}}/\hat Q_{\mathrm{crit}}) > 0\) and loaded wells the reverse.
+4. After fitting, \(\hat Q_{\mathrm{crit}}(X)\) can be evaluated for any well. Classify unloaded if \(Q_{\mathrm{operating}} > \hat Q_{\mathrm{crit}}\).
